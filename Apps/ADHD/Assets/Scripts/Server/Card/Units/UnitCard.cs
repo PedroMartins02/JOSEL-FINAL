@@ -2,12 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UnitCard : Card
+namespace GameModel
 {
-
-
-    public UnitCard(UnitCardSO cardSO) : base(cardSO.MapToCardSO())
+    public class UnitCard : Card
     {
 
+
+        public UnitCard(UnitCardSO cardSO) : base(cardSO.MapToCardSO())
+        {
+
+        }
     }
 }

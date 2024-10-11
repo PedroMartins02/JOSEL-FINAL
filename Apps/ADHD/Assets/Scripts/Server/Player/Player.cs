@@ -4,11 +4,8 @@ using UnityEngine;
 
 namespace GameModel
 {
-    public enum Elements
+    public class Player
     {
-        Air,
-        Fire,
-        Water,
-        Earth,
+        public string Name { get; private set; }
     }
 }

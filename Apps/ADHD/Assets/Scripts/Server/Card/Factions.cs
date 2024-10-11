@@ -1,6 +1,9 @@
-public enum Factions
+namespace GameModel
 {
-    Greek,
-    Roman,
-    Viking,
+    public enum Factions
+    {
+        Greek,
+        Roman,
+        Viking,
+    }
 }

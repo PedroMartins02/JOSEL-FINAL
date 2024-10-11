@@ -4,11 +4,8 @@ using UnityEngine;
 
 namespace GameModel
 {
-    public enum Elements
+    public abstract class ICondition
     {
-        Air,
-        Fire,
-        Water,
-        Earth,
+        public abstract bool IsTrue();
     }
 }
