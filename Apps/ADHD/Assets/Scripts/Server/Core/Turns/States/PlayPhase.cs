@@ -7,10 +7,10 @@ namespace GameCore
 {
     public class PlayPhase : ITurnState
     {
-        private TurnManager _turnManager;
+        private HostTurnManager _turnManager;
         private Player _currentPlayer;
 
-        public PlayPhase(TurnManager manager, Player player)
+        public PlayPhase(HostTurnManager manager, Player player)
         {
             this._turnManager = manager;
             this._currentPlayer = player;

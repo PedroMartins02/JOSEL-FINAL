@@ -4,14 +4,14 @@ using GameModel;
 
 namespace GameCore
 {
-    public class TurnManager
+    public class HostTurnManager: ITurnManager
     {
         private List<Player> _players;
         private int _currentPlayerIdx;
 
         private ITurnState _currentState;
 
-        public TurnManager(List<Player> playerList)
+        public HostTurnManager(List<Player> playerList)
         {
             _players = playerList;
             _currentPlayerIdx = 0;
