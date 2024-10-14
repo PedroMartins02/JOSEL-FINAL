@@ -6,12 +6,9 @@ using UnityEngine.UI;
 
 public class StartQueueSearch : MonoBehaviour
 {
-    void Start()
-    {
-        gameObject.GetComponent<Button>().onClick.AddListener(QueueUp);
-    }
 
-    void QueueUp()
+
+    public void QueueUp()
     {
         RelayManager.Singleton.JoinQueue();
     }

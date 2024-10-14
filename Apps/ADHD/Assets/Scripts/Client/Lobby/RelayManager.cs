@@ -18,13 +18,6 @@ using System.Linq;
 
 public class RelayManager : MonoBehaviour
 {
-    [SerializeField] Button hostButton;
-    [SerializeField] Button listButton;
-    [SerializeField] Button queueButton;
-
-    [SerializeField] private GameObject roomPrefab;
-    [SerializeField] private Transform roomListContainer;
-
     private static RelayManager _singleton;
 
     public static RelayManager Singleton
@@ -43,14 +36,8 @@ public class RelayManager : MonoBehaviour
 
     async void Start()
     {
-        // =========== this should be somewhere else (i think), just not sure where : )
         await UnityServices.InitializeAsync(); 
         await AuthenticationService.Instance.SignInAnonymouslyAsync();
-        // =========== this should be somewhere else (i think), just not sure where : )
-
-        hostButton.onClick.AddListener(() => CreateRoom("Custom"));
-        listButton.onClick.AddListener(ListRooms);
-        queueButton.onClick.AddListener(JoinQueue);
     }
 
     private void Awake()
@@ -117,37 +104,13 @@ public class RelayManager : MonoBehaviour
         CreateRoom(lobbyType);
     }
 
-    private void ClearRoomsList()
-    {
-        foreach (Transform child in roomListContainer)
-        {
-            Destroy(child.gameObject);
-        }
-    }
-
     async void ListRooms()
     {
         var lobbies = await SearchLobbiesOfType("Custom");
         if (!lobbies.Any()) { return; }
 
-        ClearRoomsList();
-
         foreach (var lobby in lobbies)
         {
-            // Instantiate the room prefab and set its parent to the container
-            GameObject roomUI = Instantiate(roomPrefab, roomListContainer);
-
-            // Find the UI components inside the prefab
-            TMP_Text roomNameText = roomUI.transform.Find("RoomName").GetComponent<TMP_Text>();
-            Button joinButton = roomUI.transform.Find("JoinButton").GetComponent<Button>();
-
-            // Set the room data
-            roomNameText.text = $"Room Name: {lobby.Name}";
-
-            // Set up the join button functionality
-            string relayJoinCode = lobby.Data["RelayJoinCode"].Value;
-            joinButton.onClick.AddListener(() => JoinRoom(relayJoinCode));
-
             Debug.Log($"Lobby Name: {lobby.Name}, Players: {lobby.Players.Count}/{lobby.MaxPlayers}");
         }
     }
