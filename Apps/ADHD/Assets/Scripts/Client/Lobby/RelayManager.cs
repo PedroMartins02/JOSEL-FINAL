@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -24,6 +25,22 @@ public class RelayManager : MonoBehaviour
     [SerializeField] private GameObject roomPrefab;
     [SerializeField] private Transform roomListContainer;
 
+    private static RelayManager _singleton;
+
+    public static RelayManager Singleton
+    {
+        get => _singleton;
+        private set
+        {
+            if (null == _singleton) 
+                _singleton = value;
+            else if (value != _singleton)
+            {
+                Destroy(value);
+            }
+        }
+    }
+
     async void Start()
     {
         // =========== this should be somewhere else (i think), just not sure where : )
@@ -34,6 +51,11 @@ public class RelayManager : MonoBehaviour
         hostButton.onClick.AddListener(() => CreateRoom("Custom"));
         listButton.onClick.AddListener(ListRooms);
         queueButton.onClick.AddListener(JoinQueue);
+    }
+
+    private void Awake()
+    {
+        Singleton = this;
     }
 
     private async Task<string> HostRelay(int maxPlayers)
@@ -82,7 +104,7 @@ public class RelayManager : MonoBehaviour
         CreateLobby(lobbyName, joinCode, maxPlayers, lobbyType);
     }
 
-    async void JoinQueue()
+    public async void JoinQueue()
     {
         string lobbyType = "Matchmaking";
         var lobbies = await SearchLobbiesOfType(lobbyType);
