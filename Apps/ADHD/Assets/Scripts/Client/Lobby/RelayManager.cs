@@ -23,9 +23,10 @@ public class RelayManager : MonoBehaviour
 
     async void Start()
     {
-        await UnityServices.InitializeAsync();
-
+        // =========== this should be somewhere else (i think), just not sure where : )
+        await UnityServices.InitializeAsync(); 
         await AuthenticationService.Instance.SignInAnonymouslyAsync();
+        // =========== this should be somewhere else (i think), just not sure where : )
 
         hostButton.onClick.AddListener(() => CreateRoom("Custom"));
         listButton.onClick.AddListener(ListRooms);
