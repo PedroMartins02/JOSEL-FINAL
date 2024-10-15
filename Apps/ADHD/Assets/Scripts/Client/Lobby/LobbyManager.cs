@@ -1,14 +1,20 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class LobbyManager : MonoBehaviour
 {
+    [SerializeField] private TextMeshProUGUI nameText;
+    [SerializeField] private Button readyButton;
+
     void Start()
     {
+        nameText.text = RelayManager.Singleton.currentLobby.Name;
         NetworkManager.Singleton.OnClientConnectedCallback += OnPlayerJoined;
         NetworkManager.Singleton.OnClientDisconnectCallback += OnPlayerLeft;
     }

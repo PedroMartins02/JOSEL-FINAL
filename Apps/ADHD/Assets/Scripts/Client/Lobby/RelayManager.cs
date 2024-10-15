@@ -19,7 +19,7 @@ using System.Linq;
 public class RelayManager : MonoBehaviour
 {
     public bool isHostingLobby = false;
-    private string currentLobbyId;
+    public Lobby currentLobby;
     private static RelayManager _singleton;
 
     public static RelayManager Singleton
@@ -79,7 +79,7 @@ public class RelayManager : MonoBehaviour
             }
         };
         Lobby lobby = await LobbyService.Instance.CreateLobbyAsync(name, maxPlayers, options);
-        currentLobbyId = lobby.Id;
+        currentLobby = lobby;
         Debug.Log("Lobby created with ID: " + lobby.Id);
         isHostingLobby = true;
         StartCoroutine(LobbyHeartbeatCoroutine());
@@ -92,15 +92,15 @@ public class RelayManager : MonoBehaviour
         {
             yield return new WaitForSeconds(30f); // Ping every 30 seconds
 
-            if (string.IsNullOrEmpty(currentLobbyId))
+            if (currentLobby == null)
             {
                 continue;
             }
 
             try
             {
-                LobbyService.Instance.SendHeartbeatPingAsync(currentLobbyId);
-                Debug.Log("Lobby heartbeat sent for Lobby ID: " + currentLobbyId);
+                LobbyService.Instance.SendHeartbeatPingAsync(currentLobby.Id);
+                Debug.Log("Lobby heartbeat sent for Lobby ID: " + currentLobby.Id);
             }
             catch (LobbyServiceException e)
             {
@@ -113,11 +113,11 @@ public class RelayManager : MonoBehaviour
     private async void CloseLobby()
     {
         isHostingLobby = false; // Stop the coroutine
-        if (string.IsNullOrEmpty(currentLobbyId)) { return; }
+        if (currentLobby == null) { return; }
 
-        await LobbyService.Instance.DeleteLobbyAsync(currentLobbyId);
-        Debug.Log("Lobby deleted: " + currentLobbyId);
-        currentLobbyId = null;
+        await LobbyService.Instance.DeleteLobbyAsync(currentLobby.Id);
+        Debug.Log("Lobby deleted: " + currentLobby.Id);
+        currentLobby = null;
     }
 
     private async Task<IEnumerable<Lobby>> SearchLobbiesOfType(string type)
