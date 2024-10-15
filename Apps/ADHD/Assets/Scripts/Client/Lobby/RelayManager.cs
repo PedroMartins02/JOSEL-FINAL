@@ -18,7 +18,7 @@ using System.Linq;
 
 public class RelayManager : MonoBehaviour
 {
-    private bool isHostingLobby = false;
+    public bool isHostingLobby = false;
     private string currentLobbyId;
     private static RelayManager _singleton;
 

@@ -9,8 +9,6 @@ public class LobbyManager : MonoBehaviour
 {
     void Start()
     {
-        Debug.Log($"Players: {NetworkManager.Singleton.ConnectedClientsList}");
-
         NetworkManager.Singleton.OnClientConnectedCallback += OnPlayerJoined;
         NetworkManager.Singleton.OnClientDisconnectCallback += OnPlayerLeft;
     }
@@ -19,23 +17,25 @@ public class LobbyManager : MonoBehaviour
     {
         NetworkManager.Singleton.OnClientConnectedCallback -= OnPlayerJoined;
         NetworkManager.Singleton.OnClientDisconnectCallback -= OnPlayerLeft;
+        NetworkManager.Singleton.OnServerStopped -= _ => NavigateBack();
         RelayManager.Singleton.CloseConnection();
     }
 
     private void OnPlayerJoined(ulong clientId)
     {
         Debug.Log($"Player {clientId} has joined.");
-
-        int playerCount = NetworkManager.Singleton.ConnectedClientsList.Count;
-        Debug.Log($"Current player count: {playerCount}");
     }
 
     private void OnPlayerLeft(ulong clientId)
     {
         Debug.Log($"Player {clientId} has left.");
+        if (RelayManager.Singleton.isHostingLobby)
+        {
+            //handle client left
+            return;
+        }
 
-        int playerCount = NetworkManager.Singleton.ConnectedClientsList.Count;
-        Debug.Log($"Current player count: {playerCount}");
+        NavigateToNavigationScene();
     }
 
     public void NavigateBack()

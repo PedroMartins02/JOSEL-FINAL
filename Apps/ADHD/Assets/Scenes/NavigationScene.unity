@@ -1550,6 +1550,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94aeb930289ddc543a53000347e64e0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isHostingLobby: 0
 --- !u!4 &1283628861
 Transform:
   m_ObjectHideFlags: 0
