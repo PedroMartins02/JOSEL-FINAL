@@ -11,8 +11,14 @@ public class NavigationManager : MonoBehaviour
     [SerializeField] private GameObject collectionPrefab;
     [SerializeField] private GameObject settingsPrefab;
 
+    void Start()
+    {
+        NavigateToHome();
+    }
+
     public void NavigateToHome()
     {
+        ClearContentView();
 
     }
 
@@ -24,11 +30,13 @@ public class NavigationManager : MonoBehaviour
 
     public void NavigateToCollection()
     {
+        ClearContentView();
 
     }
 
     public void NavigateToSettings()
     {
+        ClearContentView();
 
     }
 

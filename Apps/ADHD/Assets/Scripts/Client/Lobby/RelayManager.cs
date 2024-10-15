@@ -113,10 +113,17 @@ public class RelayManager : MonoBehaviour
 
     private async Task<IEnumerable<Lobby>> SearchLobbiesOfType(string type)
     {
-        QueryLobbiesOptions options = new QueryLobbiesOptions();
-        QueryResponse response = await LobbyService.Instance.QueryLobbiesAsync(options);
+        QueryResponse response = null;
+        try {
+            QueryLobbiesOptions options = new QueryLobbiesOptions();
+            response = await LobbyService.Instance.QueryLobbiesAsync(options);
+        } 
+        catch (Exception ex)
+        {
+            Debug.Log($"Failed to find Lobbies: {ex.Message}");
+        }
 
-        if (!response.Results.Any()) { return Enumerable.Empty<Lobby>(); }
+        if (response == null || !response.Results.Any()) { return Enumerable.Empty<Lobby>(); }
 
         return response.Results.Where(lobby => lobby.Data["Type"].Value.Equals(type));
     }
