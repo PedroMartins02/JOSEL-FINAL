@@ -26,7 +26,7 @@ public class RoomUI : MonoBehaviour
             return;
         }
         Debug.Log("Start Loading");
-        if (await RelayManager.Singleton.JoinRoom(lobby.Data["RelayJoinCode"].Value))
+        if (await RelayManager.Singleton.JoinRoom(lobby))
         {
             NavigateToLobby();
         }

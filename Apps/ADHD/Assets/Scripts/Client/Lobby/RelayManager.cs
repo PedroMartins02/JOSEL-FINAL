@@ -112,11 +112,12 @@ public class RelayManager : MonoBehaviour
 
     private async void CloseLobby()
     {
-        isHostingLobby = false; // Stop the coroutine
-        if (currentLobby == null) { return; }
-
-        await LobbyService.Instance.DeleteLobbyAsync(currentLobby.Id);
-        Debug.Log("Lobby deleted: " + currentLobby.Id);
+        if (currentLobby != null && isHostingLobby)
+        {
+            await LobbyService.Instance.DeleteLobbyAsync(currentLobby.Id);
+            Debug.Log("Lobby deleted: " + currentLobby.Id);
+        }
+        isHostingLobby = false;
         currentLobby = null;
     }
 
@@ -152,7 +153,7 @@ public class RelayManager : MonoBehaviour
         var lobbies = await SearchLobbiesOfType(lobbyType);
         if (lobbies.Any())
         {
-            await JoinRoom(lobbies.First().Data["RelayJoinCode"].Value);
+            await JoinRoom(lobbies.First());
             return;
         }
 
@@ -164,15 +165,19 @@ public class RelayManager : MonoBehaviour
         return await SearchLobbiesOfType("Custom");
     }
 
-    public async Task<bool> JoinRoom(string joinCode)
+    public async Task<bool> JoinRoom(Lobby lobby)
     {
         try {
-            var joinAllocation = await RelayService.Instance.JoinAllocationAsync(joinCode);
+            var joinAllocation = await RelayService.Instance.JoinAllocationAsync(lobby.Data["RelayJoinCode"].Value);
             var relayServerData = new RelayServerData(joinAllocation, "dtls");
             NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
-            NetworkManager.Singleton.StartClient();
-            Debug.Log($"Joined Lobby: {relayServerData}");
-            return true;
+            if (NetworkManager.Singleton.StartClient())
+            {
+                currentLobby = lobby;
+                Debug.Log($"Joined Lobby: {relayServerData}");
+                return true;
+            }
+            return false;
         } catch (Exception ex)
         {
             Debug.Log($"Failed to join Lobby: {ex.Message}");
