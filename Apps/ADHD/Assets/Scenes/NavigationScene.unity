@@ -1924,6 +1924,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcc389bb7b4435f49a8cda467644a515, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  contentView: {fileID: 298845426}
   homePrefab: {fileID: 0}
   playPrefab: {fileID: 7417869583786306551, guid: 5eb9a94e2f8fee844bbb693495b74763,
     type: 3}
