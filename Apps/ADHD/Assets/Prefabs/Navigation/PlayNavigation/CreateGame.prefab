@@ -657,7 +657,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1023110362492178526}
         m_TargetAssemblyTypeName: CreateGameManager, Assembly-CSharp
-        m_MethodName: CreateGame
+        m_MethodName: CreateGameAsync
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

@@ -44,7 +44,15 @@ public class RelayManager : MonoBehaviour
 
     private void Awake()
     {
-        Singleton = this;
+        if (Singleton == null)
+        {
+            Singleton = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     private async Task<string> HostRelay(int maxPlayers)
@@ -61,7 +69,7 @@ public class RelayManager : MonoBehaviour
         return relayJoinCode;
     }
 
-    private async void CreateLobby(string name, string code, int maxPlayers, string lobbyType)
+    private async Task<bool> CreateLobby(string name, string code, int maxPlayers, string lobbyType)
     {
         CreateLobbyOptions options = new CreateLobbyOptions
         {
@@ -75,6 +83,7 @@ public class RelayManager : MonoBehaviour
         Debug.Log("Lobby created with ID: " + lobby.Id);
         isHostingLobby = true;
         StartCoroutine(LobbyHeartbeatCoroutine());
+        return lobby != null;
     }
 
     private IEnumerator LobbyHeartbeatCoroutine()
@@ -128,12 +137,12 @@ public class RelayManager : MonoBehaviour
         return response.Results.Where(lobby => lobby.Data["Type"].Value.Equals(type));
     }
 
-    public async void CreateRoom(string lobbyName, string type)
+    public async Task<bool> CreateRoom(string lobbyName, string type)
     {
         int maxPlayers = 2;
         string joinCode = await HostRelay(maxPlayers);
         string lobbyType = type;
-        CreateLobby(lobbyName, joinCode, maxPlayers, lobbyType);
+        return await CreateLobby(lobbyName, joinCode, maxPlayers, lobbyType);
     }
 
     public async void JoinQueue()
@@ -143,11 +152,11 @@ public class RelayManager : MonoBehaviour
         var lobbies = await SearchLobbiesOfType(lobbyType);
         if (lobbies.Any())
         {
-            JoinRoom(lobbies.First().Data["RelayJoinCode"].Value);
+            await JoinRoom(lobbies.First().Data["RelayJoinCode"].Value);
             return;
         }
 
-        CreateRoom(lobbyName, lobbyType);
+        await CreateRoom(lobbyName, lobbyType);
     }
 
     public async Task<IEnumerable<Lobby>> ListRooms()
@@ -155,18 +164,26 @@ public class RelayManager : MonoBehaviour
         return await SearchLobbiesOfType("Custom");
     }
 
-    public async void JoinRoom(string joinCode)
+    public async Task<bool> JoinRoom(string joinCode)
     {
         try {
             var joinAllocation = await RelayService.Instance.JoinAllocationAsync(joinCode);
             var relayServerData = new RelayServerData(joinAllocation, "dtls");
             NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
             NetworkManager.Singleton.StartClient();
-
             Debug.Log($"Joined Lobby: {relayServerData}");
+            return true;
         } catch (Exception ex)
         {
             Debug.Log($"Failed to join Lobby: {ex.Message}");
+            return false;
         }
+    }
+
+    public bool CloseConnection()
+    {
+        NetworkManager.Singleton.Shutdown();
+        CloseLobby();
+        return true;
     }
 }
