@@ -128,11 +128,10 @@ public class RelayManager : MonoBehaviour
         return response.Results.Where(lobby => lobby.Data["Type"].Value.Equals(type));
     }
 
-    public async void CreateRoom(string type)
+    public async void CreateRoom(string lobbyName, string type)
     {
         int maxPlayers = 2;
         string joinCode = await HostRelay(maxPlayers);
-        string lobbyName = "Placeholder";
         string lobbyType = type;
         CreateLobby(lobbyName, joinCode, maxPlayers, lobbyType);
     }
@@ -140,6 +139,7 @@ public class RelayManager : MonoBehaviour
     public async void JoinQueue()
     {
         string lobbyType = "Matchmaking";
+        string lobbyName = "Matchmaking";
         var lobbies = await SearchLobbiesOfType(lobbyType);
         if (lobbies.Any())
         {
@@ -147,7 +147,7 @@ public class RelayManager : MonoBehaviour
             return;
         }
 
-        CreateRoom(lobbyType);
+        CreateRoom(lobbyName, lobbyType);
     }
 
     public async Task<IEnumerable<Lobby>> ListRooms()

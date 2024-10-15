@@ -6,8 +6,13 @@ using UnityEngine.UI;
 
 public class StartQueueSearch : MonoBehaviour
 {
-    public void QueueUp()
+
+    private bool isInQueue = false;
+
+    public void FindGame()
     {
+        if (isInQueue) { return; }
         RelayManager.Singleton.JoinQueue();
+        isInQueue = true;
     }
 }

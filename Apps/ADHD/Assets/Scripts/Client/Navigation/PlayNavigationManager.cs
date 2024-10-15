@@ -18,19 +18,19 @@ public class PlayNavigationManager : MonoBehaviour
     public void NavigateToQuickMatch()
     {
         ClearContentView();
-
+        Instantiate(quickMatchPrefab, contentView);
     }
 
     public void NavigateToServerBrowser()
     {
         ClearContentView();
-        GameObject serverBrowserInstance = Instantiate(serverBrowserPrefab, contentView);
+        Instantiate(serverBrowserPrefab, contentView);
     }
 
     public void NavigateToCreateGame()
     {
         ClearContentView();
-
+        Instantiate(createGamePrefab, contentView);
     }
 
     private void ClearContentView()

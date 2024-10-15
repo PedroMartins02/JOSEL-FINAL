@@ -25,7 +25,7 @@ public class NavigationManager : MonoBehaviour
     public void NavigateToPlay()
     {
         ClearContentView();
-        GameObject playInstance = Instantiate(playPrefab, contentView);
+        Instantiate(playPrefab, contentView);
     }
 
     public void NavigateToCollection()
