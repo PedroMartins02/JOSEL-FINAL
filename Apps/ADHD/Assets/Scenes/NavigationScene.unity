@@ -204,7 +204,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 116132308}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1914627170}
+        m_TargetAssemblyTypeName: NavigationManager, Assembly-CSharp
+        m_MethodName: NavigateToCollection
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &116132308
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -325,7 +337,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 271383772}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1914627170}
+        m_TargetAssemblyTypeName: NavigationManager, Assembly-CSharp
+        m_MethodName: NavigateToPlay
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &271383772
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1147,7 +1171,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1023488371}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1914627170}
+        m_TargetAssemblyTypeName: NavigationManager, Assembly-CSharp
+        m_MethodName: NavigateToSettings
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1023488371
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1611,7 +1647,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1537130501}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1914627170}
+        m_TargetAssemblyTypeName: NavigationManager, Assembly-CSharp
+        m_MethodName: NavigateToHome
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 0
 --- !u!114 &1537130501
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1795,6 +1843,7 @@ GameObject:
   - component: {fileID: 1914627167}
   - component: {fileID: 1914627169}
   - component: {fileID: 1914627168}
+  - component: {fileID: 1914627170}
   m_Layer: 5
   m_Name: MenuPanel
   m_TagString: Untagged
@@ -1863,6 +1912,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1914627166}
   m_CullTransparentMesh: 1
+--- !u!114 &1914627170
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1914627166}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcc389bb7b4435f49a8cda467644a515, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  homePrefab: {fileID: 0}
+  playPrefab: {fileID: 7417869583786306551, guid: 5eb9a94e2f8fee844bbb693495b74763,
+    type: 3}
+  collectionPrefab: {fileID: 0}
+  settingsPrefab: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

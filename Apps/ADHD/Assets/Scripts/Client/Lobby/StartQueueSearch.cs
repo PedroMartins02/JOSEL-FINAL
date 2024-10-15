@@ -6,8 +6,6 @@ using UnityEngine.UI;
 
 public class StartQueueSearch : MonoBehaviour
 {
-
-
     public void QueueUp()
     {
         RelayManager.Singleton.JoinQueue();

@@ -18,6 +18,8 @@ using System.Linq;
 
 public class RelayManager : MonoBehaviour
 {
+    private bool isHostingLobby = false;
+    private string currentLobbyId;
     private static RelayManager _singleton;
 
     public static RelayManager Singleton
@@ -69,7 +71,44 @@ public class RelayManager : MonoBehaviour
             }
         };
         Lobby lobby = await LobbyService.Instance.CreateLobbyAsync(name, maxPlayers, options);
+        currentLobbyId = lobby.Id;
         Debug.Log("Lobby created with ID: " + lobby.Id);
+        isHostingLobby = true;
+        StartCoroutine(LobbyHeartbeatCoroutine());
+    }
+
+    private IEnumerator LobbyHeartbeatCoroutine()
+    {
+        while (isHostingLobby)
+        {
+            yield return new WaitForSeconds(30f); // Ping every 30 seconds
+
+            if (string.IsNullOrEmpty(currentLobbyId))
+            {
+                continue;
+            }
+
+            try
+            {
+                LobbyService.Instance.SendHeartbeatPingAsync(currentLobbyId);
+                Debug.Log("Lobby heartbeat sent for Lobby ID: " + currentLobbyId);
+            }
+            catch (LobbyServiceException e)
+            {
+                Debug.LogError("Failed to send lobby heartbeat: " + e.Message);
+                // Handle failure (e.g., lobby might no longer exist)
+            }
+        }
+    }
+
+    private async void CloseLobby()
+    {
+        isHostingLobby = false; // Stop the coroutine
+        if (string.IsNullOrEmpty(currentLobbyId)) { return; }
+
+        await LobbyService.Instance.DeleteLobbyAsync(currentLobbyId);
+        Debug.Log("Lobby deleted: " + currentLobbyId);
+        currentLobbyId = null;
     }
 
     private async Task<IEnumerable<Lobby>> SearchLobbiesOfType(string type)
@@ -82,7 +121,7 @@ public class RelayManager : MonoBehaviour
         return response.Results.Where(lobby => lobby.Data["Type"].Value.Equals(type));
     }
 
-    async void CreateRoom(string type)
+    public async void CreateRoom(string type)
     {
         int maxPlayers = 2;
         string joinCode = await HostRelay(maxPlayers);
@@ -104,24 +143,23 @@ public class RelayManager : MonoBehaviour
         CreateRoom(lobbyType);
     }
 
-    async void ListRooms()
+    public async Task<IEnumerable<Lobby>> ListRooms()
     {
-        var lobbies = await SearchLobbiesOfType("Custom");
-        if (!lobbies.Any()) { return; }
-
-        foreach (var lobby in lobbies)
-        {
-            Debug.Log($"Lobby Name: {lobby.Name}, Players: {lobby.Players.Count}/{lobby.MaxPlayers}");
-        }
+        return await SearchLobbiesOfType("Custom");
     }
 
-    async void JoinRoom(string joinCode)
+    public async void JoinRoom(string joinCode)
     {
-        var joinAllocation = await RelayService.Instance.JoinAllocationAsync(joinCode);
-        var relayServerData = new RelayServerData(joinAllocation, "dtls");
-        NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
-        NetworkManager.Singleton.StartClient();
+        try {
+            var joinAllocation = await RelayService.Instance.JoinAllocationAsync(joinCode);
+            var relayServerData = new RelayServerData(joinAllocation, "dtls");
+            NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
+            NetworkManager.Singleton.StartClient();
 
-        Debug.Log($"Joined Lobby: {relayServerData}");
+            Debug.Log($"Joined Lobby: {relayServerData}");
+        } catch (Exception ex)
+        {
+            Debug.Log($"Failed to join Lobby: {ex.Message}");
+        }
     }
 }
