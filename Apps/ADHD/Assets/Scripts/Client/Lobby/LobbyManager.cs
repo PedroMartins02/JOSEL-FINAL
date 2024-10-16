@@ -1,3 +1,4 @@
+using GameModel;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,25 +14,61 @@ using UnityEngine.UI;
 public class LobbyManager : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI nameText;
-    [SerializeField] private Button readyButton;
+    [SerializeField] private GameObject playerPrefab;
+    [SerializeField] private Transform player1Slot;
+    [SerializeField] private Transform player2Slot;
 
     private bool hasReceivedPlayerData = false;
 
     void Start()
     {
         nameText.text = RelayManager.Singleton.currentLobby.Name;
-        NetworkManager.Singleton.OnClientConnectedCallback += OnPlayerJoined;
-        NetworkManager.Singleton.OnClientDisconnectCallback += OnPlayerLeft;
-        NetworkManager.Singleton.OnServerStopped += _ => NavigateBack();
+        AddCallbacks();
+        InstantiatePlayerPrefab(true);
         StartCoroutine(CheckLobbyExistenceCoroutine());
     }
 
     private void OnDestroy()
     {
+        RemoveCallbacks();
+        RelayManager.Singleton.CloseConnection();
+    }
+
+    private void InstantiatePlayerPrefab(bool isMe)
+    {
+        Transform slot = RelayManager.Singleton.isHostingLobby
+                        ? (isMe ? player1Slot : player2Slot)
+                        : (isMe ? player2Slot : player1Slot);
+
+        GameObject playerObject = Instantiate(playerPrefab, slot);
+        //PlayerUI playerUI = playerObject.GetComponent<PlayerUI>();
+        //playerUI.SetPlayerData(reee);
+    }
+
+    private void DestroyPlayerPrefab(bool isMe)
+    {
+        Transform slot = RelayManager.Singleton.isHostingLobby
+                        ? (isMe ? player1Slot : player2Slot)
+                        : (isMe ? player2Slot : player1Slot);
+
+        foreach (Transform child in slot)
+        {
+            Destroy(child.gameObject);
+        }
+    }
+
+    private void AddCallbacks()
+    {
+        NetworkManager.Singleton.OnClientConnectedCallback += OnPlayerJoined;
+        NetworkManager.Singleton.OnClientDisconnectCallback += OnPlayerLeft;
+        NetworkManager.Singleton.OnServerStopped += _ => NavigateBack();
+    }
+
+    private void RemoveCallbacks()
+    {
         NetworkManager.Singleton.OnClientConnectedCallback -= OnPlayerJoined;
         NetworkManager.Singleton.OnClientDisconnectCallback -= OnPlayerLeft;
         NetworkManager.Singleton.OnServerStopped -= _ => NavigateBack();
-        RelayManager.Singleton.CloseConnection();
     }
 
     IEnumerator CheckLobbyExistenceCoroutine()
@@ -66,6 +103,7 @@ public class LobbyManager : MonoBehaviour
     {
         hasReceivedPlayerData = true;
         Debug.Log($"Player {clientId} has joined.");
+        InstantiatePlayerPrefab(false);
     }
 
     private void OnPlayerLeft(ulong clientId)
@@ -73,10 +111,11 @@ public class LobbyManager : MonoBehaviour
         Debug.Log($"Player {clientId} has left.");
         if (RelayManager.Singleton.isHostingLobby)
         {
-            //handle client left
+            DestroyPlayerPrefab(false);
             return;
         }
 
+        DestroyPlayerPrefab(true);
         NavigateBack();
     }
 
