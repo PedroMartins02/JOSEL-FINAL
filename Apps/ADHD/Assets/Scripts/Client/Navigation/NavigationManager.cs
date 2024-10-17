@@ -5,12 +5,10 @@ using UnityEngine;
 public class NavigationManager : MonoBehaviour
 {
   [SerializeField] private Transform contentView;
-  //[SerializeField] private GameObject parallaxObject;
 
   void Start()
   {
     ClearContentView();
-    //ShowBackground();
   }
 
   public void NavigateToPage(GameObject pagePrefab)
@@ -28,9 +26,4 @@ public class NavigationManager : MonoBehaviour
       Destroy(child.gameObject);
     }
   }
-
-  /*private void ShowBackground()
-  {
-    parallaxObject.SetActive(true);
-  }*/
 }

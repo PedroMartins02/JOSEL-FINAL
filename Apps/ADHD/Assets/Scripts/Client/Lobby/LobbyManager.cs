@@ -62,6 +62,10 @@ public class LobbyManager : MonoBehaviour
         NetworkManager.Singleton.OnClientConnectedCallback += OnPlayerJoined;
         NetworkManager.Singleton.OnClientDisconnectCallback += OnPlayerLeft;
         NetworkManager.Singleton.OnServerStopped += _ => NavigateBack();
+        //OnReadyChange = (playerId, isReady) to update UI
+        //OnCountdownStart - to start countown 
+        //OnCountdownCancel - to stop countdown
+        //OnGameStart - to navigate to game scene
     }
 
     private void RemoveCallbacks()
@@ -121,11 +125,15 @@ public class LobbyManager : MonoBehaviour
 
     public void NavigateBack()
     {
-        NavigateToNavigationScene();
+        SceneManager.LoadScene("NavigationScene");
     }
 
-    private void NavigateToNavigationScene()
+    public void SetReady()
     {
-        SceneManager.LoadScene("NavigationScene");
+        /*
+        ready = !ready
+        UpdateUI -> change ready button to cancel and vice versa / update player prefab to display ready state
+        SendToServer
+         */ 
     }
 }
