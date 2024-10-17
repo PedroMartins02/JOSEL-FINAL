@@ -4,46 +4,33 @@ using UnityEngine;
 
 public class NavigationManager : MonoBehaviour
 {
-    [SerializeField] private Transform contentView;
+  [SerializeField] private Transform contentView;
+  //[SerializeField] private GameObject parallaxObject;
 
-    [SerializeField] private GameObject homePrefab;
-    [SerializeField] private GameObject playPrefab;
-    [SerializeField] private GameObject collectionPrefab;
-    [SerializeField] private GameObject settingsPrefab;
+  void Start()
+  {
+    ClearContentView();
+    //ShowBackground();
+  }
 
-    void Start()
+  public void NavigateToPage(GameObject pagePrefab)
+  {
+    ClearContentView();
+
+    if (pagePrefab != null)
+      Instantiate(pagePrefab, contentView);
+  }
+
+  private void ClearContentView()
+  {
+    foreach (Transform child in contentView)
     {
-        NavigateToHome();
+      Destroy(child.gameObject);
     }
+  }
 
-    public void NavigateToHome()
-    {
-        ClearContentView();
-        
-    }
-
-    public void NavigateToPlay()
-    {
-        ClearContentView();
-        Instantiate(playPrefab, contentView);
-    }
-
-    public void NavigateToCollection()
-    {
-        ClearContentView();
-    }
-
-    public void NavigateToSettings()
-    {
-        ClearContentView();
-
-    }
-
-    private void ClearContentView()
-    {
-        foreach (Transform child in contentView)
-        {
-            Destroy(child.gameObject);
-        }
-    }
+  /*private void ShowBackground()
+  {
+    parallaxObject.SetActive(true);
+  }*/
 }

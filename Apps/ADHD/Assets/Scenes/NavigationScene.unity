@@ -207,11 +207,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1914627170}
         m_TargetAssemblyTypeName: NavigationManager, Assembly-CSharp
-        m_MethodName: NavigateToCollection
-        m_Mode: 1
+        m_MethodName: NavigateToPage
+        m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -340,11 +340,12 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1914627170}
         m_TargetAssemblyTypeName: NavigationManager, Assembly-CSharp
-        m_MethodName: NavigateToPlay
-        m_Mode: 1
+        m_MethodName: NavigateToPage
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 4623477723509909156, guid: 315b17c35b05d714f8ffa6e1acf2ac73,
+            type: 3}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -1175,11 +1176,12 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1914627170}
         m_TargetAssemblyTypeName: NavigationManager, Assembly-CSharp
-        m_MethodName: NavigateToSettings
-        m_Mode: 1
+        m_MethodName: NavigateToPage
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 7344075579108143832, guid: 2dee0b07fecce8241a79d73bc41244e7,
+            type: 3}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -1797,11 +1799,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1914627170}
         m_TargetAssemblyTypeName: NavigationManager, Assembly-CSharp
-        m_MethodName: NavigateToHome
-        m_Mode: 1
+        m_MethodName: NavigateToPage
+        m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -2072,11 +2074,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   contentView: {fileID: 298845426}
-  homePrefab: {fileID: 0}
-  playPrefab: {fileID: 4623477723509909156, guid: 315b17c35b05d714f8ffa6e1acf2ac73,
-    type: 3}
-  collectionPrefab: {fileID: 0}
-  settingsPrefab: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
