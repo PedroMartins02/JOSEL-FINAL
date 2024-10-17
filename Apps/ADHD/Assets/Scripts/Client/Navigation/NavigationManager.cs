@@ -6,6 +6,8 @@ public class NavigationManager : MonoBehaviour
 {
     [SerializeField] private Transform contentView;
 
+    [SerializeField] private GameObject parallaxObject;
+
     [SerializeField] private GameObject homePrefab;
     [SerializeField] private GameObject playPrefab;
     [SerializeField] private GameObject collectionPrefab;
@@ -14,12 +16,13 @@ public class NavigationManager : MonoBehaviour
     void Start()
     {
         NavigateToHome();
+        ShowBackground();
     }
 
     public void NavigateToHome()
     {
         ClearContentView();
-
+        
     }
 
     public void NavigateToPlay()
@@ -31,7 +34,6 @@ public class NavigationManager : MonoBehaviour
     public void NavigateToCollection()
     {
         ClearContentView();
-
     }
 
     public void NavigateToSettings()
@@ -44,7 +46,12 @@ public class NavigationManager : MonoBehaviour
     {
         foreach (Transform child in contentView)
         {
-            Destroy(child.gameObject);
+            //Destroy(child.gameObject);
         }
+    }
+
+    private void ShowBackground()
+    {
+        parallaxObject.SetActive(true);
     }
 }
