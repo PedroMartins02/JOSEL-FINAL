@@ -1179,7 +1179,7 @@ MonoBehaviour:
         m_MethodName: NavigateToPage
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 7344075579108143832, guid: 2dee0b07fecce8241a79d73bc41244e7,
+          m_ObjectArgument: {fileID: 2600058602380722947, guid: 2dee0b07fecce8241a79d73bc41244e7,
             type: 3}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
