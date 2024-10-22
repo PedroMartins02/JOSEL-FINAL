@@ -85,6 +85,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3948008132896919974}
   - component: {fileID: 8450917959186219492}
+  - component: {fileID: 5879102461892386422}
   m_Layer: 5
   m_Name: Parallax
   m_TagString: Untagged
@@ -134,6 +135,28 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &5879102461892386422
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2398499347528413949}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f194a553ad11fa349bfcde2e0996c094, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skyImage: {fileID: 4872230607629622771}
+  skySprites:
+  - {fileID: 21300000, guid: f20273e7e5e546d419846cc54943a72b, type: 3}
+  - {fileID: 21300000, guid: a1e3bd0a2581bad42bc134c56dd7d3c0, type: 3}
+  - {fileID: 21300000, guid: 31dbfb53a98e0134b8e08a4de8ed18d9, type: 3}
+  templeImage: {fileID: 6454653913954635899}
+  templeSprites:
+  - {fileID: 21300000, guid: 04148373e8db41948a8f11b18b7c0873, type: 3}
+  - {fileID: 21300000, guid: 8673cc03a329e254ead71f662f9acaa5, type: 3}
+  - {fileID: 21300000, guid: ef01a33bb526d53469eb677f4d5a9796, type: 3}
 --- !u!1 &6016248487855450775
 GameObject:
   m_ObjectHideFlags: 0

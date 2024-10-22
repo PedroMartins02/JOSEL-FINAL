@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class NavigationManager : MonoBehaviour
 {
-  [SerializeField] private Transform contentView;
+    [SerializeField] private Transform contentView;
+    [SerializeField] private GameObject startPage;
 
-  void Start()
-  {
-    ClearContentView();
-  }
+    void Start()
+    {
+        ClearContentView();
+        NavigateToPage(startPage);
+    }
 
   public void NavigateToPage(GameObject pagePrefab)
   {

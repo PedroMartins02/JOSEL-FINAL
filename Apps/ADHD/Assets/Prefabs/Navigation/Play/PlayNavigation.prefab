@@ -401,6 +401,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   contentView: {fileID: 2831087306500888726}
+  startPage: {fileID: 7417869583786306551, guid: 2621bb5dd7f6c5d4eb80641b14b68368,
+    type: 3}
 --- !u!1 &5237533762434184918
 GameObject:
   m_ObjectHideFlags: 0
