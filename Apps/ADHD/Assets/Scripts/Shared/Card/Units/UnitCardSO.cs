@@ -9,7 +9,6 @@ namespace GameModel
     {
         public int Attack;
         public int Health;
-        public List<IModifier> Modifiers;
         public Elements Element;
 
         public CardSO MapToCardSO()
