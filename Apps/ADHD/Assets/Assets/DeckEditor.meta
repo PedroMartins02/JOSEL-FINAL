@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Apps/ADHD/Assets/Cards.meta
+guid: a5198f8128102954696f8517502d6a57
+========
 guid: c607604cd09691448957be6def9c06d8
+>>>>>>>> c7511ac5050c235ce5927ee0e6d7d5145d8a82cc:Apps/ADHD/Assets/Assets/DeckEditor.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

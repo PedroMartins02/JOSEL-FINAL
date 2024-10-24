@@ -4,12 +4,9 @@ using UnityEngine;
 
 namespace GameModel
 {
-    [CreateAssetMenu(fileName = "New Unit Card", menuName = "Cards/Unit Card")]
-    public class UnitCardSO : CardSO
+    [CreateAssetMenu(fileName = "New Unit Card", menuName = "Cards/Battle Tactic Card")]
+    public class BattleTacticCardSO : CardSO
     {
-        public int Attack;
-        public int Health;
-        public Elements Element;
 
         public CardSO MapToCardSO()
         {

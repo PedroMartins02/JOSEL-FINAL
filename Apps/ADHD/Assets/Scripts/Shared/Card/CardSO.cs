@@ -11,6 +11,8 @@ namespace GameModel
         public Sprite Art;
         public string ShortText;
         public string Description;
+        public List<IModifier> Modifiers;
+        public List<Effect> Effects;
         public Factions Faction;
     }
 }
