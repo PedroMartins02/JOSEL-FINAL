@@ -15,6 +15,8 @@ EditorBuildSettings:
     path: Assets/Scenes/AugmentedReality.unity
     guid: 1c1c513efbd5b3746a89afe8c3be5ef5
   m_configObjects:
+    Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 7d1eb4e1e2eb752488c0e170f48c335b,
+      type: 2}
     com.unity.xr.arfoundation.simulation_settings: {fileID: 11400000, guid: 2b55480cc5535c84eb2d17c7b31b1c5f,
       type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: ebcc273ce1ae6e54d9067e0f09f9ceba,
