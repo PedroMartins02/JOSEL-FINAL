@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Apps/ADHD/Assets/XR/Loaders.meta
 guid: 7b396fa97c79b2847b7ce61cddbd0127
+========
+guid: 0373dd4e21570bc43a36bfb3e511e3ce
+>>>>>>>> 56f63eb6fb30b18d5112a0caeaa9560ae2d4289b:Apps/ADHD/Assets/Assets/Shop.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
