@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6680243804346614484}
   - component: {fileID: 5879027775182567121}
   m_Layer: 5
-  m_Name: PlayContent
+  m_Name: CardsContent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -163,7 +163,7 @@ GameObject:
   - component: {fileID: 3619758120570541818}
   - component: {fileID: 6669769633898173083}
   m_Layer: 5
-  m_Name: DeckMenu
+  m_Name: CardsNavigation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -219,7 +219,7 @@ GameObject:
   - component: {fileID: 9004665381937103461}
   - component: {fileID: 178087644857871216}
   m_Layer: 5
-  m_Name: DeckButton
+  m_Name: DecksButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -389,7 +389,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -342}
+  m_AnchoredPosition: {x: 0, y: -222}
   m_SizeDelta: {x: -60, y: 97}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8129008041947783071
