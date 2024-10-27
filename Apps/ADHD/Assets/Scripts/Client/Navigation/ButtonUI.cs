@@ -7,6 +7,9 @@ public class ButtonUI : MonoBehaviour
 {
     [SerializeField] private Sprite onSprite;
     [SerializeField] private Sprite offSprite;
+    [SerializeField] private bool isOn;
+
+    private bool isStartup = true;
 
     private Image buttonImage;
 
@@ -17,16 +20,29 @@ public class ButtonUI : MonoBehaviour
 
     public void Start()
     {
-        //SetOff();
+        buttonImage.sprite = isOn ? onSprite : offSprite;
     }
 
     public void SetOn()
     {
+        isOn = true;
         buttonImage.sprite = onSprite;
     }
 
     public void SetOff()
     {
+        if (isStartup)
+        {
+            isStartup = false;
+            return;
+        }
+        isOn = false;
         buttonImage.sprite = offSprite;
+    }
+
+    public void Toggle()
+    {
+        isOn = !isOn;
+        buttonImage.sprite = isOn ? onSprite : offSprite;
     }
 }

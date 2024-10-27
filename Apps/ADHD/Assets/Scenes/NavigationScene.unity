@@ -218,6 +218,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 116132310}
+        m_TargetAssemblyTypeName: ButtonUI, Assembly-CSharp
+        m_MethodName: SetOn
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &116132308
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -270,6 +282,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   onSprite: {fileID: 21300000, guid: b670211c1f607e94995e2b11194a5ae4, type: 3}
   offSprite: {fileID: 21300000, guid: 3128522ad5a9ad54497b6314cd8bb908, type: 3}
+  isOn: 0
 --- !u!1 &271383769
 GameObject:
   m_ObjectHideFlags: 0
@@ -366,6 +379,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 271383774}
+        m_TargetAssemblyTypeName: ButtonUI, Assembly-CSharp
+        m_MethodName: SetOn
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &271383772
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -418,6 +443,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   onSprite: {fileID: 21300000, guid: 1c7897d66bf9bc94facabb9001eb39e7, type: 3}
   offSprite: {fileID: 21300000, guid: 23f9d62f10288d34db4a0a571779d704, type: 3}
+  isOn: 0
 --- !u!1 &298845425
 GameObject:
   m_ObjectHideFlags: 0
@@ -899,6 +925,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 753389008}
+        m_TargetAssemblyTypeName: ButtonUI, Assembly-CSharp
+        m_MethodName: SetOn
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &753389006
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -951,6 +989,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   onSprite: {fileID: 21300000, guid: 5ad23ac39a2588142abfecb8577ae0c0, type: 3}
   offSprite: {fileID: 21300000, guid: 8f1a1b880d1037e4cabeb5c45fe9e245, type: 3}
+  isOn: 0
 --- !u!1 &944508406
 GameObject:
   m_ObjectHideFlags: 0
@@ -1533,6 +1572,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1537130503}
+        m_TargetAssemblyTypeName: ButtonUI, Assembly-CSharp
+        m_MethodName: SetOn
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1537130501
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1585,6 +1636,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   onSprite: {fileID: 21300000, guid: 32bd70ca151d4714e9142032e681899c, type: 3}
   offSprite: {fileID: 21300000, guid: f17202164b705a74b9823b4c4b5fdbcf, type: 3}
+  isOn: 1
 --- !u!1 &1914627166
 GameObject:
   m_ObjectHideFlags: 0

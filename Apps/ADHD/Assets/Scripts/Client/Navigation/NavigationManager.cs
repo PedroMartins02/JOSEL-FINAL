@@ -33,7 +33,6 @@ public class NavigationManager : MonoBehaviour
         ClearContentView();
         ResetButtons();
         Instantiate(pagePrefab, contentView);
-        HighlightButton();
     }
 
     private void ResetButtons()
@@ -42,18 +41,6 @@ public class NavigationManager : MonoBehaviour
         {
             button.SetOff();
         }
-    }
-
-    private void HighlightButton()
-    {
-        GameObject clickedButton = EventSystem.current.currentSelectedGameObject;
-        if (clickedButton == null || !buttons.Any(b => b.Equals(clickedButton.GetComponent<ButtonUI>())))
-        {
-            buttons.FirstOrDefault().SetOn();
-            return;
-        }
-        ButtonUI clickedButtonUI = clickedButton.GetComponent<ButtonUI>();
-        clickedButtonUI.SetOn();
     }
 
     private void ClearContentView()
