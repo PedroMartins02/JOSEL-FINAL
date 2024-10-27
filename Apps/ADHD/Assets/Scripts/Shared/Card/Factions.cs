@@ -4,7 +4,7 @@ namespace GameModel
     {
         Greek = 0,
         Roman = 1,
-        Viking = 2,
+        Norse = 2,
         Egypt = 3,
     }
 }

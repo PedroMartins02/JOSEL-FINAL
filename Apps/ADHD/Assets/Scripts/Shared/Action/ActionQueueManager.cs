@@ -5,17 +5,17 @@ namespace GameModel
 {
     public static class ActionQueueManager
     {
-        private static Queue<IAction> actionQueue = new Queue<IAction>();
+        private static Queue<Action> actionQueue = new Queue<Action>();
         private static bool isProcessing = false;
 
-        public static void AddAction(IAction action)
+        public static void AddAction(Action action)
         {
             actionQueue.Enqueue(action);
         }
 
-        public static void AddPriorityAction(IAction action)
+        public static void AddPriorityAction(Action action)
         {
-            var newQueue = new Queue<IAction>();
+            var newQueue = new Queue<Action>();
             newQueue.Enqueue(action);
 
             while (actionQueue.Count > 0)
@@ -34,7 +34,7 @@ namespace GameModel
 
             if (actionQueue.Count > 0)
             {
-                IAction nextAction = actionQueue.Dequeue();
+                Action nextAction = actionQueue.Dequeue();
 
                 await nextAction.Execute();
             }

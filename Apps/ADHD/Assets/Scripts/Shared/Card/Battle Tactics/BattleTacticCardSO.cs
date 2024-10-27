@@ -4,14 +4,9 @@ using UnityEngine;
 
 namespace GameModel
 {
-    [CreateAssetMenu(fileName = "New Unit Card", menuName = "Cards/Battle Tactic Card")]
+    [CreateAssetMenu(fileName = "New Unit Card", menuName = "Cards/Battle Tactic")]
     public class BattleTacticCardSO : CardSO
     {
-
-        public CardSO MapToCardSO()
-        {
-            // TODO: Implement this shit
-            return CreateInstance<CardSO>();
-        }
+        public List<Effect> Effects;
     }
 }

@@ -52,5 +52,10 @@ namespace GameCore
         {
             _currentState?.NextPhase();
         }
+
+        public void SetPhase()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

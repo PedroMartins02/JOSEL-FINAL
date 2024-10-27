@@ -9,12 +9,5 @@ namespace GameModel
     {
         public int Attack;
         public int Health;
-        public Elements Element;
-
-        public CardSO MapToCardSO()
-        {
-            // TODO: Implement this shit
-            return CreateInstance<CardSO>();
-        }
     }
 }

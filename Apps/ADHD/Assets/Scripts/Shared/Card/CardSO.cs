@@ -7,12 +7,11 @@ namespace GameModel
     public class CardSO : ScriptableObject
     {
         public string Name;
-        public int Blessings;
         public Sprite Art;
+        public Factions Faction;
+        public Elements Element;
         public string ShortText;
         public string Description;
-        public List<IModifier> Modifiers;
-        public List<Effect> Effects;
-        public Factions Faction;
+        public int Blessings;
     }
 }

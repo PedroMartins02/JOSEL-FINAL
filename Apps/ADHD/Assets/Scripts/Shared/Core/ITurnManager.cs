@@ -1,5 +1,7 @@
 public interface ITurnManager
 {
-    void StartTurn();
-    void EndTurn();
+    public void StartTurn();
+    public void EndTurn();
+    public void NextPhase();
+    public void SetPhase();
 }

@@ -11,7 +11,7 @@ namespace GameModel
     {
         public string Name;
         public Card Myth;
-        public List<Card> Cards;
+        public List<CardSO> Cards;
         public Factions Faction;
     }
 }

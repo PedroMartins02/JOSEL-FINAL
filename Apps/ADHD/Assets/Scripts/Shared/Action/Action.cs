@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace GameModel
 {
-    public abstract class IAction
+    public abstract class Action : ScriptableObject
     {
         public abstract bool IsLegal();
         public abstract Task Execute();

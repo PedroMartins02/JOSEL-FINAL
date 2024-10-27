@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace GameModel
 {
-    public abstract class ICondition
+    public interface IModifiable 
     {
-        public abstract bool IsTrue();
+        
     }
 }
