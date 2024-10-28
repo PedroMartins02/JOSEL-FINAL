@@ -16,8 +16,30 @@ namespace GameModel
         {
             this.Name = deckSO.Name;
             this.Myth = deckSO.Myth;
-            this.Cards = deckSO.Cards;
             this.Faction = deckSO.Faction;
+
+            this.Cards = new List<Card>();
+
+            InitializeCards(deckSO.Cards);
+        }
+
+        private void InitializeCards(List<CardSO> cardSOList)
+        {
+            foreach (object cardSO in cardSOList)
+            {
+                if (cardSO.GetType() == typeof(UnitCardSO))
+                {
+                    Cards.Add(new UnitCard((UnitCardSO)cardSO));
+                }
+                else if (cardSO.GetType() == typeof(LegendCardSO))
+                {
+                    Cards.Add(new LegendCard((LegendCardSO)cardSO));
+                }
+                else if (cardSO.GetType() == typeof(BattleTacticCardSO))
+                {
+                    Cards.Add(new BattleTacticCard((BattleTacticCardSO)cardSO));
+                }
+            }
         }
     }
 }

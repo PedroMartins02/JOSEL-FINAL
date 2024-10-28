@@ -5,10 +5,11 @@ using UnityEngine;
 
 namespace GameModel
 {
-    public abstract class Effect
+    [CreateAssetMenu(fileName = "New Card Effect", menuName = "Effect")]
+    public class Effect : ScriptableObject
     {
-        protected List<ICondition> conditionList;
-        protected List<IAction> actionList;
+        [SerializeField] protected List<Condition> conditionList;
+        [SerializeField] protected List<Action> actionList;
 
         public void Apply()
         {

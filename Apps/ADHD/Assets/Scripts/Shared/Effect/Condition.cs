@@ -4,9 +4,8 @@ using UnityEngine;
 
 namespace GameModel
 {
-    public abstract class IModifier
+    public abstract class Condition : ScriptableObject
     {
-        public abstract void Apply();
-        public abstract void Remove();
+        public abstract bool IsTrue();
     }
 }

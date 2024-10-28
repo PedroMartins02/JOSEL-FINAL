@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace GameModel
@@ -9,12 +10,19 @@ namespace GameModel
     {
         public int Attack;
         public int Health;
-        public Elements Element;
+    }
 
-        public CardSO MapToCardSO()
+    [CustomEditor(typeof(UnitCardSO))]
+    public class UnitCardSOEditor : CardSOEditor
+    {
+        private void OnEnable()
         {
-            // TODO: Implement this shit
-            return CreateInstance<CardSO>();
+            card = target as UnitCardSO;
+        }
+
+        public override void OnInspectorGUI()
+        {
+            base.OnInspectorGUI();
         }
     }
 }
