@@ -36,12 +36,6 @@ public class RelayManager : MonoBehaviour
         }
     }
 
-    async void Start()
-    {
-        await UnityServices.InitializeAsync(); 
-        await AuthenticationService.Instance.SignInAnonymouslyAsync();
-    }
-
     private void Awake()
     {
         if (Singleton == null)
