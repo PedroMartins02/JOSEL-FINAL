@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: UnitExample
   m_EditorClassIdentifier: 
   Name: 
-  Blessings: 0
-  Art: {fileID: 0}
+  ShortText: 
   Description: 
-  Faction: 2
+  Art: {fileID: 21300000, guid: 8f128ea4e61ea9940b21fc885d438166, type: 3}
+  Faction: 0
+  Element: 1
+  Blessings: 0
   Attack: 0
   Health: 0
-  Element: 1
