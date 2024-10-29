@@ -1,37 +1,45 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(GridLayoutGroup))]
 public class ScaleCardsToFitCell : MonoBehaviour
 {
-    private GridLayoutGroup gridLayout;
+    private RectTransform parentRect;
+    private bool isScaled = false;
 
     void Start()
     {
-        gridLayout = GetComponent<GridLayoutGroup>();
-        ScaleCards();
+        parentRect = GetComponent<RectTransform>();
     }
 
-
-    private void ScaleCards()
+    void Update()
     {
-        Vector2 cellSize = gridLayout.cellSize;
-
-        foreach (RectTransform card in transform)
+        if (isScaled)
         {
-            if (card != null)
-            {
-                // Calculate scale factor based on cell size vs card's original size
-                float scaleX = cellSize.x / card.rect.width;
-                float scaleY = cellSize.y / card.rect.height;
+            return;
+        }
+        parentRect = GetComponent<RectTransform>();
+        ScaleChildren();
+    }
 
-                // Use the smaller scale to maintain the aspect ratio
-                float uniformScale = Mathf.Min(scaleX, scaleY);
+    void ScaleChildren()
+    {
+        isScaled= true;
+        if (parentRect == null)
+        {
+            return;
+        }
 
-                // Apply uniform scale to the entire card
-                card.localScale = new Vector3(uniformScale, uniformScale, 1);
-                card.sizeDelta = cellSize; // Optional: Adjust if you need exact cell fitting
-            }
+        Vector2 parentSize = parentRect.rect.size;
+
+        foreach (RectTransform child in transform)
+        {
+            Vector2 childOriginalSize = child.rect.size;
+
+            float scaleX = parentSize.x / childOriginalSize.x;
+            float scaleY = parentSize.y / childOriginalSize.y;
+
+            child.localScale = new Vector3(scaleX, scaleY, 1f);
+            child.anchoredPosition = Vector2.zero;
         }
     }
 }
