@@ -1,8 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using GameModel;
-using UnityEditor;
 using UnityEngine;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 [CreateAssetMenu(fileName = "New Legend Card", menuName = "Cards/Legend Card")]
 public class LegendCardSO : CardSO
@@ -32,6 +35,7 @@ public class LegendCardSO : CardSO
         return unitCardSO;
     }
 
+#if UNITY_EDITOR
     [CustomEditor(typeof(LegendCardSO))]
     public class LegendSOEditor : CardSOEditor
     {
@@ -45,4 +49,5 @@ public class LegendCardSO : CardSO
             base.OnInspectorGUI();
         }
     }
+#endif
 }
