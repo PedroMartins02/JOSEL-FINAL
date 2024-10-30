@@ -7,6 +7,10 @@ using UnityEngine.UI;
 
 public class CardUI : MonoBehaviour
 {
+    [SerializeField] private Sprite UnitFrame;
+    [SerializeField] private Sprite BattleTacticFrame;
+    [SerializeField] private Sprite LegendFrame;
+
     [SerializeField] private Image ElementIcon;
 
     [SerializeField] private GameObject BlessingsIcon;
@@ -21,6 +25,9 @@ public class CardUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI CivilizationName;
     [SerializeField] private TextMeshProUGUI ShortText;
 
+    [SerializeField] private Image CardArt;
+    [SerializeField] private Image CardFrame;
+
     [SerializeField] private GameObject TagArea;
 
     void Start()
@@ -30,6 +37,59 @@ public class CardUI : MonoBehaviour
 
     public void SetCardData(Card card)
     {
+        if (card == null)
+            return;
 
+        SetGeneralUI(card);
+
+        if (card is UnitCard unitCard)
+        {
+            SetUnitCardUI(unitCard);
+            return;
+        }
+
+        if (card is BattleTacticCard battleTacticCard)
+        {
+            SetBattleTacticCardUI(battleTacticCard);
+            return;
+        }
+
+        if (card is LegendCard legendCard)
+        {
+            SetLegendCardUI(legendCard);
+            return;
+        }
+    }
+
+    private void SetGeneralUI(Card card)
+    {
+        CardName.text = card.Name;
+        ShortText.text = card.ShortText;
+        BlessingsText.text = card.Blessings.ToString();
+        CivilizationName.text = card.Faction.ToString();
+        //CardArt
+    }
+
+    private void SetUnitCardUI(UnitCard card)
+    {
+        CardFrame.sprite = UnitFrame;
+        //AttackText.text = card.Attack;
+        //HealthText.text = card.Text;
+    }
+
+    private void SetBattleTacticCardUI(BattleTacticCard card)
+    {
+        CardFrame.sprite = BattleTacticFrame;
+        AttackIcon.SetActive(false);
+        HealthIcon.SetActive(false);
+        //Effects
+    }
+
+    private void SetLegendCardUI(LegendCard card)
+    {
+        CardFrame.sprite = LegendFrame;
+        //AttackText.text = card.Attack;
+        //HealthText.text = card.Text;
+        //Effects
     }
 }
