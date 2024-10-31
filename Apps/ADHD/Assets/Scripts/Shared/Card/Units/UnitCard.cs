@@ -16,6 +16,7 @@ namespace GameModel
             this.Description = cardSO.Description;
             //this.Art = cardSO.Art.GetSpriteID();
             this.Faction = cardSO.Faction;
+            this.Element = cardSO.Element;
             this.Effects = new List<Effect>();
             this.Modifiers = new List<Modifier>();
             this.Blessings = cardSO.Blessings;

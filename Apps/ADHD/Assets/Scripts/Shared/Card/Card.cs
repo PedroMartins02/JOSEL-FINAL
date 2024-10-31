@@ -13,6 +13,7 @@ namespace GameModel
         public int Blessings { get; protected set; }
         //public GUID Art; // TODO: Verificar como guardar uma referencia para o asset
         public Factions Faction { get; protected set; }
+        public Elements Element { get; protected set; }
         public List<Effect> Effects { get; protected set; }
         public List<Modifier> Modifiers { get; protected set; }
     }

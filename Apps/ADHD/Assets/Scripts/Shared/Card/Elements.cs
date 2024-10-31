@@ -10,5 +10,7 @@ namespace GameModel
         Fire,
         Water,
         Earth,
+        Light,
+        Dark
     }
 }
