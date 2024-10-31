@@ -10,9 +10,13 @@ namespace GameModel
 {
     public class CardSO : ScriptableObject
     {
+        [Header("Card ID")]
+        public string Id;
+
         [Header("General Info")]
         public string Name;
         public string ShortText;
+
         [TextArea] public string Description;
         public Sprite Art;
 
@@ -24,6 +28,14 @@ namespace GameModel
         [Space]
         [Header("Stats")]
         public int Blessings;
+
+        private void OnValidate()
+        {
+            if (string.IsNullOrEmpty(Id))
+            {
+                Id = $"{System.Guid.NewGuid().ToString().Substring(0, 4)}{GetInstanceID()}";
+            }
+        }
     }
 
 
