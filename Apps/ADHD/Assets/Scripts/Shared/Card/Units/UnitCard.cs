@@ -6,8 +6,8 @@ namespace GameModel
 {
     public class UnitCard : Card
     {
-        private int attack;
-        private int health;
+        public int Attack { get; protected set; }
+        public int Health { get; protected set; }
 
         public UnitCard(UnitCardSO cardSO)
         {
@@ -19,8 +19,8 @@ namespace GameModel
             this.Effects = new List<Effect>();
             this.Modifiers = new List<Modifier>();
             this.Blessings = cardSO.Blessings;
-            this.attack = cardSO.Attack;
-            this.health = cardSO.Health;
+            this.Attack = cardSO.Attack;
+            this.Health = cardSO.Health;
         }
     }
 }
