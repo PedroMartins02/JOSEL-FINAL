@@ -30,8 +30,8 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2016168123835305163}
-  - {fileID: 4450732175600256277}
   - {fileID: 7352666495255167799}
+  - {fileID: 4450732175600256277}
   - {fileID: 71190835981384347}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -101,7 +101,6 @@ GameObject:
   - component: {fileID: 8879387715243838298}
   - component: {fileID: 6348528552545466371}
   - component: {fileID: 413301797508894449}
-  - component: {fileID: 6433908265003339609}
   m_Layer: 5
   m_Name: MissionsButton
   m_TagString: Untagged
@@ -191,7 +190,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.49019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -215,7 +214,7 @@ MonoBehaviour:
         m_MethodName: NavigateToPage
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 2600058602380722947, guid: 4efb7a40aab3ef3499e5e18b3621c2fd,
+          m_ObjectArgument: {fileID: 7417869583786306551, guid: f298924f74aac1d4da09648d3c425b76,
             type: 3}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
@@ -223,21 +222,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &6433908265003339609
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3712414023018607484}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d05af11e81b3df041a56664dd1da4424, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  onSprite: {fileID: 21300000, guid: 02cf5281b35a9d442a0193c5d589c4af, type: 3}
-  offSprite: {fileID: 21300000, guid: a82672b9f0c3105499fd097afd0f2ee6, type: 3}
-  isOn: 0
 --- !u!1 &4517496977575232903
 GameObject:
   m_ObjectHideFlags: 0
