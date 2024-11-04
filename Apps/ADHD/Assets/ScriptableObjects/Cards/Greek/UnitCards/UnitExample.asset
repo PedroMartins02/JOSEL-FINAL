@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40d5e5baf0e005248a06fdbfd3f36b64, type: 3}
   m_Name: UnitExample
   m_EditorClassIdentifier: 
+  Id: 44cf39914
   Name: 
   ShortText: 
   Description: 

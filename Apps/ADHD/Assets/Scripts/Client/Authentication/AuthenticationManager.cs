@@ -5,6 +5,7 @@ using TMPro;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class AuthenticationManager : MonoBehaviour
 {
@@ -123,6 +124,7 @@ public class AuthenticationManager : MonoBehaviour
         {
             await AuthenticationService.Instance.SignUpWithUsernamePasswordAsync(username, password);
             Debug.Log("Registration successful!");
+            OnRegisterSuccess();
         }
         catch (AuthenticationException ex)
         {
@@ -142,6 +144,7 @@ public class AuthenticationManager : MonoBehaviour
         {
             await AuthenticationService.Instance.SignInWithUsernamePasswordAsync(username, password);
             Debug.Log("Login successful!");
+            OnLoginSuccess();
         }
         catch (AuthenticationException ex)
         {
@@ -153,5 +156,16 @@ public class AuthenticationManager : MonoBehaviour
             Debug.LogError($"Request failed: {ex.Message}");
             LoginErrorText.text = ex.Message;
         }
+    }
+
+    private void OnRegisterSuccess()
+    {
+        //SceneManager.LoadScene("TutorialScene");
+        SceneManager.LoadScene("NavigationScene");
+    }
+
+    private void OnLoginSuccess()
+    {
+        SceneManager.LoadScene("NavigationScene");
     }
 }
