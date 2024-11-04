@@ -141,10 +141,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 3621507341929302813}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 761.67017, y: -4.0411835}
-  m_SizeDelta: {x: 42.0876, y: 38.4954}
+  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3817798128054236500
 CanvasRenderer:
@@ -236,6 +236,18 @@ MonoBehaviour:
           m_ObjectArgument: {fileID: 854574968755338123, guid: 468a24e06efadbd49bc75838e7b3dc65,
             type: 3}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 8641223213537364451}
+        m_TargetAssemblyTypeName: NavigationManager, Assembly-CSharp
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -1111,6 +1123,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6738949545016199465}
+  - component: {fileID: 1515185848957723927}
   m_Layer: 5
   m_Name: MissionsPanel
   m_TagString: Untagged
@@ -1138,6 +1151,21 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1515185848957723927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7417869583786306551}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcc389bb7b4435f49a8cda467644a515, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  contentView: {fileID: 6838843602472112143}
+  startPage: {fileID: 854574968755338123, guid: 468a24e06efadbd49bc75838e7b3dc65,
+    type: 3}
 --- !u!1 &7507145133938120227
 GameObject:
   m_ObjectHideFlags: 0
@@ -1420,13 +1448,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8641223213537364451}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fcc389bb7b4435f49a8cda467644a515, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   contentView: {fileID: 6838843602472112143}
-  startPage: {fileID: 7417869583786306551}
+  startPage: {fileID: 854574968755338123, guid: 468a24e06efadbd49bc75838e7b3dc65,
+    type: 3}
 --- !u!1 &8923327314530934543
 GameObject:
   m_ObjectHideFlags: 0
