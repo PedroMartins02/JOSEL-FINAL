@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Services.Authentication;
 using Unity.Services.CloudSave;
 using UnityEngine;
 
@@ -33,31 +34,42 @@ public class AccountManager : MonoBehaviour
         }
     }
 
-    public async void LoadData()
+    private PlayerData playerData;
+
+    public PlayerData GetPlayerData()
     {
-        var playerData = await CloudSaveService.Instance.Data.Player.LoadAsync(new HashSet<string> {
-          "firstKeyName", "secondKeyName"
-        });
+        return playerData;
+    }
 
-        if (playerData.TryGetValue("firstKeyName", out var firstKey))
+    public void SetPlayerData(PlayerData playerData, bool isToSave = false)
+    {
+        this.playerData = playerData;
+        if (isToSave)
         {
-            Debug.Log($"firstKeyName value: {firstKey.Value.GetAs<string>()}");
-        }
-
-        if (playerData.TryGetValue("secondKeyName", out var secondKey))
-        {
-            Debug.Log($"secondKey value: {secondKey.Value.GetAs<int>()}");
+            SaveData();
         }
     }
 
-    public async void SaveData()
+    public async void LoadData()
     {
-        var playerData = new Dictionary<string, object>{
-          {"firstKeyName", "a text value"},
-          {"secondKeyName", 123}
+        var playerDataDictionary = await CloudSaveService.Instance.Data.Player.LoadAsync(new HashSet<string> {"playerData"});
+
+        if (playerDataDictionary.TryGetValue("playerData", out var firstKey))
+        {
+            playerData = PlayerData.FromDictionary(firstKey.Value.GetAs<Dictionary<string, object>>());
+            Debug.Log($"Loaded data {string.Join(',', playerDataDictionary)}");
+            Debug.Log($"PlayerData instance {playerData.ToJson()}");
+        }
+    }
+
+    private async void SaveData()
+    {
+        Debug.Log($"PlayerData instance {playerData.ToJson()}");
+        var playerDataDictionary = new Dictionary<string, object>{
+          {"playerData", playerData.ToDictionary()}
         };
-        await CloudSaveService.Instance.Data.Player.SaveAsync(playerData);
-        Debug.Log($"Saved data {string.Join(',', playerData)}");
+        await CloudSaveService.Instance.Data.Player.SaveAsync(playerDataDictionary);
+        Debug.Log($"Saved data {string.Join(',', playerDataDictionary)}");
     }
 
 }

@@ -1,18 +1,36 @@
+using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using UnityEngine;
 
-public class PlayerData : MonoBehaviour
+[System.Serializable]
+public class PlayerData
 {
-    // Start is called before the first frame update
-    void Start()
+    public string Name { get; set; }
+
+    public PlayerData(string name)
     {
-        
+        Name = name;
     }
 
-    // Update is called once per frame
-    void Update()
+    public string ToJson()
     {
-        
+        return JsonConvert.SerializeObject(this);
+    }
+
+    public static PlayerData FromJson(string jsonData)
+    {
+        return JsonConvert.DeserializeObject<PlayerData>(jsonData);
+    }
+
+    public Dictionary<string, object> ToDictionary()
+    {
+        return JsonConvert.DeserializeObject<Dictionary<string, object>>(this.ToJson());
+    }
+
+    public static PlayerData FromDictionary(Dictionary<string, object> dict)
+    {
+        return JsonConvert.DeserializeObject<PlayerData>(JsonConvert.SerializeObject(dict));
     }
 }

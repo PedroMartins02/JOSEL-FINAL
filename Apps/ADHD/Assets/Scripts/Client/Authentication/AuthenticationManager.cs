@@ -124,7 +124,7 @@ public class AuthenticationManager : MonoBehaviour
         {
             await AuthenticationService.Instance.SignUpWithUsernamePasswordAsync(username, password);
             Debug.Log("Registration successful!");
-            OnRegisterSuccess();
+            OnRegisterSuccess(username);
         }
         catch (AuthenticationException ex)
         {
@@ -144,7 +144,7 @@ public class AuthenticationManager : MonoBehaviour
         {
             await AuthenticationService.Instance.SignInWithUsernamePasswordAsync(username, password);
             Debug.Log("Login successful!");
-            OnLoginSuccess();
+            OnLoginSuccess(username);
         }
         catch (AuthenticationException ex)
         {
@@ -158,14 +158,21 @@ public class AuthenticationManager : MonoBehaviour
         }
     }
 
-    private void OnRegisterSuccess()
+    private async void OnRegisterSuccess(string username)
     {
+        await AuthenticationService.Instance.UpdatePlayerNameAsync(username);
         //SceneManager.LoadScene("TutorialScene");
         SceneManager.LoadScene("NavigationScene");
     }
 
-    private void OnLoginSuccess()
+    private async void OnLoginSuccess(string username)
     {
+        string currentUsername = await AuthenticationService.Instance.GetPlayerNameAsync();
+        if (currentUsername == null)
+        {
+            await AuthenticationService.Instance.UpdatePlayerNameAsync(username);
+        }
+        AccountManager.Singleton.SetPlayerData(new PlayerData(username));
         SceneManager.LoadScene("NavigationScene");
     }
 }
