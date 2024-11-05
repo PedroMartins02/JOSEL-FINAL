@@ -1866,6 +1866,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3619758120570541818}
+  - component: {fileID: 4825387500751271684}
   m_Layer: 5
   m_Name: CollectionPage
   m_TagString: Untagged
@@ -1893,6 +1894,21 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &4825387500751271684
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4623477723509909156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24248093c411d484f98e128f3f94eeb4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ScrollContent: {fileID: 1190504866603625607}
+  CardPrefab: {fileID: 6066824139122942845, guid: 2318f09ea2dcbee4db9127028a22be72,
+    type: 3}
 --- !u!1 &5179286777983732156
 GameObject:
   m_ObjectHideFlags: 0

@@ -172,7 +172,6 @@ public class AuthenticationManager : MonoBehaviour
         {
             await AuthenticationService.Instance.UpdatePlayerNameAsync(username);
         }
-        AccountManager.Singleton.SetPlayerData(new PlayerData(username));
         SceneManager.LoadScene("NavigationScene");
     }
 }

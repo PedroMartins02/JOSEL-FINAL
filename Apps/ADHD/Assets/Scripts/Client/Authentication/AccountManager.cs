@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Unity.Services.Authentication;
 using Unity.Services.CloudSave;
 using UnityEngine;
@@ -50,7 +51,7 @@ public class AccountManager : MonoBehaviour
         }
     }
 
-    public async void LoadData()
+    public async Task<bool> LoadData()
     {
         var playerDataDictionary = await CloudSaveService.Instance.Data.Player.LoadAsync(new HashSet<string> {"playerData"});
 
@@ -59,7 +60,9 @@ public class AccountManager : MonoBehaviour
             playerData = PlayerData.FromDictionary(firstKey.Value.GetAs<Dictionary<string, object>>());
             Debug.Log($"Loaded data {string.Join(',', playerDataDictionary)}");
             Debug.Log($"PlayerData instance {playerData.ToJson()}");
+            return true;
         }
+        return false;
     }
 
     private async void SaveData()

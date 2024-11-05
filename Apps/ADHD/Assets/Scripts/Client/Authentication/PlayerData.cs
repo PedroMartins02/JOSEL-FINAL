@@ -8,10 +8,12 @@ using UnityEngine;
 public class PlayerData
 {
     public string Name { get; set; }
+    public Dictionary<string, int> CardCollection { get; set; }
 
     public PlayerData(string name)
     {
         Name = name;
+        CardCollection = new Dictionary<string, int>();
     }
 
     public string ToJson()

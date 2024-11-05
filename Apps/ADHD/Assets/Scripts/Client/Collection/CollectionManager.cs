@@ -2,10 +2,15 @@ using GameModel;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Serialization;
+using TMPro;
 using UnityEngine;
 
 public class CollectionManager : MonoBehaviour
 {
+    [SerializeField] private Transform ScrollContent;
+    [SerializeField] private GameObject CardPrefab;
+
     private List<Card> cards = new List<Card>();
     private Dictionary<Factions, bool> factionsFilter = new Dictionary<Factions, bool>();
     private Dictionary<int, bool> blessingsFilter = new Dictionary<int, bool>();
@@ -17,6 +22,42 @@ public class CollectionManager : MonoBehaviour
     {
         InitializeCardTypeMapping();
         InitializeFilters();
+    }
+
+    private void Start()
+    {
+        //JUST A TEST
+        LoadCardCollection();
+    }
+
+    private void LoadCardCollection()
+    {
+        //JUST A TEST
+        UnitCardSO[] allCardSOs = Resources.LoadAll<UnitCardSO>("ScriptableObjects/Cards/Greek/UnitCards");
+        List<Card> allCards = new List<Card>();
+        foreach (UnitCardSO cardSO in allCardSOs)
+        {
+            allCards.Add(new UnitCard(cardSO));
+        }
+
+        foreach (Transform child in ScrollContent)
+        {
+            Destroy(child.gameObject);
+        }
+
+        foreach (Card card in allCards)
+        {
+            var cardInstance = Instantiate(CardPrefab, ScrollContent);
+            var cardUI = cardInstance.GetComponent<CardUI>();
+            cardUI.SetCardData(card);
+        }
+
+        PlayerData playerData = AccountManager.Singleton.GetPlayerData();
+        foreach (var kvp in playerData.CardCollection)
+        {
+            string cardId = kvp.Key;
+            int cardQuantity = kvp.Value;
+        }
     }
 
     private void InitializeCardTypeMapping()
