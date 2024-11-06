@@ -1,7 +1,9 @@
 using GameModel;
+using ModestTree;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Serialization;
 using TMPro;
 using UnityEngine;
@@ -53,10 +55,13 @@ public class CollectionManager : MonoBehaviour
         }
 
         PlayerData playerData = AccountManager.Singleton.GetPlayerData();
-        foreach (var kvp in playerData.CardCollection)
+
+        if (playerData.DeckCollection.IsEmpty())
         {
-            string cardId = kvp.Key;
-            int cardQuantity = kvp.Value;
+            DeckSO[] deckSOs = Resources.LoadAll<DeckSO>("ScriptableObjects/Decks");
+            DeckSO starterDeck = deckSOs.Where(deck => deck.Name.Equals("Starter Deck")).First();
+            playerData.DeckCollection.Add(new DeckData(starterDeck));
+            AccountManager.Singleton.SetPlayerData(playerData, true);
         }
     }
 
