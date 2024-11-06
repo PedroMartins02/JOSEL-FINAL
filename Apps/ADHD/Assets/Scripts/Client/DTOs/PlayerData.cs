@@ -8,7 +8,7 @@ using GameModel;
 public class PlayerData
 {
     public string Name { get; set; }
-    public Dictionary<string, int> CardCollection { get; set; } = new Dictionary<string, int>();
+    public List<string> CardCollection { get; set; } = new List<string>();
     public List<DeckData> DeckCollection { get; set; } = new List<DeckData>();
 
     // Parameterless constructor for JSON deserialization
@@ -19,7 +19,7 @@ public class PlayerData
     public PlayerData(string name)
     {
         Name = name;
-        CardCollection = new Dictionary<string, int>();
+        CardCollection = new List<string>();
         DeckCollection = new List<DeckData>();
     }
 

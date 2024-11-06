@@ -1,5 +1,6 @@
 using GameModel;
 using ModestTree;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -35,11 +36,31 @@ public class CollectionManager : MonoBehaviour
     private void LoadCardCollection()
     {
         //JUST A TEST
-        UnitCardSO[] allCardSOs = Resources.LoadAll<UnitCardSO>("ScriptableObjects/Cards/Greek/UnitCards");
-        List<Card> allCards = new List<Card>();
-        foreach (UnitCardSO cardSO in allCardSOs)
+        UnitCardSO[] allUnitCardSOs = Resources.LoadAll<UnitCardSO>("ScriptableObjects/Cards/Greek/UnitCards");
+        List<Card> allUnitCards = new List<Card>();
+        foreach (UnitCardSO cardSO in allUnitCardSOs)
         {
-            allCards.Add(new UnitCard(cardSO));
+            allUnitCards.Add(new UnitCard(cardSO));
+        }
+        //JUST A TEST
+
+        PlayerData playerData = AccountManager.Singleton.GetPlayerData();
+
+        if (playerData.CardCollection.IsEmpty())
+        {
+            DeckSO[] deckSOs = Resources.LoadAll<DeckSO>("ScriptableObjects/Decks");
+            DeckSO starterDeck = deckSOs.Where(deck => deck.Name.Equals("Starter Deck")).First();
+            foreach(CardSO card in starterDeck.Cards)
+            {
+                playerData.CardCollection.Add(card.Id);
+            }
+
+            if (playerData.DeckCollection.IsEmpty())
+            {
+                playerData.DeckCollection.Add(new DeckData(starterDeck));
+            }
+
+            AccountManager.Singleton.SetPlayerData(playerData, true);
         }
 
         foreach (Transform child in ScrollContent)
@@ -47,21 +68,22 @@ public class CollectionManager : MonoBehaviour
             Destroy(child.gameObject);
         }
 
-        foreach (Card card in allCards)
-        {
-            var cardInstance = Instantiate(CardPrefab, ScrollContent);
-            var cardUI = cardInstance.GetComponent<CardUI>();
-            cardUI.SetCardData(card);
-        }
+        Dictionary<string, int> cardCount = playerData.CardCollection
+            .GroupBy(item => item)
+            .ToDictionary(g => g.Key, g => g.Count());
 
-        PlayerData playerData = AccountManager.Singleton.GetPlayerData();
-
-        if (playerData.DeckCollection.IsEmpty())
+        foreach (var kvp in cardCount)
         {
-            DeckSO[] deckSOs = Resources.LoadAll<DeckSO>("ScriptableObjects/Decks");
-            DeckSO starterDeck = deckSOs.Where(deck => deck.Name.Equals("Starter Deck")).First();
-            playerData.DeckCollection.Add(new DeckData(starterDeck));
-            AccountManager.Singleton.SetPlayerData(playerData, true);
+            try
+            {
+                Card card = new UnitCard(allUnitCardSOs.Where(cardSO => cardSO.Id.Equals(kvp.Key)).First());
+                var cardInstance = Instantiate(CardPrefab, ScrollContent);
+                var cardUI = cardInstance.GetComponent<CardUI>();
+                cardUI.SetCardData(card);
+            } catch
+            {
+
+            }
         }
     }
 
