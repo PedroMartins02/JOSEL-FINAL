@@ -120,6 +120,7 @@ GameObject:
   - component: {fileID: 3817798128054236500}
   - component: {fileID: 1975474786432457612}
   - component: {fileID: 8161009003769510262}
+  - component: {fileID: 6953376896193667712}
   m_Layer: 5
   m_Name: X_Btn
   m_TagString: Untagged
@@ -228,31 +229,31 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1786911449784663686}
-        m_TargetAssemblyTypeName: NavigationManager, Assembly-CSharp
-        m_MethodName: NavigateToPage
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 854574968755338123, guid: 468a24e06efadbd49bc75838e7b3dc65,
-            type: 3}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 8641223213537364451}
-        m_TargetAssemblyTypeName: NavigationManager, Assembly-CSharp
-        m_MethodName: 
+      - m_Target: {fileID: 6953376896193667712}
+        m_TargetAssemblyTypeName: ClosePanel, Assembly-CSharp
+        m_MethodName: DestroyPanel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &6953376896193667712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1426781171503769329}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c95ac201c22dbc948be91dfda73e8662, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  panelToDestroy: {fileID: 7417869583786306551}
 --- !u!1 &1679275679809100131
 GameObject:
   m_ObjectHideFlags: 0
@@ -1123,7 +1124,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6738949545016199465}
-  - component: {fileID: 1515185848957723927}
   m_Layer: 5
   m_Name: MissionsPanel
   m_TagString: Untagged
@@ -1151,21 +1151,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1515185848957723927
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7417869583786306551}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fcc389bb7b4435f49a8cda467644a515, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  contentView: {fileID: 6838843602472112143}
-  startPage: {fileID: 854574968755338123, guid: 468a24e06efadbd49bc75838e7b3dc65,
-    type: 3}
 --- !u!1 &7507145133938120227
 GameObject:
   m_ObjectHideFlags: 0
@@ -1374,7 +1359,6 @@ GameObject:
   - component: {fileID: 3621507341929302813}
   - component: {fileID: 4809249396757132669}
   - component: {fileID: 3059226426973575882}
-  - component: {fileID: 1786911449784663686}
   m_Layer: 5
   m_Name: Background
   m_TagString: Untagged
@@ -1441,21 +1425,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &1786911449784663686
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8641223213537364451}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fcc389bb7b4435f49a8cda467644a515, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  contentView: {fileID: 6838843602472112143}
-  startPage: {fileID: 854574968755338123, guid: 468a24e06efadbd49bc75838e7b3dc65,
-    type: 3}
 --- !u!1 &8923327314530934543
 GameObject:
   m_ObjectHideFlags: 0
