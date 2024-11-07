@@ -1,7 +1,10 @@
 using GameModel;
+using ModestTree;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Serialization;
 using TMPro;
 using UnityEngine;
@@ -26,37 +29,67 @@ public class CollectionManager : MonoBehaviour
 
     private void Start()
     {
-        //JUST A TEST
         LoadCardCollection();
+    }
+
+    private void AwardStarterDeck()
+    {
+        PlayerData playerData = AccountManager.Singleton.GetPlayerData();
+
+        DeckSO[] deckSOs = Resources.LoadAll<DeckSO>("ScriptableObjects/Decks");
+        DeckSO starterDeck = deckSOs.Where(deck => deck.Name.Equals("Starter Deck")).First();
+        foreach (CardSO card in starterDeck.Cards)
+        {
+            playerData.CardCollection.Add(card.Id);
+        }
+        playerData.CardCollection.Add(starterDeck.Myth.Id);
+
+        if (playerData.DeckCollection.IsEmpty())
+        {
+            playerData.DeckCollection.Add(new DeckData(starterDeck));
+        }
+
+        AccountManager.Singleton.SetPlayerData(playerData, true);
     }
 
     private void LoadCardCollection()
     {
-        //JUST A TEST
-        UnitCardSO[] allCardSOs = Resources.LoadAll<UnitCardSO>("ScriptableObjects/Cards/Greek/UnitCards");
-        List<Card> allCards = new List<Card>();
-        foreach (UnitCardSO cardSO in allCardSOs)
+        if (AccountManager.Singleton.GetPlayerData().CardCollection.IsEmpty())
         {
-            allCards.Add(new UnitCard(cardSO));
+            AwardStarterDeck();
         }
+
+        UpdateCardsList();
+    }
+
+    private void UpdateCardsList()
+    {
+        PlayerData playerData = AccountManager.Singleton.GetPlayerData();
 
         foreach (Transform child in ScrollContent)
         {
             Destroy(child.gameObject);
         }
 
-        foreach (Card card in allCards)
+        Dictionary<string, int> cardCount = playerData.CardCollection
+            .GroupBy(item => item)
+            .ToDictionary(g => g.Key, g => g.Count());
+
+        foreach (var kvp in cardCount)
         {
+            Card card = CardDatabase.Singleton.GetCardOfId(kvp.Key);
+            if (card.GetType() == typeof(MythCard))
+            {
+                continue;
+            }
+
+            if (!FilterCard(card))
+            {
+                continue;
+            }
             var cardInstance = Instantiate(CardPrefab, ScrollContent);
             var cardUI = cardInstance.GetComponent<CardUI>();
             cardUI.SetCardData(card);
-        }
-
-        PlayerData playerData = AccountManager.Singleton.GetPlayerData();
-        foreach (var kvp in playerData.CardCollection)
-        {
-            string cardId = kvp.Key;
-            int cardQuantity = kvp.Value;
         }
     }
 
@@ -110,11 +143,13 @@ public class CollectionManager : MonoBehaviour
     public void ChangeFactionFilter(int faction)
     {
         factionsFilter[(Factions)faction] = !factionsFilter[(Factions)faction];
+        UpdateCardsList();
     }
 
     public void ChangeBlessingsFilter(int blessings)
     {
         blessingsFilter[blessings] = !blessingsFilter[blessings];
+        UpdateCardsList();
     }
 
     public void ChangeTypeFilter(int type)
@@ -125,5 +160,6 @@ public class CollectionManager : MonoBehaviour
             return;
         }
         typeFilter[cardType] = !typeFilter[cardType];
+        UpdateCardsList();
     }
 }

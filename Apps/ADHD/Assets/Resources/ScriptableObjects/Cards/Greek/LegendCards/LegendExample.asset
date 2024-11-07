@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cec2a473a4338c84db8a610a37cc7654, type: 3}
   m_Name: LegendExample
   m_EditorClassIdentifier: 
-  Name: 
+  Id: adff40520
+  Name: LegendExample
   ShortText: 
   Description: 
   Art: {fileID: 21300000, guid: a050a3a578c9d4544998a67313616a6b, type: 3}

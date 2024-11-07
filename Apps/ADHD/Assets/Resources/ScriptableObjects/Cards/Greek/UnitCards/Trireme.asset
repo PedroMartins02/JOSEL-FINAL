@@ -12,13 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40d5e5baf0e005248a06fdbfd3f36b64, type: 3}
   m_Name: Trireme
   m_EditorClassIdentifier: 
+  Id: 4f7b41066
   Name: Trireme
-  Blessings: 1
-  Art: {fileID: 0}
   ShortText: Warship of the ancient Greek navy.
   Description: Triremes were fast, agile warships that dominated naval battles in
     ancient Greece.
+  Art: {fileID: 0}
   Faction: 0
+  Element: 2
+  Blessings: 1
   Attack: 1
   Health: 2
-  Element: 2

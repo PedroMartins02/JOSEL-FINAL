@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebde07a14ac7007409d3fb05a7c66441, type: 3}
   m_Name: BattleTacticExample
   m_EditorClassIdentifier: 
-  Name: 
+  Id: 185940718
+  Name: BTExample
   ShortText: 
   Description: 
   Art: {fileID: 21300000, guid: ef7b9cccfd0efaf42aedb6a42526f7b7, type: 3}

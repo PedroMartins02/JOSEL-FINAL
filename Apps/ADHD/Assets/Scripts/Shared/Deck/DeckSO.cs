@@ -10,7 +10,7 @@ namespace GameModel
     public class DeckSO : ScriptableObject
     {
         public string Name;
-        public Card Myth;
+        public CardSO Myth;
         public List<CardSO> Cards;
         public Factions Faction;
     }

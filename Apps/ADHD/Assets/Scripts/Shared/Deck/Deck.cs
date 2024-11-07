@@ -15,7 +15,7 @@ namespace GameModel
         public Deck(DeckSO deckSO)
         {
             this.Name = deckSO.Name;
-            this.Myth = deckSO.Myth;
+            //this.Myth = new MythCard(deckSO.Myth);
             this.Faction = deckSO.Faction;
 
             this.Cards = new List<Card>();

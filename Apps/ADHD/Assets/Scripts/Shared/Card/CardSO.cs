@@ -34,6 +34,8 @@ namespace GameModel
             if (string.IsNullOrEmpty(Id))
             {
                 Id = $"{System.Guid.NewGuid().ToString().Substring(0, 4)}{GetInstanceID()}";
+                EditorUtility.SetDirty(this);
+                AssetDatabase.SaveAssets();
             }
         }
     }

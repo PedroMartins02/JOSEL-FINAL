@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: ExampleDeck
   m_EditorClassIdentifier: 
   Name: 
+  Myth: {fileID: 0}
   Cards:
   - {fileID: 11400000, guid: e46eabc65b9a68846b5309e114116a1f, type: 2}
   - {fileID: 11400000, guid: 102b292268c548d41b1ae68c8f49d796, type: 2}
