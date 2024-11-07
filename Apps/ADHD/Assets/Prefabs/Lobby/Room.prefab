@@ -269,8 +269,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 484543d01a1125d40866ed085f4a881c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nameText: {fileID: 8627119711164922888}
-  joinButton: {fileID: 1957081268463257212}
+  lobbyNameText: {fileID: 8627119711164922888}
 --- !u!1 &7868968089525528434
 GameObject:
   m_ObjectHideFlags: 0
@@ -392,7 +391,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 946190116521084313}
-        m_TargetAssemblyTypeName: RoomUI, Assembly-CSharp
+        m_TargetAssemblyTypeName: UI_Room, Assembly-CSharp
         m_MethodName: JoinRoom
         m_Mode: 1
         m_Arguments:
