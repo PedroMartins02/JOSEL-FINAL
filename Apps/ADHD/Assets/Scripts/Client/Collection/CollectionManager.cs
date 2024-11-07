@@ -58,6 +58,12 @@ public class CollectionManager : MonoBehaviour
         {
             AwardStarterDeck();
         }
+
+        UpdateCardsList();
+    }
+
+    private void UpdateCardsList()
+    {
         PlayerData playerData = AccountManager.Singleton.GetPlayerData();
 
         foreach (Transform child in ScrollContent)
@@ -72,7 +78,12 @@ public class CollectionManager : MonoBehaviour
         foreach (var kvp in cardCount)
         {
             Card card = CardDatabase.Singleton.GetCardOfId(kvp.Key);
-            if (card.GetType() == typeof(MythCard)) 
+            if (card.GetType() == typeof(MythCard))
+            {
+                continue;
+            }
+
+            if (!FilterCard(card))
             {
                 continue;
             }
@@ -132,11 +143,13 @@ public class CollectionManager : MonoBehaviour
     public void ChangeFactionFilter(int faction)
     {
         factionsFilter[(Factions)faction] = !factionsFilter[(Factions)faction];
+        UpdateCardsList();
     }
 
     public void ChangeBlessingsFilter(int blessings)
     {
         blessingsFilter[blessings] = !blessingsFilter[blessings];
+        UpdateCardsList();
     }
 
     public void ChangeTypeFilter(int type)
@@ -147,5 +160,6 @@ public class CollectionManager : MonoBehaviour
             return;
         }
         typeFilter[cardType] = !typeFilter[cardType];
+        UpdateCardsList();
     }
 }
