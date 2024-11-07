@@ -12,13 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40d5e5baf0e005248a06fdbfd3f36b64, type: 3}
   m_Name: Peltast
   m_EditorClassIdentifier: 
+  Id: 8a6441240
   Name: Peltast
-  Blessings: 2
-  Art: {fileID: 0}
   ShortText: Light-armed skirmisher.
   Description: Peltasts used javelins for long-range attacks and were swift on the
     battlefield.
+  Art: {fileID: 0}
   Faction: 0
+  Element: 0
+  Blessings: 2
   Attack: 3
   Health: 1
-  Element: 0

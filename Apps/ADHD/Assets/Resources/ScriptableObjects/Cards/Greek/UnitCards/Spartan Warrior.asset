@@ -12,13 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40d5e5baf0e005248a06fdbfd3f36b64, type: 3}
   m_Name: Spartan Warrior
   m_EditorClassIdentifier: 
+  Id: b08741014
   Name: Spartan Warrior
-  Blessings: 3
-  Art: {fileID: 0}
   ShortText: Elite soldier of Sparta, trained from birth.
   Description: Trained from birth for combat, Spartan Warriors were unmatched in
     discipline and ferocity.
+  Art: {fileID: 0}
   Faction: 0
+  Element: 1
+  Blessings: 3
   Attack: 2
   Health: 3
-  Element: 1

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cec2a473a4338c84db8a610a37cc7654, type: 3}
   m_Name: LegendExample
   m_EditorClassIdentifier: 
+  Id: adff40520
   Name: 
   ShortText: 
   Description: 
