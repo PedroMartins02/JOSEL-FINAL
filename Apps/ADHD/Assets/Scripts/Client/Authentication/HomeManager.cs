@@ -10,7 +10,7 @@ public class HomeManager : MonoBehaviour
 
     void Start()
     {
-        //SetupUI();
+        SetupUI();
     }
 
     private async void SetupUI()
