@@ -6,8 +6,26 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class CreateGameManager : MonoBehaviour
+public class UI_CreateGameController : MonoBehaviour
 {
+    [SerializeField] private TMP_InputField nameText;
+
+    private string lobbyName;
+    private bool isPrivate = false;
+
+    public void CreateGame()
+    {
+        lobbyName = nameText.text.IsEmpty() ? "Custom Game" : nameText.text;
+
+        LobbyManager.Instance.CreateLobby(
+                lobbyName,
+                isPrivate,
+                LobbyManager.LobbyType.CustomMatch
+            );
+    }
+
+
+    /**
     [SerializeField] private TMP_InputField nameText;
 
     public async void CreateGameAsync()
@@ -25,4 +43,5 @@ public class CreateGameManager : MonoBehaviour
     {
         SceneManager.LoadScene("Lobby");
     }
+    */
 }

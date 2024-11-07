@@ -14,7 +14,6 @@ public class CollectionManager : MonoBehaviour
     [SerializeField] private Transform ScrollContent;
     [SerializeField] private GameObject CardPrefab;
 
-    private List<Card> cards = new List<Card>();
     private Dictionary<Factions, bool> factionsFilter = new Dictionary<Factions, bool>();
     private Dictionary<int, bool> blessingsFilter = new Dictionary<int, bool>();
     private Dictionary<Type, bool> typeFilter = new Dictionary<Type, bool>();
@@ -77,8 +76,8 @@ public class CollectionManager : MonoBehaviour
 
         foreach (var kvp in cardCount)
         {
-            Card card = CardDatabase.Singleton.GetCardOfId(kvp.Key);
-            if (card.GetType() == typeof(MythCard))
+            CardSO card = CardDatabase.Singleton.GetCardSoOfId(kvp.Key);
+            if (card.GetType() == typeof(MythCardSO))
             {
                 continue;
             }
@@ -97,9 +96,9 @@ public class CollectionManager : MonoBehaviour
     {
         cardTypeMapping = new Dictionary<int, Type>
         {
-            { 0, typeof(UnitCard) },
-            { 1, typeof(BattleTacticCard) },
-            //{ 2, typeof(LegendCard) }
+            { 0, typeof(UnitCardSO) },
+            { 1, typeof(BattleTacticCardSO) },
+            { 2, typeof(LegendCardSO) }
         };
     }
 
@@ -119,14 +118,14 @@ public class CollectionManager : MonoBehaviour
 
         typeFilter = new Dictionary<Type, bool>
         {
-            { typeof(UnitCard), true },
-            { typeof(BattleTacticCard), true },
-            //{ typeof(LegendCard), true},
+            { typeof(UnitCardSO), true },
+            { typeof(BattleTacticCardSO), true },
+            { typeof(LegendCardSO), true},
         };
         
     }
 
-    private bool FilterCard(Card card)
+    private bool FilterCard(CardSO card)
     {
         if (factionsFilter.TryGetValue(card.Faction, out bool factionAllowed) && !factionAllowed)
             return false;
