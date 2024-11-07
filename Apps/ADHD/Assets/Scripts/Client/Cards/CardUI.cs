@@ -35,33 +35,33 @@ public class CardUI : MonoBehaviour
         
     }
 
-    public void SetCardData(Card card)
+    public void SetCardData(CardSO card)
     {
         if (card == null)
             return;
 
         SetGeneralUI(card);
 
-        if (card is UnitCard unitCard)
+        if (card is UnitCardSO unitCard)
         {
             SetUnitCardUI(unitCard);
             return;
         }
 
-        if (card is BattleTacticCard battleTacticCard)
+        if (card is BattleTacticCardSO battleTacticCard)
         {
             SetBattleTacticCardUI(battleTacticCard);
             return;
         }
 
-        if (card is LegendCard legendCard)
+        if (card is LegendCardSO legendCard)
         {
             SetLegendCardUI(legendCard);
             return;
         }
     }
 
-    private void SetGeneralUI(Card card)
+    private void SetGeneralUI(CardSO card)
     {
         CardName.text = card.Name;
         ShortText.text = card.ShortText;
@@ -70,14 +70,14 @@ public class CardUI : MonoBehaviour
         //CardArt
     }
 
-    private void SetUnitCardUI(UnitCard card)
+    private void SetUnitCardUI(UnitCardSO card)
     {
         CardFrame.sprite = UnitFrame;
         //AttackText.text = card.Attack;
         //HealthText.text = card.Text;
     }
 
-    private void SetBattleTacticCardUI(BattleTacticCard card)
+    private void SetBattleTacticCardUI(BattleTacticCardSO card)
     {
         CardFrame.sprite = BattleTacticFrame;
         AttackIcon.SetActive(false);
@@ -85,7 +85,7 @@ public class CardUI : MonoBehaviour
         //Effects
     }
 
-    private void SetLegendCardUI(LegendCard card)
+    private void SetLegendCardUI(LegendCardSO card)
     {
         CardFrame.sprite = LegendFrame;
         //AttackText.text = card.Attack;

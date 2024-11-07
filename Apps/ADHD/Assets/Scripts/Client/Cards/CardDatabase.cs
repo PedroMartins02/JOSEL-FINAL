@@ -78,4 +78,10 @@ public class CardDatabase : MonoBehaviour
 
         return null;
     }
+
+
+    public CardSO GetCardSoOfId(string cardId)
+    {
+        return AllCards.Where(card => card.Id.Equals(cardId)).FirstOrDefault();
+    }
 }
