@@ -8,7 +8,7 @@ public class Container : ScriptableObject
    // public new string name;
     public string description;
     //public Sprite background;
-    public int task_completion;
+    public string task_completion;
    // public int id;
     public int coins;
 }

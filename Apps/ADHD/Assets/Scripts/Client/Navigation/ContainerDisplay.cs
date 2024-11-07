@@ -19,7 +19,7 @@ public class ContainerDisplay : MonoBehaviour
         //nameText.text = container.name;
         descriptionText.text = container.description;
        // backgroundImage.sprite = container.background;
-        taskcompletionText.text = container.task_completion.ToString();
+        taskcompletionText.text = container.task_completion;
        // idText.text = container.id.ToString();
         coinsText.text = container.coins.ToString();
     }
