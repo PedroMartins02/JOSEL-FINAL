@@ -55,4 +55,14 @@ public class DeckListsManager : MonoBehaviour
     {
         //Go To EditDeck Scene (send selected deck data)
     }
+
+    public void OnDeleteClick()
+    {
+        //
+    }
+
+    public void OnCustomizeClick()
+    {
+        //
+    }
 }
