@@ -39,6 +39,20 @@ public class DeckListsManager : MonoBehaviour
 
     public void OnSlotClick(int slotIndex)
     {
+        //if slot has DeckPrefab child:
+            //-> Highlight Deck (and store slot index of currently highlighted deck) 
+            //-> Enable Select, Edit and Delete buttons while selected index != null
+        //else:
+            //-> Go To CreateDeck Scene (select civilization)
+    }
 
+    public void OnSelectClick()
+    {
+        //set player data's selected deck Id to currently selected deck's id, update UI
+    }
+
+    public void OnEditClick()
+    {
+        //Go To EditDeck Scene (send selected deck data)
     }
 }
