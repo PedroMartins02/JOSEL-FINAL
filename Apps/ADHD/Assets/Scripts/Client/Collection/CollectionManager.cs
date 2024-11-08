@@ -28,36 +28,6 @@ public class CollectionManager : MonoBehaviour
 
     private void Start()
     {
-        LoadCardCollection();
-    }
-
-    private void AwardStarterDeck()
-    {
-        PlayerData playerData = AccountManager.Singleton.GetPlayerData();
-
-        DeckSO[] deckSOs = Resources.LoadAll<DeckSO>("ScriptableObjects/Decks");
-        DeckSO starterDeck = deckSOs.Where(deck => deck.Name.Equals("Starter Deck")).First();
-        foreach (CardSO card in starterDeck.Cards)
-        {
-            playerData.CardCollection.Add(card.Id);
-        }
-        playerData.CardCollection.Add(starterDeck.Myth.Id);
-
-        if (playerData.DeckCollection.IsEmpty())
-        {
-            playerData.DeckCollection.Add(new DeckData(starterDeck));
-        }
-
-        AccountManager.Singleton.SetPlayerData(playerData, true);
-    }
-
-    private void LoadCardCollection()
-    {
-        if (AccountManager.Singleton.GetPlayerData().CardCollection.IsEmpty())
-        {
-            AwardStarterDeck();
-        }
-
         UpdateCardsList();
     }
 

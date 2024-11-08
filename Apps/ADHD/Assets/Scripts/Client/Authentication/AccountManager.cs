@@ -1,5 +1,8 @@
+using GameModel;
+using ModestTree;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Unity.Services.Authentication;
 using Unity.Services.CloudSave;
@@ -60,6 +63,7 @@ public class AccountManager : MonoBehaviour
             playerData = PlayerData.FromDictionary(firstKey.Value.GetAs<Dictionary<string, object>>());
             Debug.Log($"Loaded data {string.Join(',', playerDataDictionary)}");
             Debug.Log($"PlayerData instance {playerData.ToJson()}");
+            VerifyData();
             return true;
         }
         return false;
@@ -75,4 +79,30 @@ public class AccountManager : MonoBehaviour
         Debug.Log($"Saved data {string.Join(',', playerDataDictionary)}");
     }
 
+
+    private void VerifyData()
+    {
+        if (playerData.CardCollection.IsEmpty())
+        {
+            AwardStarterDeck();
+        }
+    }
+
+    private void AwardStarterDeck()
+    {
+        DeckSO[] deckSOs = Resources.LoadAll<DeckSO>("ScriptableObjects/Decks");
+        DeckSO starterDeck = deckSOs.Where(deck => deck.Name.Equals("Starter Deck")).First();
+        foreach (CardSO card in starterDeck.Cards)
+        {
+            playerData.CardCollection.Add(card.Id);
+        }
+        playerData.CardCollection.Add(starterDeck.Myth.Id);
+
+        if (playerData.DeckCollection.IsEmpty())
+        {
+            playerData.DeckCollection.Add(new DeckData(starterDeck));
+        }
+
+        SetPlayerData(playerData, true);
+    }
 }
