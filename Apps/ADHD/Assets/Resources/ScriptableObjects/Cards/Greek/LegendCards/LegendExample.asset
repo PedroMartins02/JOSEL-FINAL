@@ -16,7 +16,7 @@ MonoBehaviour:
   Name: LegendExample
   ShortText: 
   Description: 
-  Art: {fileID: 21300000, guid: a050a3a578c9d4544998a67313616a6b, type: 3}
+  Art: {fileID: 21300000, guid: a1e3bd0a2581bad42bc134c56dd7d3c0, type: 3}
   Faction: 0
   Element: 0
   Blessings: 0

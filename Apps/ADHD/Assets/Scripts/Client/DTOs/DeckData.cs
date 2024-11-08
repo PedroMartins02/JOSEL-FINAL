@@ -8,7 +8,7 @@ using UnityEngine;
 public class DeckData
 {
     public string Name { get; set; }
-    public string CardBackId { get; set; }
+    public int CardBackId { get; set; }
     public string MythId { get; set; }
     public List<string> CardList { get; set; } = new List<string>();
 
@@ -17,7 +17,7 @@ public class DeckData
 
     public DeckData(DeckSO deckSO) { 
         Name = deckSO.Name;
-        CardBackId = "1";
+        CardBackId = 0;
         MythId = deckSO.Myth.Id;
         CardList = new List<string>();
         

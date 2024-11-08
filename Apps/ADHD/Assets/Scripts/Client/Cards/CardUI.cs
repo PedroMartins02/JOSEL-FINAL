@@ -67,14 +67,14 @@ public class CardUI : MonoBehaviour
         ShortText.text = card.ShortText;
         BlessingsText.text = card.Blessings.ToString();
         CivilizationName.text = card.Faction.ToString();
-        //CardArt
+        CardArt.sprite = card.Art;
     }
 
     private void SetUnitCardUI(UnitCardSO card)
     {
         CardFrame.sprite = UnitFrame;
-        //AttackText.text = card.Attack;
-        //HealthText.text = card.Text;
+        AttackText.text = card.Attack.ToString();
+        HealthText.text = card.Health.ToString();
     }
 
     private void SetBattleTacticCardUI(BattleTacticCardSO card)
@@ -88,8 +88,8 @@ public class CardUI : MonoBehaviour
     private void SetLegendCardUI(LegendCardSO card)
     {
         CardFrame.sprite = LegendFrame;
-        //AttackText.text = card.Attack;
-        //HealthText.text = card.Text;
+        AttackText.text = card.Attack.ToString();
+        HealthText.text = card.Health.ToString();
         //Effects
     }
 }

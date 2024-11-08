@@ -32,8 +32,8 @@ public class DeckListsManager : MonoBehaviour
             }
 
             var deckInstance = Instantiate(DeckPrefab, deckSlot);
-            //var deckUI = cardInstance.GetComponent<DeckUI>();
-            //deckUI.SetDeckData(deck);
+            var deckUI = deckInstance.GetComponent<DeckUI>();
+            deckUI.SetDeckData(deck);
         }
     }
 
