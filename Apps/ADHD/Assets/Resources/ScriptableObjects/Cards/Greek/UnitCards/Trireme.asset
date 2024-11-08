@@ -20,6 +20,6 @@ MonoBehaviour:
   Art: {fileID: 0}
   Faction: 0
   Element: 2
-  Blessings: 1
-  Attack: 1
-  Health: 2
+  Blessings: 4
+  Attack: 4
+  Health: 4

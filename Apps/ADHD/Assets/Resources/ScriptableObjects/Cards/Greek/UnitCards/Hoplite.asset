@@ -17,7 +17,7 @@ MonoBehaviour:
   ShortText: Elite warrior of the phalanx.
   Description: Armed with spears and shields, Hoplites fought in tight ranks within
     the phalanx formation.
-  Art: {fileID: 0}
+  Art: {fileID: 21300000, guid: d163bda56b0d6f447a6e9c728fcecc06, type: 3}
   Faction: 0
   Element: 3
   Blessings: 2

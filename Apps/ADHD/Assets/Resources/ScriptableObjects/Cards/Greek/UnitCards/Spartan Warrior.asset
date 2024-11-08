@@ -17,7 +17,7 @@ MonoBehaviour:
   ShortText: Elite soldier of Sparta, trained from birth.
   Description: Trained from birth for combat, Spartan Warriors were unmatched in
     discipline and ferocity.
-  Art: {fileID: 0}
+  Art: {fileID: 21300000, guid: 264cdd4f3cde6b24a9f833eb02e6e763, type: 3}
   Faction: 0
   Element: 1
   Blessings: 3

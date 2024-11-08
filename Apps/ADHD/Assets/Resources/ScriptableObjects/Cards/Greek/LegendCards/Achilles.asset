@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cec2a473a4338c84db8a610a37cc7654, type: 3}
+  m_Name: Achilles
+  m_EditorClassIdentifier: 
+  Id: 547c-104426
+  Name: Achilles
+  ShortText: Achilles was known for his near invulnerability, with his only weakness
+    being his heel.
+  Description: Achilles was known for his near invulnerability, with his only weakness
+    being his heel.
+  Art: {fileID: 0}
+  Faction: 0
+  Element: 4
+  Blessings: 6
+  Attack: 7
+  Health: 4
+  Effects: []

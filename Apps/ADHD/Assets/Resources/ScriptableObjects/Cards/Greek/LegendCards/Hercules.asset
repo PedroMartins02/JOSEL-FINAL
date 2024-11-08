@@ -9,15 +9,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ebde07a14ac7007409d3fb05a7c66441, type: 3}
-  m_Name: BattleTacticExample
+  m_Script: {fileID: 11500000, guid: cec2a473a4338c84db8a610a37cc7654, type: 3}
+  m_Name: Hercules
   m_EditorClassIdentifier: 
-  Id: 185940718
-  Name: BTExample
-  ShortText: 
-  Description: 
+  Id: a9dc-103922
+  Name: "H\xE9racles"
+  ShortText: Hero of the Twelve Labors
+  Description: "H\xE9racles performed twelve nearly impossible tasks as punishment
+    for his past actions."
   Art: {fileID: 0}
   Faction: 0
-  Element: 0
-  Blessings: 0
+  Element: 4
+  Blessings: 7
+  Attack: 8
+  Health: 5
   Effects: []

@@ -10,14 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ebde07a14ac7007409d3fb05a7c66441, type: 3}
-  m_Name: BattleTacticExample
+  m_Name: Trojan Horse
   m_EditorClassIdentifier: 
-  Id: 185940718
-  Name: BTExample
-  ShortText: 
-  Description: 
+  Id: 8876-105950
+  Name: Trojan Horse
+  ShortText: 'Wooden horse used to infiltrate Troy '
+  Description: The Greeks used this deception to hide soldiers inside and gain access
+    to the city of Troy.
   Art: {fileID: 0}
   Faction: 0
   Element: 0
-  Blessings: 0
+  Blessings: 4
   Effects: []
