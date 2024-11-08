@@ -84,25 +84,38 @@ public class AccountManager : MonoBehaviour
     {
         if (playerData.CardCollection.IsEmpty())
         {
+            AwardStarterDeckCards();
+        }
+        if (playerData.DeckCollection.IsEmpty())
+        {
             AwardStarterDeck();
         }
+        SetPlayerData(playerData, true);
     }
 
-    private void AwardStarterDeck()
+    private DeckSO LoadStarterDeckCards()
     {
         DeckSO[] deckSOs = Resources.LoadAll<DeckSO>("ScriptableObjects/Decks");
-        DeckSO starterDeck = deckSOs.Where(deck => deck.Name.Equals("Starter Deck")).First();
+        return deckSOs.Where(deck => deck.Name.Equals("Starter Deck")).First();
+    }
+
+    private void AwardStarterDeckCards()
+    {
+        DeckSO starterDeck = LoadStarterDeckCards();
         foreach (CardSO card in starterDeck.Cards)
         {
             playerData.CardCollection.Add(card.Id);
         }
         playerData.CardCollection.Add(starterDeck.Myth.Id);
+    }
 
+    private void AwardStarterDeck()
+    {
+        DeckSO starterDeck = LoadStarterDeckCards();
         if (playerData.DeckCollection.IsEmpty())
         {
             playerData.DeckCollection.Add(new DeckData(starterDeck));
         }
-
-        SetPlayerData(playerData, true);
+        playerData.SelectedDeckId = 0;
     }
 }
