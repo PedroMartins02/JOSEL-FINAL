@@ -2579,6 +2579,8 @@ MonoBehaviour:
   ScrollContent: {fileID: 1190504866603625607}
   CardPrefab: {fileID: 6066824139122942845, guid: 2318f09ea2dcbee4db9127028a22be72,
     type: 3}
+  QuantityPrefab: {fileID: 8255241883133531654, guid: 40ed13c961630ce4db7d7d17e8451a29,
+    type: 3}
   PopUp: {fileID: 34215722021153716}
   PopUpSlot: {fileID: 2624700905505151983}
 --- !u!1 &5097322371973815087

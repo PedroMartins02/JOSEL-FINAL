@@ -17,7 +17,7 @@ MonoBehaviour:
   ShortText: Light-armed skirmisher.
   Description: Peltasts used javelins for long-range attacks and were swift on the
     battlefield.
-  Art: {fileID: 0}
+  Art: {fileID: 21300000, guid: 4f28a47f310eafa49b71df4a7a707351, type: 3}
   Faction: 0
   Element: 0
   Blessings: 2

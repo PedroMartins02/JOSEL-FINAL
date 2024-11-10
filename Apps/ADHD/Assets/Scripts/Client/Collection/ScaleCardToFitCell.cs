@@ -1,10 +1,11 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ScaleCardsToFitCell : MonoBehaviour
+public class ScaleCardToFitCell : MonoBehaviour
 {
     private RectTransform parentRect;
     private bool isScaled = false;
+    [SerializeField] private GameObject CardToScale;
 
     void Start()
     {
@@ -31,15 +32,13 @@ public class ScaleCardsToFitCell : MonoBehaviour
 
         Vector2 parentSize = parentRect.rect.size;
 
-        foreach (RectTransform child in transform)
-        {
-            Vector2 childOriginalSize = child.rect.size;
+        RectTransform child = (RectTransform)CardToScale.transform;
+        Vector2 childOriginalSize = child.rect.size;
 
-            float scaleX = parentSize.x / childOriginalSize.x;
-            float scaleY = parentSize.y / childOriginalSize.y;
+        float scaleX = parentSize.x / childOriginalSize.x;
+        float scaleY = parentSize.y / childOriginalSize.y;
 
-            child.localScale = new Vector3(scaleX, scaleY, 1f);
-            child.anchoredPosition = Vector2.zero;
-        }
+        child.localScale = new Vector3(scaleX, scaleY, 1f);
+        child.anchoredPosition = Vector2.zero;
     }
 }

@@ -17,7 +17,7 @@ MonoBehaviour:
   ShortText: Mounted soldiers of the battlefield.
   Description: Greek cavalry units were highly mobile and used to outflank enemy
     infantry.
-  Art: {fileID: 0}
+  Art: {fileID: 21300000, guid: ec07d507c37a97749a13f5f0a4bd7b41, type: 3}
   Faction: 0
   Element: 3
   Blessings: 1
