@@ -279,6 +279,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   onSprite: {fileID: 21300000, guid: d90a6ebf5e4bcdf4d9b34d9f8ca2afe5, type: 3}
   offSprite: {fileID: 21300000, guid: bc2bd22a79752a6439b5bac3855744ef, type: 3}
+  isOn: 0
 --- !u!1 &6885104671808033640
 GameObject:
   m_ObjectHideFlags: 0
@@ -427,6 +428,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   onSprite: {fileID: 21300000, guid: 18faa4dcd4a98f64b9efd453eeb46c6a, type: 3}
   offSprite: {fileID: 21300000, guid: 691e75322cc1c9140bbd1271244f5bee, type: 3}
+  isOn: 0
 --- !u!1 &8338052557976538237
 GameObject:
   m_ObjectHideFlags: 0
@@ -650,3 +652,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   onSprite: {fileID: 21300000, guid: 8196c1fabcd912643913c154e77d2d64, type: 3}
   offSprite: {fileID: 21300000, guid: eafe0698b30b2eb4b960d0b9432e5bf7, type: 3}
+  isOn: 0
