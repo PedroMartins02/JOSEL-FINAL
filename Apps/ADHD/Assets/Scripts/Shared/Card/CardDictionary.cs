@@ -14,8 +14,6 @@ namespace GameModel
     [CreateAssetMenu(fileName = "New Card Dictionary", menuName = "Cards/Dictionary")]
     public class CardDictionarySO : ScriptableObject
     {
-        public Factions Faction;
-
         [SerializeField] private CardDict _cardDict; 
 
         private Dictionary<string, CardSO> _cardDictionary;
@@ -72,7 +70,6 @@ namespace GameModel
     {
         private CardDictionarySO dictionary;
 
-        private SerializedProperty m_faction;
         private SerializedProperty m_cardDictionary;
 
         private void OnEnable()
@@ -96,12 +93,12 @@ namespace GameModel
 
         private void UpdateDictionary()
         {
-            if (!Directory.Exists("Assets/ScriptableObjects/Cards/" + dictionary.Faction)) {
-                Debug.LogWarning("The selected Faction doesn't contain a folder yet or it has the wrong name! The directory should be: Assets/ScriptableObjects/Cards/" + dictionary.Faction);
+            if (!Directory.Exists("Assets/Resources/ScriptableObjects/Cards")) {
+                Debug.LogWarning("The directory doesn't exist or it has the wrong name! The directory should be: Assets/Resources/ScriptableObjects/Cards");
                 return;
             }
 
-            string[] cardsGuids = AssetDatabase.FindAssets("t:CardSO", new[] { "Assets/ScriptableObjects/Cards/" + dictionary.Faction });
+            string[] cardsGuids = AssetDatabase.FindAssets("t:CardSO", new[] { "Assets/Resources/ScriptableObjects/Cards" });
 
             if (cardsGuids.Length == 0)
             {
@@ -124,7 +121,7 @@ namespace GameModel
 
             dictionary.UpdateDictionary(cardDict);
 
-            Debug.Log($"Updated the Dictionary for the {dictionary.Faction} Faction. Found a total of {cardsGuids.Length} cards!");
+            Debug.Log($"Updated the Card Dictionary. Found a total of {cardsGuids.Length} cards!");
         }
     }
 #endif
