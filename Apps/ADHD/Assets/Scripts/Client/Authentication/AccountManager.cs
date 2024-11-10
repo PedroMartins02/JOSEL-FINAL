@@ -82,15 +82,18 @@ public class AccountManager : MonoBehaviour
 
     private void VerifyData()
     {
+        bool dataChanged = false;
         if (playerData.CardCollection.IsEmpty())
         {
             AwardStarterDeckCards();
+            dataChanged = true;
         }
         if (playerData.DeckCollection.IsEmpty())
         {
             AwardStarterDeck();
+            dataChanged = true;
         }
-        SetPlayerData(playerData, true);
+        SetPlayerData(playerData, dataChanged);
     }
 
     private DeckSO LoadStarterDeckCards()

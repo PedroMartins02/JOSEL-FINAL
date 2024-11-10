@@ -7,11 +7,16 @@ using UnityEngine;
 public class DeckListsManager : MonoBehaviour
 {
     [SerializeField] private Transform[] DeckSlots;
+    [SerializeField] private Transform[] Checks;
     [SerializeField] private GameObject DeckPrefab;
+    [SerializeField] private GameObject PopUp;
+
+    private int highlightedDeckId = -1;
 
     private void Start()
     {
         UpdateDeckLists();
+        DisablePopUp();
     }
 
     private void UpdateDeckLists()
@@ -35,20 +40,52 @@ public class DeckListsManager : MonoBehaviour
             var deckUI = deckInstance.GetComponent<DeckUI>();
             deckUI.SetDeckData(deck);
         }
+        UpdateSelectedDeckUI();
+    }
+
+    private void UpdateSelectedDeckUI()
+    {
+        PlayerData playerData = AccountManager.Singleton.GetPlayerData();
+        int selectedDeckId = playerData.SelectedDeckId;
+        for (int i = 0; i < Checks.Count(); i++) {
+            Checks[i].gameObject.SetActive(i == selectedDeckId);
+        }
+    }
+
+    public void DisablePopUp()
+    {
+        highlightedDeckId = -1;
+        PopUp.SetActive(false);
     }
 
     public void OnSlotClick(int slotIndex)
     {
-        //if slot has DeckPrefab child:
-            //-> Highlight Deck (and store slot index of currently highlighted deck) 
-            //-> Enable Select, Edit and Delete buttons while selected index != null
-        //else:
-            //-> Go To CreateDeck Scene (select civilization)
+        PlayerData playerData = AccountManager.Singleton.GetPlayerData();
+        List<DeckData> deckLists = playerData.DeckCollection;
+        if (deckLists.Count > slotIndex)
+        {
+            highlightedDeckId = slotIndex;
+            PopUp.SetActive(true);
+            Debug.Log($"Selected Deck {slotIndex}");
+            return;
+        }
+
+        Debug.Log($"Create new Deck, clicked on slot {slotIndex}");
     }
 
     public void OnSelectClick()
     {
-        //set player data's selected deck Id to currently selected deck's id, update UI
+        DisablePopUp();
+        if (highlightedDeckId == -1)
+            return;
+
+        PlayerData playerData = AccountManager.Singleton.GetPlayerData();
+        if (playerData.SelectedDeckId == highlightedDeckId)
+            return;
+
+        playerData.SelectedDeckId = highlightedDeckId;
+        AccountManager.Singleton.SetPlayerData(playerData, true);
+        UpdateSelectedDeckUI();
     }
 
     public void OnEditClick()

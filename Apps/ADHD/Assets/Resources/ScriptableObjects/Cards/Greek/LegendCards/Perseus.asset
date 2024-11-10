@@ -17,7 +17,7 @@ MonoBehaviour:
   ShortText: Hero who defeated Medusa
   Description: Perseus beheaded Medusa and used her petrifying gaze as a weapon against
     his enemies.
-  Art: {fileID: 0}
+  Art: {fileID: 21300000, guid: 9b1ef6929e91449448eb50c4280254a7, type: 3}
   Faction: 0
   Element: 5
   Blessings: 7

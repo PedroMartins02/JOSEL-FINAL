@@ -18,7 +18,7 @@ MonoBehaviour:
     being his heel.
   Description: Achilles was known for his near invulnerability, with his only weakness
     being his heel.
-  Art: {fileID: 0}
+  Art: {fileID: 21300000, guid: 394349cc4363d38478aeec92db568cac, type: 3}
   Faction: 0
   Element: 4
   Blessings: 6
