@@ -8,15 +8,18 @@ public class DeckListsManager : MonoBehaviour
 {
     [SerializeField] private Transform[] DeckSlots;
     [SerializeField] private Transform[] Checks;
+    [SerializeField] private GameObject PopUpArea;
     [SerializeField] private GameObject DeckPrefab;
-    [SerializeField] private GameObject PopUp;
+    [SerializeField] private GameObject OptionsPopUp;
+    [SerializeField] private GameObject ErrorPopUp;
+    [SerializeField] private GameObject ConfirmationPopUp;
 
     private int highlightedDeckId = -1;
 
     private void Start()
     {
         UpdateDeckLists();
-        DisablePopUp();
+        DisablePopUp(true);
     }
 
     private void UpdateDeckLists()
@@ -24,17 +27,16 @@ public class DeckListsManager : MonoBehaviour
         PlayerData playerData = AccountManager.Singleton.GetPlayerData();
         List<DeckData> deckLists = playerData.DeckCollection;
 
-        int deckCount = deckLists.Count > 6 ? 6 : deckLists.Count;
-
-        for (int i = 0; i < deckCount; i++)
+        for (int i = 0; i < DeckSlots.Count(); i++)
         {
-            DeckData deck = deckLists[i];
             Transform deckSlot = DeckSlots[i];
-
             foreach (Transform child in deckSlot)
-            {
                 Destroy(child.gameObject);
-            }
+
+            if (i >= deckLists.Count())
+                continue;
+
+            DeckData deck = deckLists[i];
 
             var deckInstance = Instantiate(DeckPrefab, deckSlot);
             var deckUI = deckInstance.GetComponent<DeckUI>();
@@ -52,10 +54,24 @@ public class DeckListsManager : MonoBehaviour
         }
     }
 
-    public void DisablePopUp()
+    public void DisablePopUp(bool resetSelection = false)
     {
-        highlightedDeckId = -1;
-        PopUp.SetActive(false);
+        if (resetSelection)
+            highlightedDeckId = -1;
+
+        PopUpArea.SetActive(false);
+        foreach (Transform child in PopUpArea.transform)
+        {
+            if (child.name.Equals("Darken"))
+                continue;
+            child.gameObject.SetActive(false);
+        }
+    }
+
+    private void ShowPopUp(GameObject popUp)
+    {
+        popUp.SetActive(true);
+        PopUpArea.SetActive(true);
     }
 
     public void OnSlotClick(int slotIndex)
@@ -65,7 +81,7 @@ public class DeckListsManager : MonoBehaviour
         if (deckLists.Count > slotIndex)
         {
             highlightedDeckId = slotIndex;
-            PopUp.SetActive(true);
+            ShowPopUp(OptionsPopUp);
             Debug.Log($"Selected Deck {slotIndex}");
             return;
         }
@@ -76,6 +92,7 @@ public class DeckListsManager : MonoBehaviour
     public void OnSelectClick()
     {
         DisablePopUp();
+
         if (highlightedDeckId == -1)
             return;
 
@@ -86,6 +103,8 @@ public class DeckListsManager : MonoBehaviour
         playerData.SelectedDeckId = highlightedDeckId;
         AccountManager.Singleton.SetPlayerData(playerData, true);
         UpdateSelectedDeckUI();
+
+        highlightedDeckId = -1;
     }
 
     public void OnEditClick()
@@ -95,7 +114,38 @@ public class DeckListsManager : MonoBehaviour
 
     public void OnDeleteClick()
     {
-        //
+        DisablePopUp();
+        PlayerData playerData = AccountManager.Singleton.GetPlayerData();
+        List<DeckData> deckLists = playerData.DeckCollection;
+        if (deckLists.Count() <= 1)
+        {
+            ShowPopUp(ErrorPopUp);
+            return;
+        }
+        ShowPopUp(ConfirmationPopUp);
+    }
+
+    public void ConfirmDeleteClick()
+    {
+        PlayerData playerData = AccountManager.Singleton.GetPlayerData();
+        playerData.DeckCollection.RemoveAt(highlightedDeckId);
+        
+        if (playerData.SelectedDeckId == highlightedDeckId)
+        {
+            playerData.SelectedDeckId = 0;
+        } else if (playerData.SelectedDeckId > highlightedDeckId)
+        {
+            playerData.SelectedDeckId -= 1;
+        }
+
+        AccountManager.Singleton.SetPlayerData(playerData, true);
+        UpdateDeckLists();
+        DisablePopUp(true);
+    }
+
+    public void CancelDeleteClick()
+    {
+        DisablePopUp(true);
     }
 
     public void OnCustomizeClick()
