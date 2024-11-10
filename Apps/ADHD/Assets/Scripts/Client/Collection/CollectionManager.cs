@@ -8,11 +8,15 @@ using System.Linq;
 using System.Xml.Serialization;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CollectionManager : MonoBehaviour
 {
     [SerializeField] private Transform ScrollContent;
-    [SerializeField] private GameObject CardPrefab;
+    [SerializeField] private GameObject CardPrefab; 
+
+    [SerializeField] private GameObject PopUp;
+    [SerializeField] private Transform PopUpSlot;
 
     private Dictionary<Factions, bool> factionsFilter = new Dictionary<Factions, bool>();
     private Dictionary<int, bool> blessingsFilter = new Dictionary<int, bool>();
@@ -28,6 +32,7 @@ public class CollectionManager : MonoBehaviour
 
     private void Start()
     {
+        DisablePopUp();
         UpdateCardsList();
     }
 
@@ -59,6 +64,14 @@ public class CollectionManager : MonoBehaviour
             var cardInstance = Instantiate(CardPrefab, ScrollContent);
             var cardUI = cardInstance.GetComponent<CardUI>();
             cardUI.SetCardData(card);
+
+            Button cardButton = cardInstance.GetComponent<Button>();
+
+            if (cardButton != null)
+            {
+                cardButton.onClick.RemoveAllListeners();
+                cardButton.onClick.AddListener(() => ShowCard(card));
+            }
         }
     }
 
@@ -92,7 +105,6 @@ public class CollectionManager : MonoBehaviour
             { typeof(BattleTacticCardSO), true },
             { typeof(LegendCardSO), true},
         };
-        
     }
 
     private bool FilterCard(CardSO card)
@@ -130,5 +142,28 @@ public class CollectionManager : MonoBehaviour
         }
         typeFilter[cardType] = !typeFilter[cardType];
         UpdateCardsList();
+    }
+
+    public void DisablePopUp()
+    {
+        PopUp.SetActive(false);
+        ClearPopUpArea();
+    }
+
+    private void ShowCard(CardSO cardSO)
+    {
+        ClearPopUpArea();
+        var cardInstance = Instantiate(CardPrefab, PopUpSlot);
+        var cardUI = cardInstance.GetComponent<CardUI>();
+        cardUI.SetCardData(cardSO);
+        PopUp.SetActive(true);
+    }
+
+    private void ClearPopUpArea()
+    {
+        foreach (Transform child in PopUpSlot)
+        {
+            Destroy(child.gameObject);
+        }
     }
 }
