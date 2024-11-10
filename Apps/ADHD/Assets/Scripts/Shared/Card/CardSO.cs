@@ -29,6 +29,7 @@ namespace GameModel
         [Header("Stats")]
         public int Blessings;
 
+#if UNITY_EDITOR
         private void OnValidate()
         {
             if (string.IsNullOrEmpty(Id))
@@ -38,6 +39,7 @@ namespace GameModel
                 AssetDatabase.SaveAssets();
             }
         }
+#endif
     }
 
 
