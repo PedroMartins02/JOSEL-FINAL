@@ -162,7 +162,7 @@ public class AuthenticationManager : MonoBehaviour
     {
         await AuthenticationService.Instance.UpdatePlayerNameAsync(username);
         PlayerData playerData = new PlayerData(username);
-        AccountManager.Singleton.SetPlayerData(playerData, true);
+        AccountManager.Singleton.SetPlayerData(playerData);
         //SceneManager.LoadScene("TutorialScene");
         SceneManager.LoadScene("NavigationScene");
     }
@@ -174,6 +174,8 @@ public class AuthenticationManager : MonoBehaviour
         {
             await AuthenticationService.Instance.UpdatePlayerNameAsync(username);
         }
+        PlayerData playerData = new PlayerData(username);
+        AccountManager.Singleton.SetPlayerData(playerData);
         SceneManager.LoadScene("NavigationScene");
     }
 }

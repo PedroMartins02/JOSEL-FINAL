@@ -17,15 +17,8 @@ public class HomeManager : MonoBehaviour
     {
         PlayerName.enabled = false;
 
-        if (CheckAndSetPlayerData())
-        {
-            return;
-        }
-
-        if (await AccountManager.Singleton.LoadData())
-        {
-            CheckAndSetPlayerData();
-        }
+        await AccountManager.Singleton.LoadData();
+        CheckAndSetPlayerData();
     }
 
     private bool CheckAndSetPlayerData()
