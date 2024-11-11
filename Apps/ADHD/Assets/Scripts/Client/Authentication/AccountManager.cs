@@ -66,6 +66,12 @@ public class AccountManager : MonoBehaviour
             VerifyData();
             return true;
         }
+
+        if (playerData != null)
+        {
+            VerifyData();
+        }
+
         return false;
     }
 
