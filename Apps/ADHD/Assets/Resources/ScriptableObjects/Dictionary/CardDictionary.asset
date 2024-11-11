@@ -13,4 +13,36 @@ MonoBehaviour:
   m_Name: CardDictionary
   m_EditorClassIdentifier: 
   _cardDict:
-    DictItems: []
+    DictItems:
+    - Id: 8673-102990
+      ItemCardSO: {fileID: 11400000, guid: 973e2b4d59ccc2b46b1f78852a226259, type: 2}
+    - Id: 225d-103122
+      ItemCardSO: {fileID: 11400000, guid: 93b6420f86a3c424cbe9fc29c744c37f, type: 2}
+    - Id: 7c93-100510
+      ItemCardSO: {fileID: 11400000, guid: b038288fef566ab42b953355839f3988, type: 2}
+    - Id: c9e8-100202
+      ItemCardSO: {fileID: 11400000, guid: b6d5345e932edb54cbd056ffdc21dc77, type: 2}
+    - Id: 368f-1134146
+      ItemCardSO: {fileID: 11400000, guid: d44ced5ef358ff24d801cda3293b9d91, type: 2}
+    - Id: 8876-105950
+      ItemCardSO: {fileID: 11400000, guid: c5a1f7fc4e4833f42b2361447bef41a3, type: 2}
+    - Id: 547c-104426
+      ItemCardSO: {fileID: 11400000, guid: 6428f53fb85f2304a9d2eb66c395c756, type: 2}
+    - Id: a9dc-103922
+      ItemCardSO: {fileID: 11400000, guid: 94a43a953b66f6144bfc15103b60954f, type: 2}
+    - Id: b180-105022
+      ItemCardSO: {fileID: 11400000, guid: f83dd8995a7f80c469d664a534b71aa6, type: 2}
+    - Id: 42ce-99434
+      ItemCardSO: {fileID: 11400000, guid: cde8b7e8aeed75a4fa32b9929eecd097, type: 2}
+    - Id: 6d9a-99844
+      ItemCardSO: {fileID: 11400000, guid: 760aaf89801f46b44bbffc6fdb44c4af, type: 2}
+    - Id: e5d941168
+      ItemCardSO: {fileID: 11400000, guid: a38b178dd189ac74ea507def185f3629, type: 2}
+    - Id: a1eb42070
+      ItemCardSO: {fileID: 11400000, guid: b9388999da9b98b4cb516f16632f1386, type: 2}
+    - Id: 8a6441240
+      ItemCardSO: {fileID: 11400000, guid: 23c71cf37cad32841a1a16ec1f400a74, type: 2}
+    - Id: b08741014
+      ItemCardSO: {fileID: 11400000, guid: e4f0b6ef301dfec4f9cfe0c62cf0c0be, type: 2}
+    - Id: 4f7b41066
+      ItemCardSO: {fileID: 11400000, guid: d3c2068770fb6f348bce8c8c036dfac9, type: 2}
