@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace GameModel
 {
@@ -14,19 +15,24 @@ namespace GameModel
     public enum RuleTarget
     {
         StartingHealth,
-        ManaPerTurn,
-        StartingMana,
+        StartingHandSize,
+        BlessingPerTurn,
+        StartingBlessings,
         CardsDrawnPerTurn,
+        MaximumBlessings
     }
 
+    [Serializable]
     public class GameRule
     {
+        [SerializeField]
         public string Description { get; private set; }
 
         public ValueType ValueType { get; private set; }
 
         public RuleTarget Target { get; private set; }
 
+        [SerializeField]
         private object Value;
 
 
@@ -74,9 +80,14 @@ namespace GameModel
         {
             List<GameRule> rules = new List<GameRule>();
 
+            rules.Add(new GameRule("", ValueType.Integer, 20, RuleTarget.StartingHealth));
+            rules.Add(new GameRule("", ValueType.Integer, 5, RuleTarget.StartingHandSize));
+            rules.Add(new GameRule("", ValueType.Integer, 1, RuleTarget.CardsDrawnPerTurn));
+            rules.Add(new GameRule("", ValueType.Integer, 2, RuleTarget.StartingBlessings));
+            rules.Add(new GameRule("", ValueType.Integer, 1, RuleTarget.BlessingPerTurn));
+            rules.Add(new GameRule("", ValueType.Integer, 1, RuleTarget.MaximumBlessings));
 
             return rules;
         }
-
     }
 }
