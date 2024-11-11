@@ -12,3 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9598ca9f999cf864a9bf99bae1f1ee69, type: 3}
   m_Name: New Card Effect
   m_EditorClassIdentifier: 
+  conditionList: []
+  actionList: []

@@ -12,22 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fc97877328f5ce46be7b34709dea615, type: 3}
   m_Name: CardDictionary
   m_EditorClassIdentifier: 
-  Faction: 0
   _cardDict:
-    DictItems:
-    - Id: aebf39910
-      ItemCardSO: {fileID: 11400000, guid: 102b292268c548d41b1ae68c8f49d796, type: 2}
-    - Id: 876839912
-      ItemCardSO: {fileID: 11400000, guid: 526b4a299fb74a64cae6aa61d3b67fab, type: 2}
-    - Id: 615d41424
-      ItemCardSO: {fileID: 11400000, guid: a38b178dd189ac74ea507def185f3629, type: 2}
-    - Id: 174542302
-      ItemCardSO: {fileID: 11400000, guid: b9388999da9b98b4cb516f16632f1386, type: 2}
-    - Id: 052c41490
-      ItemCardSO: {fileID: 11400000, guid: 23c71cf37cad32841a1a16ec1f400a74, type: 2}
-    - Id: b81241270
-      ItemCardSO: {fileID: 11400000, guid: e4f0b6ef301dfec4f9cfe0c62cf0c0be, type: 2}
-    - Id: 82fa41322
-      ItemCardSO: {fileID: 11400000, guid: d3c2068770fb6f348bce8c8c036dfac9, type: 2}
-    - Id: 44cf39914
-      ItemCardSO: {fileID: 11400000, guid: e46eabc65b9a68846b5309e114116a1f, type: 2}
+    DictItems: []

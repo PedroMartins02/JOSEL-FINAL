@@ -9,15 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ebde07a14ac7007409d3fb05a7c66441, type: 3}
-  m_Name: BattleTacticExample
+  m_Script: {fileID: 11500000, guid: df7e7a88b2536a141b352b90fc843010, type: 3}
+  m_Name: Zeus
   m_EditorClassIdentifier: 
-  Id: 185940718
-  Name: BTExample
-  ShortText: 
+  Id: 6d9a-99844
+  Name: Zeus
+  ShortText: Goddess of Sky and Thunder
   Description: 
-  Art: {fileID: 0}
+  Art: {fileID: 21300000, guid: bd6e0c76425aa8a49869d9fd798f0ff9, type: 3}
   Faction: 0
-  Element: 0
+  Element: 4
   Blessings: 0
   Effects: []

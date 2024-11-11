@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: StarterDeck
   m_EditorClassIdentifier: 
   Name: Starter Deck
-  Myth: {fileID: 11400000, guid: c509f239ef0b59f41a68af523f4733e3, type: 2}
+  Myth: {fileID: 11400000, guid: cde8b7e8aeed75a4fa32b9929eecd097, type: 2}
   Cards:
   - {fileID: 11400000, guid: a38b178dd189ac74ea507def185f3629, type: 2}
   - {fileID: 11400000, guid: a38b178dd189ac74ea507def185f3629, type: 2}
