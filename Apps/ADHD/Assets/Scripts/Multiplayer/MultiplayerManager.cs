@@ -19,7 +19,6 @@ public class MultiplayerManager : NetworkBehaviour
 
     private NetworkList<MP_PlayerData> playerDataNetworkList;
     private string playerName;
-    private string topic;
 
     // Events for Client establishing connecting from the lobby list to Lobby Scene
     public event EventHandler OnTryingToJoinGame;
@@ -36,7 +35,6 @@ public class MultiplayerManager : NetworkBehaviour
         DontDestroyOnLoad(gameObject);
 
         playerName = PlayerPrefs.GetString(PLAYER_PREFS_PLAYER_NAME_MULTIPLAYER, "PlayerName" + UnityEngine.Random.Range(100, 1000));
-        topic = "None";
 
         // Initialize networkList here otherwise error
         playerDataNetworkList = new NetworkList<MP_PlayerData>();
