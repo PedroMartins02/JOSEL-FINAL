@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace GameModel
 {
@@ -66,6 +67,15 @@ namespace GameModel
         public override string ToString()
         {
             return $"GameRule: {Target}, Type: {ValueType}, Value: {Value}";
+        }
+
+        // Hopefully temporary
+        public static List<GameRule> GetDefaultRules()
+        {
+            List<GameRule> rules = new List<GameRule>();
+
+
+            return rules;
         }
 
     }

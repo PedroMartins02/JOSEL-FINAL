@@ -17,13 +17,13 @@ public class MultiplayerManager : NetworkBehaviour
     public const int MAX_PLAYER_AMOUNT = 2;
     private const string PLAYER_PREFS_PLAYER_NAME_MULTIPLAYER = "PlayerNameMultiplayer";
 
+    private List<GameModel.GameRule> lobbyGameRules;
     private NetworkList<MP_PlayerData> playerDataNetworkList;
-    private string playerName;
 
-    // Events for Client establishing connecting from the lobby list to Lobby Scene
+    // Events for Clients establishing connection to the network 
     public event EventHandler OnTryingToJoinGame;
     public event EventHandler OnFailedToJoinGame;
-    // Events for Lobby Scene for when players enter or leave the lobby
+    // Event for when the list of Players in the network and their info change
     public event EventHandler OnPlayerDataNetworkListChanged;
 
 
@@ -34,10 +34,9 @@ public class MultiplayerManager : NetworkBehaviour
 
         DontDestroyOnLoad(gameObject);
 
-        playerName = PlayerPrefs.GetString(PLAYER_PREFS_PLAYER_NAME_MULTIPLAYER, "PlayerName" + UnityEngine.Random.Range(100, 1000));
-
         // Initialize networkList here otherwise error
         playerDataNetworkList = new NetworkList<MP_PlayerData>();
+
         // Listen for NetworkList changed event
         playerDataNetworkList.OnListChanged += PlayerDataNetworkList_OnListChanged;
     }
@@ -79,7 +78,6 @@ public class MultiplayerManager : NetworkBehaviour
         {
             clientId = clientId,
         });
-        SetPlayerNameServerRpc(GetPlayerName());
         SetPlayerIdServerRpc(AuthenticationService.Instance.PlayerId);
     }
 
@@ -120,8 +118,7 @@ public class MultiplayerManager : NetworkBehaviour
 
     private void NetworkManager_Client_OnClientConnectedCallback(ulong obj)
     {
-        // To tell the server the username and playerId, use ServerRpc
-        SetPlayerNameServerRpc(GetPlayerName());
+        // To tell the server the playerId, use ServerRpc
         SetPlayerIdServerRpc(AuthenticationService.Instance.PlayerId);
     }
 
@@ -206,16 +203,12 @@ public class MultiplayerManager : NetworkBehaviour
         NetworkManager_Server_OnClientDisconnectCallback(clientId);
     }
 
-
-    public string GetPlayerName()
+    /**
+     * Method to set the game rules
+     */
+    public void SetGameRules(List<GameModel.GameRule> rules)
     {
-        return playerName;
-    }
-
-    public void SetPlayerName(string playerName)
-    {
-        this.playerName = playerName;
-
-        PlayerPrefs.SetString(PLAYER_PREFS_PLAYER_NAME_MULTIPLAYER, playerName);
+        if(rules != null)
+            this.lobbyGameRules = rules;
     }
 }

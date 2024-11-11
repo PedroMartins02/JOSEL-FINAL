@@ -245,7 +245,7 @@ public class LobbyManager : MonoBehaviour
     /**
      * Method for creating and hosting a game Lobby
      */
-    public async void CreateLobby(string lobbyName, bool isPrivate, LobbyType lobbyType)
+    public async void CreateLobby(string lobbyName, bool isPrivate, LobbyType lobbyType, List<GameModel.GameRule> gameRules)
     {
         OnCreateLobbyStarted?.Invoke(this, EventArgs.Empty);
         try
@@ -278,6 +278,9 @@ public class LobbyManager : MonoBehaviour
                     { KEY_RELAY_CODE, new DataObject(DataObject.VisibilityOptions.Member, relayJoinCode) }
                 }
             });
+
+            // Set the Game Rules
+            MultiplayerManager.Instance.SetGameRules(gameRules);
 
             // Start Hosting and go to LobbyScene, where the main lobby will be
             MultiplayerManager.Instance.StartHost();
@@ -316,7 +319,8 @@ public class LobbyManager : MonoBehaviour
                 CreateLobby(
                     "QuickMatchLobby",
                     true,
-                    LobbyManager.LobbyType.QuickMatch
+                    LobbyManager.LobbyType.QuickMatch,
+                    GameModel.GameRule.GetDefaultRules()
                 );
             }
         }
