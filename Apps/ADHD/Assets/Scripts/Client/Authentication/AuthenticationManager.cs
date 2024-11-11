@@ -161,6 +161,8 @@ public class AuthenticationManager : MonoBehaviour
     private async void OnRegisterSuccess(string username)
     {
         await AuthenticationService.Instance.UpdatePlayerNameAsync(username);
+        PlayerData playerData = new PlayerData(username);
+        AccountManager.Singleton.SetPlayerData(playerData, true);
         //SceneManager.LoadScene("TutorialScene");
         SceneManager.LoadScene("NavigationScene");
     }
