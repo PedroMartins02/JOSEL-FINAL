@@ -13,11 +13,10 @@ public class HomeManager : MonoBehaviour
         SetupUI();
     }
 
-    private async void SetupUI()
+    private void SetupUI()
     {
         PlayerName.enabled = false;
 
-        await AccountManager.Singleton.LoadData();
         CheckAndSetPlayerData();
     }
 
