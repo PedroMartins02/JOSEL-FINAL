@@ -1,4 +1,5 @@
 using GameModel;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,7 +35,7 @@ public class CardDatabase : MonoBehaviour
         }
     }
 
-    public CardSO[] AllCards { get; private set; } = new CardSO[0];
+    public Dictionary<string, CardSO> CardDictionary { get; private set; } = new();
 
     private void Start()
     {
@@ -43,45 +44,33 @@ public class CardDatabase : MonoBehaviour
 
     private void LoadCards()
     {
-        AllCards = Resources.LoadAll<CardSO>("ScriptableObjects/Cards");
-        Debug.Log($"Loaded {AllCards.Count()} cards");
+        CardDictionary = Resources.Load<CardDictionarySO>("ScriptableObjects/Dictionary/CardDictionary").GetDictionary();
+        Debug.Log($"Loaded {CardDictionary.Count} cards");
     }
+
+    private delegate Card CardConstructor(CardSO cardSO);
+    private static readonly Dictionary<Type, CardConstructor> cardConstructors = new Dictionary<Type, CardConstructor>
+    {
+        { typeof(UnitCardSO), cardSO => new UnitCard((UnitCardSO)cardSO) },
+        { typeof(BattleTacticCardSO), cardSO => new BattleTacticCard((BattleTacticCardSO)cardSO) },
+        { typeof(LegendCardSO), cardSO => new LegendCard((LegendCardSO)cardSO) },
+        { typeof(MythCardSO), cardSO => new MythCard((MythCardSO)cardSO) }
+    };
 
     public Card GetCardOfId(string cardId)
     {
-        CardSO cardSO = AllCards.Where(card => card.Id.Equals(cardId)).FirstOrDefault();
-
+        CardSO cardSO = CardDictionary.ContainsKey(cardId) ? CardDictionary[cardId] : null;
         if (cardSO == null)
-        {
             return null;
-        }
 
-        if (cardSO.GetType() == typeof(UnitCardSO))
-        {
-            return new UnitCard((UnitCardSO)cardSO);
-        }
-
-        if (cardSO.GetType() == typeof(BattleTacticCardSO))
-        {
-            return new BattleTacticCard((BattleTacticCardSO)cardSO);
-        }
-
-        if (cardSO.GetType() == typeof(LegendCardSO))
-        {
-            return new LegendCard((LegendCardSO)cardSO);
-        }
-
-        if (cardSO.GetType() == typeof(MythCardSO))
-        {
-            return new MythCard((MythCardSO)cardSO);
-        }
+        if (cardConstructors.TryGetValue(cardSO.GetType(), out CardConstructor constructor))
+            return constructor(cardSO); 
 
         return null;
     }
 
-
     public CardSO GetCardSoOfId(string cardId)
     {
-        return AllCards.Where(card => card.Id.Equals(cardId)).FirstOrDefault();
+        return CardDictionary.ContainsKey(cardId) ? CardDictionary[cardId] : null;
     }
 }

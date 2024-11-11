@@ -13,7 +13,8 @@ using UnityEngine.UI;
 public class CollectionManager : MonoBehaviour
 {
     [SerializeField] private Transform ScrollContent;
-    [SerializeField] private GameObject CardPrefab; 
+    [SerializeField] private GameObject CardPrefab;
+    [SerializeField] private GameObject QuantityPrefab;
 
     [SerializeField] private GameObject PopUp;
     [SerializeField] private Transform PopUpSlot;
@@ -64,6 +65,10 @@ public class CollectionManager : MonoBehaviour
             var cardInstance = Instantiate(CardPrefab, ScrollContent);
             var cardUI = cardInstance.GetComponent<CardUI>();
             cardUI.SetCardData(card);
+
+            var quantityInstace = Instantiate(QuantityPrefab, cardInstance.transform);
+            var quantityUI = quantityInstace.GetComponent<QuantityUI>();
+            quantityUI.SetQuantity(kvp.Value);
 
             Button cardButton = cardInstance.GetComponent<Button>();
 

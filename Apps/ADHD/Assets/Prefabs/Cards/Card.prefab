@@ -693,6 +693,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de50a7497f2c1f544ac8b7c0a9e4d2d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CardToScale: {fileID: 7364716761667459015}
 --- !u!114 &7156977685024146777
 MonoBehaviour:
   m_ObjectHideFlags: 0

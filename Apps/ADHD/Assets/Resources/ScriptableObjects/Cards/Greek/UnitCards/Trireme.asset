@@ -17,7 +17,7 @@ MonoBehaviour:
   ShortText: Warship of the ancient Greek navy.
   Description: Triremes were fast, agile warships that dominated naval battles in
     ancient Greece.
-  Art: {fileID: 0}
+  Art: {fileID: 21300000, guid: 09cbeeb4a0ff7ad4ea1d36e20e56b330, type: 3}
   Faction: 0
   Element: 2
   Blessings: 4
