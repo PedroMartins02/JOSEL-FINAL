@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class DeckListsManager : MonoBehaviour
 {
@@ -14,7 +15,7 @@ public class DeckListsManager : MonoBehaviour
     [SerializeField] private GameObject ErrorPopUp;
     [SerializeField] private GameObject ConfirmationPopUp;
 
-    private int highlightedDeckId = -1;
+    [SerializeField] private HighlightedDeckIdSO HighlightedDeckData;
 
     private void Start()
     {
@@ -57,7 +58,7 @@ public class DeckListsManager : MonoBehaviour
     public void DisablePopUp(bool resetSelection = false)
     {
         if (resetSelection)
-            highlightedDeckId = -1;
+            HighlightedDeckData.DeckId = -1;
 
         PopUpArea.SetActive(false);
         foreach (Transform child in PopUpArea.transform)
@@ -80,7 +81,7 @@ public class DeckListsManager : MonoBehaviour
         List<DeckData> deckLists = playerData.DeckCollection;
         if (deckLists.Count > slotIndex)
         {
-            highlightedDeckId = slotIndex;
+            HighlightedDeckData.DeckId = slotIndex;
             ShowPopUp(OptionsPopUp);
             Debug.Log($"Selected Deck {slotIndex}");
             return;
@@ -93,18 +94,18 @@ public class DeckListsManager : MonoBehaviour
     {
         DisablePopUp();
 
-        if (highlightedDeckId == -1)
+        if (HighlightedDeckData.DeckId == -1)
             return;
 
         PlayerData playerData = AccountManager.Singleton.GetPlayerData();
-        if (playerData.SelectedDeckId == highlightedDeckId)
+        if (playerData.SelectedDeckId == HighlightedDeckData.DeckId)
             return;
 
-        playerData.SelectedDeckId = highlightedDeckId;
+        playerData.SelectedDeckId = HighlightedDeckData.DeckId;
         AccountManager.Singleton.SetPlayerData(playerData, true);
         UpdateSelectedDeckUI();
 
-        highlightedDeckId = -1;
+        HighlightedDeckData.DeckId = -1;
     }
 
     public void OnEditClick()
@@ -128,12 +129,12 @@ public class DeckListsManager : MonoBehaviour
     public void ConfirmDeleteClick()
     {
         PlayerData playerData = AccountManager.Singleton.GetPlayerData();
-        playerData.DeckCollection.RemoveAt(highlightedDeckId);
+        playerData.DeckCollection.RemoveAt(HighlightedDeckData.DeckId);
         
-        if (playerData.SelectedDeckId == highlightedDeckId)
+        if (playerData.SelectedDeckId == HighlightedDeckData.DeckId)
         {
             playerData.SelectedDeckId = 0;
-        } else if (playerData.SelectedDeckId > highlightedDeckId)
+        } else if (playerData.SelectedDeckId > HighlightedDeckData.DeckId)
         {
             playerData.SelectedDeckId -= 1;
         }
@@ -150,6 +151,6 @@ public class DeckListsManager : MonoBehaviour
 
     public void OnCustomizeClick()
     {
-        //
+        SceneManager.LoadScene("DeckCosmeticsScene");
     }
 }

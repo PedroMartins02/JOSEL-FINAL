@@ -99,6 +99,11 @@ public class AccountManager : MonoBehaviour
             AwardStarterDeck();
             dataChanged = true;
         }
+        if (playerData.CardBackCollection.IsEmpty())
+        {
+            playerData.CardBackCollection.Add(0);
+            dataChanged = true;
+        }
         SetPlayerData(playerData, dataChanged);
     }
 

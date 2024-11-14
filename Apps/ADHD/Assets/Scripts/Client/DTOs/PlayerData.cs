@@ -11,6 +11,7 @@ public class PlayerData
     public List<string> CardCollection { get; set; } = new List<string>();
     public List<DeckData> DeckCollection { get; set; } = new List<DeckData>();
     public int SelectedDeckId { get; set; }
+    public List<int> CardBackCollection { get; set; } = new List<int>();
 
     // Parameterless constructor for JSON deserialization
     public PlayerData()
@@ -23,6 +24,7 @@ public class PlayerData
         CardCollection = new List<string>();
         DeckCollection = new List<DeckData>();
         SelectedDeckId = 0;
+        CardBackCollection = new List<int>();
     }
 
     public string ToJson()

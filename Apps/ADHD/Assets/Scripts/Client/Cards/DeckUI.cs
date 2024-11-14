@@ -7,9 +7,7 @@ using UnityEngine.UI;
 
 public class DeckUI : MonoBehaviour
 {
-    [SerializeField] private Sprite[] CardBackSprites;
-
-    [SerializeField] private Image CardBackImage;
+    [SerializeField] private CardBackUI cardBackUI;
     [SerializeField] private MythUI MythUI;
     [SerializeField] private TextMeshProUGUI NameText;
 
@@ -18,11 +16,15 @@ public class DeckUI : MonoBehaviour
         if (data == null)
             return;
 
-        int cardBackId = data.CardBackId > CardBackSprites.Count() ? 0 : data.CardBackId;
-        CardBackImage.sprite = CardBackSprites[cardBackId];
+        cardBackUI.SetCardBack(data.CardBackId);
 
         MythUI.SetMythData((MythCardSO)CardDatabase.Singleton.GetCardSoOfId(data.MythId));
     
         NameText.text = data.Name;
+    }
+
+    public void UpdateCardBack(int cardBackId)
+    {
+        cardBackUI.SetCardBack(cardBackId);
     }
 }

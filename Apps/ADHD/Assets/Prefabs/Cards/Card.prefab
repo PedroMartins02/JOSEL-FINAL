@@ -371,7 +371,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4984980739968109867}
   - component: {fileID: 3706977518666138627}
-  - component: {fileID: 9169964886087538849}
+  - component: {fileID: 7305247888287452048}
   m_Layer: 0
   m_Name: CardFrame
   m_TagString: Untagged
@@ -406,7 +406,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4790106126815821647}
   m_CullTransparentMesh: 1
---- !u!114 &9169964886087538849
+--- !u!114 &7305247888287452048
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -428,7 +428,7 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: 077e328e02cb3df479c991ec93df90fe, type: 3}
   m_Type: 0
-  m_PreserveAspect: 1
+  m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -679,7 +679,7 @@ MonoBehaviour:
   CivilizationName: {fileID: 4120561081847573781}
   ShortText: {fileID: 6646054528796283493}
   CardArt: {fileID: 3075800247677813526}
-  CardFrame: {fileID: 9169964886087538849}
+  CardFrame: {fileID: 7305247888287452048}
   TagArea: {fileID: 5064604059723920874}
 --- !u!114 &1881704630587356569
 MonoBehaviour:

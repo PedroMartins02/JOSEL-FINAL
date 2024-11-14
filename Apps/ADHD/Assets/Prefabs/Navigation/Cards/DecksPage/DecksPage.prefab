@@ -1795,6 +1795,8 @@ MonoBehaviour:
   OptionsPopUp: {fileID: 4071517156078591544}
   ErrorPopUp: {fileID: 8540868829645703338}
   ConfirmationPopUp: {fileID: 533623418444478461}
+  HighlightedDeckData: {fileID: 11400000, guid: f5b22c2f5fb043b49b1b0c19fad0138e,
+    type: 2}
 --- !u!1 &4770299833529368977
 GameObject:
   m_ObjectHideFlags: 0
