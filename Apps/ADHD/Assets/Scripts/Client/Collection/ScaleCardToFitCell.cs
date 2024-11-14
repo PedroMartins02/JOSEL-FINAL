@@ -18,7 +18,7 @@ public class ScaleCardToFitCell : MonoBehaviour
         {
             return;
         }
-        parentRect = GetComponent<RectTransform>();
+        parentRect = (RectTransform) GetComponent<Transform>();
         ScaleChildren();
     }
 
