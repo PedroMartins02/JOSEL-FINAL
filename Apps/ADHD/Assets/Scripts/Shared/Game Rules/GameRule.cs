@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace GameModel
@@ -46,6 +47,7 @@ namespace GameModel
                 this.Description = description;
                 this.ValueType = valueType;
                 this.Value = value;
+                this.Target = target;
             }
             else
             {
@@ -62,12 +64,53 @@ namespace GameModel
             return (int)Value;
         }
 
+        public bool SetIntValue(int value)
+        {
+            if (ValueType != ValueType.Integer)
+                return false;
+
+            if (value <= 0)
+            {
+                this.Value = value;
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool SetIntValue(string value)
+        {
+            if (ValueType != ValueType.Integer)
+                return false;
+
+            try
+            {
+                int numVal = Int32.Parse(value);
+                this.Value = value;
+                return true;
+            }
+            catch (FormatException e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
+        }
+
         public string GetStringValue()
         {
             if (ValueType != ValueType.String)
                 throw new InvalidOperationException($"Cannot get string value from a {ValueType} rule.");
 
             return (string)Value;
+        }
+
+        public bool SetStringValue(string value)
+        {
+            if (ValueType != ValueType.String)
+                return false;
+
+            this.Value = value;
+            return true;
         }
 
         public override string ToString()
