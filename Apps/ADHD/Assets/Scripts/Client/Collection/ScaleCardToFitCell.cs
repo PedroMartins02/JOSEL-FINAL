@@ -14,23 +14,22 @@ public class ScaleCardToFitCell : MonoBehaviour
 
     void Update()
     {
-        if (isScaled)
-        {
-            return;
-        }
-        parentRect = GetComponent<RectTransform>();
+        if (isScaled) 
+            return; 
+
+        parentRect = (RectTransform) GetComponent<Transform>();
         ScaleChildren();
     }
 
     void ScaleChildren()
     {
-        isScaled= true;
         if (parentRect == null)
-        {
             return;
-        }
 
         Vector2 parentSize = parentRect.rect.size;
+
+        if (parentSize.x > 0 && parentSize.y > 0)
+            isScaled = true;
 
         RectTransform child = (RectTransform)CardToScale.transform;
         Vector2 childOriginalSize = child.rect.size;

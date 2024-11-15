@@ -13,7 +13,8 @@ public class SceneLoader
         NavigationScene, //Main menu of the game
         DeckCosmeticsScene, //Change cosmetics of a deck
         //Game, //Scene for the game
-        Lobby //Scene for the pre-game lobby
+        Lobby, //Scene for the pre-game lobby
+        DeckBuilder
     }
 
     private static Scene targetScene;

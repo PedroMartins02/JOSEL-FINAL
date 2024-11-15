@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 6afaf7d0a5e3059458779bb2662afc79
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - ScrollContent: {instanceID: 0}
+  - CardPrefab: {fileID: 6066824139122942845, guid: 2318f09ea2dcbee4db9127028a22be72,
+      type: 3}
+  - QuantityPrefab: {instanceID: 0}
+  - PopUp: {instanceID: 0}
+  - PopUpSlot: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

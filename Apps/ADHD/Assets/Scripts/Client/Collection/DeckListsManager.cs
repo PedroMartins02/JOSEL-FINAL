@@ -87,7 +87,7 @@ public class DeckListsManager : MonoBehaviour
             return;
         }
 
-        Debug.Log($"Create new Deck, clicked on slot {slotIndex}");
+        Debug.Log($"Create new Deck, clicked on slot {slotIndex}"); //Adicionar aqui a call da scene do deck editor
     }
 
     public void OnSelectClick()
@@ -110,7 +110,7 @@ public class DeckListsManager : MonoBehaviour
 
     public void OnEditClick()
     {
-        //Go To EditDeck Scene (send selected deck data)
+        GoToDeckEditorPage();
     }
 
     public void OnDeleteClick()
@@ -152,5 +152,12 @@ public class DeckListsManager : MonoBehaviour
     public void OnCustomizeClick()
     {
         SceneManager.LoadScene("DeckCosmeticsScene");
+        //SceneLoader.Load(SceneLoader.Scene.DeckCosmeticsScene);
+    }
+
+    public void GoToDeckEditorPage()
+    {
+        SceneManager.LoadScene("Deck Builder");
+        //SceneLoader.Load(SceneLoader.Scene.DeckBuilder);
     }
 }
