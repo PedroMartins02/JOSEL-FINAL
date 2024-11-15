@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using Unity.Netcode;
 using Unity.Services.Authentication;
@@ -16,20 +17,23 @@ public class UI_LobbyController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI PlayerTwoNameText;
     [SerializeField] private Transform deckSingleTemplate;
     [SerializeField] private Transform deckContainer;
+    [SerializeField] private GameObject DeckPrefab;
 
 
     private void Awake()
     {
         // Hide the deck Template
-        //deckSingleTemplate.gameObject.SetActive(false);
+        deckSingleTemplate.gameObject.SetActive(false);
     }
 
     private void Start()
     {
         Lobby lobby = LobbyManager.Instance.GetLobby();
 
+        UpdateDeckList();
+
         LobbyManager.Instance.OnJoinedLobby += Update_OnJoinedLobby;
-        LobbyManager.Instance.OnJoinedLobbyUpdate += Update_OnJoinedLobby;
+        LobbyManager.Instance.OnJoinedLobbyUpdate += Update_OnJoinedLobbyUpdate;
     }
 
     private void Update_OnJoinedLobby(object sender, LobbyManager.LobbyEventArgs e)
@@ -37,42 +41,76 @@ public class UI_LobbyController : MonoBehaviour
         UpdateLobby(LobbyManager.Instance.GetLobby());
     }
 
+    private void Update_OnJoinedLobbyUpdate(object sender, LobbyManager.LobbyEventArgs e)
+    {
+        UpdateLobby(LobbyManager.Instance.GetLobby());
+        UpdateDeckList();
+    }
+
 
     private void UpdateLobby(Lobby lobby)
     {
-        //ClearLobby();
-
         if (deckSingleTemplate != null && deckContainer != null)
         {
-            // Update the players
-            bool firstPlayer = true;
-            foreach (Player player in lobby.Players)
-            {
-                MP_PlayerData playerData = MultiplayerManager.Instance.GetPlayerDataFromPlayerId(player.Id);
-
-                if (player != null && playerData.playerId.ToString().Length > 0)
-                {
-                    if (firstPlayer)
-                    {
-                        playerOneNameText.text = playerData.playerUsername.ToString();
-                        firstPlayer = false;
-                    }
-                    else
-                        PlayerTwoNameText.text = playerData.playerUsername.ToString();
-                }
-            }
-
+            // Update the lobby
             lobbyNameText.text = lobby.Name;
             //lobbyCodeText.text = "Lobby Code:  " + lobby.LobbyCode;
             playerCountText.text = lobby.Players.Count + "/" + lobby.MaxPlayers;
+
+            // Update the players
+            UpdatePlayers(lobby);
+
+            //UpdateDeckList();
 
             Show();
         }
     }
 
-    private void ClearLobby()
+    private void UpdatePlayers(Lobby lobby)
     {
-        
+        // Update the players
+        bool firstPlayer = true;
+        foreach (Player player in lobby.Players)
+        {
+            MP_PlayerData playerData = MultiplayerManager.Instance.GetPlayerDataFromPlayerId(player.Id);
+
+            if (player != null && playerData.playerId.ToString().Length > 0)
+            {
+                if (firstPlayer)
+                {
+                    playerOneNameText.text = playerData.playerUsername.ToString();
+                    firstPlayer = false;
+                }
+                else
+                    PlayerTwoNameText.text = playerData.playerUsername.ToString();
+            }
+        }
+    }
+
+    private void UpdateDeckList()
+    {
+        ClearDeckList();
+
+        // Update the decks
+        PlayerData accountData = AccountManager.Singleton.GetPlayerData();
+        List<DeckData> deckLists = accountData.DeckCollection;
+
+        foreach (DeckData deckData in deckLists)
+        {
+            var deckInstance = Instantiate(DeckPrefab, deckContainer);
+            var deckUI = deckInstance.GetComponent<DeckUI>();
+            deckUI.SetDeckData(deckData);
+        }
+    }
+
+    private void ClearDeckList()
+    {
+        if (deckContainer != null)
+            foreach (Transform child in deckContainer)
+            {
+                if (child == deckSingleTemplate) continue;
+                Destroy(child.gameObject);
+            }
     }
 
     private void Hide()
