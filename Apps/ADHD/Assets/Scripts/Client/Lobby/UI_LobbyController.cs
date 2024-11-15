@@ -11,14 +11,17 @@ public class UI_LobbyController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI lobbyNameText;
     //[SerializeField] private TextMeshProUGUI lobbyCodeText;
     [SerializeField] private TextMeshProUGUI playerCountText;
-    [SerializeField] private Transform playerSingleTemplate;
-    [SerializeField] private Transform playerContainer;
+    [SerializeField] private TextMeshProUGUI playerOneNameText;
+    [SerializeField] private Transform PlayerTwoBox;
+    [SerializeField] private TextMeshProUGUI PlayerTwoNameText;
+    [SerializeField] private Transform deckSingleTemplate;
+    [SerializeField] private Transform deckContainer;
 
 
     private void Awake()
     {
-        // Hide the player Template
-        playerSingleTemplate.gameObject.SetActive(false);
+        // Hide the deck Template
+        //deckSingleTemplate.gameObject.SetActive(false);
     }
 
     private void Start()
@@ -34,37 +37,32 @@ public class UI_LobbyController : MonoBehaviour
         UpdateLobby(LobbyManager.Instance.GetLobby());
     }
 
+
     private void UpdateLobby(Lobby lobby)
     {
-        ClearLobby();
+        //ClearLobby();
 
-        if (playerSingleTemplate != null && playerContainer != null)
+        if (deckSingleTemplate != null && deckContainer != null)
         {
+            // Update the players
+            bool firstPlayer = true;
             foreach (Player player in lobby.Players)
             {
-                if (player != null && MultiplayerManager.Instance.GetPlayerDataFromPlayerId(player.Id).playerId.ToString().Length > 0)
+                MP_PlayerData playerData = MultiplayerManager.Instance.GetPlayerDataFromPlayerId(player.Id);
+
+                if (player != null && playerData.playerId.ToString().Length > 0)
                 {
-                    Transform playerSingleTransform = Instantiate(playerSingleTemplate, playerContainer);
-                    playerSingleTransform.gameObject.SetActive(true);
-                    UI_LobbyPlayerSingle lobbyPlayerSingleUI = playerSingleTransform.GetComponent<UI_LobbyPlayerSingle>();
-
-                    // Make the kick button only available to the host/server
-                    lobbyPlayerSingleUI.SetKickButtonVisible(
-                        NetworkManager.Singleton.IsServer &&
-                        player.Id != AuthenticationService.Instance.PlayerId // Don't allow self kick
-                    );
-
-                    // Set the ready icon
-                    //MP_PlayerData playerData = MultiplayerManager.Instance.GetPlayerDataFromPlayerId(player.Id);
-                    //lobbyPlayerSingleUI.SetReadyIconVisible(
-                    //    LobbyReady.Instance.IsPlayerReady(playerData.clientId)
-                    //);
-
-                    lobbyPlayerSingleUI.UpdatePlayer(player);
+                    if (firstPlayer)
+                    {
+                        playerOneNameText.text = playerData.playerUsername.ToString();
+                        firstPlayer = false;
+                    }
+                    else
+                        PlayerTwoNameText.text = playerData.playerUsername.ToString();
                 }
             }
 
-            lobbyNameText.text = "Lobby Name:  " + lobby.Name;
+            lobbyNameText.text = lobby.Name;
             //lobbyCodeText.text = "Lobby Code:  " + lobby.LobbyCode;
             playerCountText.text = lobby.Players.Count + "/" + lobby.MaxPlayers;
 
@@ -74,12 +72,7 @@ public class UI_LobbyController : MonoBehaviour
 
     private void ClearLobby()
     {
-        if (playerContainer != null)
-            foreach (Transform child in playerContainer)
-            {
-                if (child == playerSingleTemplate) continue;
-                Destroy(child.gameObject);
-            }
+        
     }
 
     private void Hide()
