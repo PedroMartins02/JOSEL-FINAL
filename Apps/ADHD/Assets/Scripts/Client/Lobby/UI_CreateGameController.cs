@@ -1,6 +1,7 @@
 using ModestTree;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Threading.Tasks;
 using TMPro;
 using Unity.Services.Lobbies.Models;
@@ -13,7 +14,6 @@ public class UI_CreateGameController : MonoBehaviour
     [SerializeField] private Transform ruleSingleTemplate;
     [SerializeField] private Transform container;
 
-    private List<GameModel.GameRule> gameRules = new List<GameModel.GameRule>();
     private string lobbyName;
     private bool isPrivate = false;
 
@@ -32,6 +32,15 @@ public class UI_CreateGameController : MonoBehaviour
     public void CreateGame()
     {
         lobbyName = nameText.text.IsEmpty() ? "Custom Game" : nameText.text;
+
+        List<GameModel.GameRule> gameRules = new List<GameModel.GameRule>();
+
+        foreach (Transform child in container)
+        {
+            if (child == ruleSingleTemplate) continue;
+
+            gameRules.Add(child.GetComponent<UI_RuleSingleTemplate>().GetRule());
+        }
 
         LobbyManager.Instance.CreateLobby(
                 lobbyName,

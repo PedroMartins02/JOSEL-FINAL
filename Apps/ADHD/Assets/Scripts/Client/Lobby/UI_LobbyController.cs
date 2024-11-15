@@ -10,20 +10,21 @@ public class UI_LobbyController : MonoBehaviour
 {
 
     [SerializeField] private TextMeshProUGUI lobbyNameText;
-    //[SerializeField] private TextMeshProUGUI lobbyCodeText;
-    [SerializeField] private TextMeshProUGUI playerCountText;
     [SerializeField] private TextMeshProUGUI playerOneNameText;
     [SerializeField] private Transform PlayerTwoBox;
     [SerializeField] private TextMeshProUGUI PlayerTwoNameText;
     [SerializeField] private Transform deckSingleTemplate;
     [SerializeField] private Transform deckContainer;
     [SerializeField] private GameObject DeckPrefab;
+    [SerializeField] private Transform ruleSingleTemplate;
+    [SerializeField] private Transform ruleContainer;
 
 
     private void Awake()
     {
         // Hide the deck Template
         deckSingleTemplate.gameObject.SetActive(false);
+        ruleSingleTemplate.gameObject.SetActive(false);
     }
 
     private void Start()
@@ -31,6 +32,7 @@ public class UI_LobbyController : MonoBehaviour
         Lobby lobby = LobbyManager.Instance.GetLobby();
 
         UpdateDeckList();
+        UpdateRules();
 
         LobbyManager.Instance.OnJoinedLobby += Update_OnJoinedLobby;
         LobbyManager.Instance.OnJoinedLobbyUpdate += Update_OnJoinedLobbyUpdate;
@@ -39,12 +41,13 @@ public class UI_LobbyController : MonoBehaviour
     private void Update_OnJoinedLobby(object sender, LobbyManager.LobbyEventArgs e)
     {
         UpdateLobby(LobbyManager.Instance.GetLobby());
+        UpdateDeckList();
+        UpdateRules();
     }
 
     private void Update_OnJoinedLobbyUpdate(object sender, LobbyManager.LobbyEventArgs e)
     {
         UpdateLobby(LobbyManager.Instance.GetLobby());
-        UpdateDeckList();
     }
 
 
@@ -54,8 +57,6 @@ public class UI_LobbyController : MonoBehaviour
         {
             // Update the lobby
             lobbyNameText.text = lobby.Name;
-            //lobbyCodeText.text = "Lobby Code:  " + lobby.LobbyCode;
-            playerCountText.text = lobby.Players.Count + "/" + lobby.MaxPlayers;
 
             // Update the players
             UpdatePlayers(lobby);
@@ -109,6 +110,32 @@ public class UI_LobbyController : MonoBehaviour
             foreach (Transform child in deckContainer)
             {
                 if (child == deckSingleTemplate) continue;
+                Destroy(child.gameObject);
+            }
+    }
+
+    private void UpdateRules()
+    {
+        ClearRulesList();
+
+        // Update the rules
+        List<GameModel.GameRule> definedRulesList = MultiplayerManager.Instance.GetLobbyGameRules();
+
+        foreach (GameModel.GameRule gameRule in definedRulesList)
+        {
+            Transform ruleSingleTransform = Instantiate(ruleSingleTemplate, ruleContainer);
+            ruleSingleTransform.gameObject.SetActive(true);
+
+            ruleSingleTransform.GetComponent<UI_LobbyRuleTemplate>().SetRule(gameRule);
+        }
+    }
+
+    private void ClearRulesList()
+    {
+        if (ruleContainer != null)
+            foreach (Transform child in ruleContainer)
+            {
+                if (child == ruleSingleTemplate) continue;
                 Destroy(child.gameObject);
             }
     }

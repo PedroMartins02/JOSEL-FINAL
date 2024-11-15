@@ -280,7 +280,7 @@ public class LobbyManager : MonoBehaviour
             });
 
             // Set the Game Rules
-            MultiplayerManager.Instance.SetGameRules(gameRules);
+            MultiplayerManager.Instance.SetLobbyGameRules(gameRules);
 
             // Start Hosting and go to LobbyScene, where the main lobby will be
             MultiplayerManager.Instance.StartHost();

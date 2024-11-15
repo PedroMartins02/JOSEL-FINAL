@@ -47,5 +47,8 @@ public class UI_RuleSingleTemplate : MonoBehaviour
             ruleInputField.text = rule.GetIntValue().ToString();
     }
 
-
+    public GameRule GetRule()
+    {
+        return rule;
+    }
 }

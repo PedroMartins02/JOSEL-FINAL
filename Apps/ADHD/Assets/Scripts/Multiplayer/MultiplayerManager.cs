@@ -206,9 +206,17 @@ public class MultiplayerManager : NetworkBehaviour
     /**
      * Method to set the game rules
      */
-    public void SetGameRules(List<GameModel.GameRule> rules)
+    public void SetLobbyGameRules(List<GameModel.GameRule> rules)
     {
         if(rules != null)
             this.lobbyGameRules = rules;
+    }
+
+    /**
+     * Method to get the game rules
+     */
+    public List<GameModel.GameRule> GetLobbyGameRules()
+    {
+        return this.lobbyGameRules;
     }
 }
