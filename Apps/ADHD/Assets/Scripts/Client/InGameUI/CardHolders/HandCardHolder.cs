@@ -79,8 +79,6 @@ public class HandCardHolder : HorizontalCardHolder
         card.isInHand = true;
         card.gameObject.tag = isMine ? "MyCard" : "OpponentCard";
 
-        card.SetCardData(cardSO);
-
         StartCoroutine(Frame());
 
         IEnumerator Frame()
@@ -91,6 +89,8 @@ public class HandCardHolder : HorizontalCardHolder
 
             cards.Add(card);
             card.cardVisual.UpdateIndex(transform.childCount);
+
+            card.SetCardData(cardSO);
         }
     }
 }

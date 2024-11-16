@@ -597,9 +597,6 @@ MonoBehaviour:
   cardsToSpawn: 4
   cards: []
   tweenCardReturn: 1
-  DrawCardEvent:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &273999229
 GameObject:
   m_ObjectHideFlags: 0
@@ -2514,9 +2511,6 @@ MonoBehaviour:
   cardsToSpawn: 4
   cards: []
   tweenCardReturn: 1
-  DrawCardEvent:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &2143816134
 GameObject:
   m_ObjectHideFlags: 0
@@ -2603,7 +2597,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2143816139}
         m_TargetAssemblyTypeName: MockFunctionalities, Assembly-CSharp
-        m_MethodName: DrawEventMock
+        m_MethodName: DrawCardMock
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
