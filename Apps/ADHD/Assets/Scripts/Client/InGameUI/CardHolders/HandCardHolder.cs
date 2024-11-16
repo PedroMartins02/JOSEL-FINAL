@@ -3,7 +3,6 @@ using GameModel;
 using System.Collections;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class HandCardHolder : HorizontalCardHolder
 {

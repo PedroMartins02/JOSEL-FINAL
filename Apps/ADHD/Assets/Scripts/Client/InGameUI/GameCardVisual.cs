@@ -85,8 +85,6 @@ public class GameCardVisual : MonoBehaviour
         parentCard.BeginDragEvent.AddListener(BeginDrag);
         parentCard.EndDragEvent.AddListener(EndDrag);
 
-        //UI
-
         //Initialization
         initalize = true;
     }
@@ -158,28 +156,6 @@ public class GameCardVisual : MonoBehaviour
         tiltParent.eulerAngles = new Vector3(lerpX, lerpY, lerpZ);
     }
 
-    private void MoveUp(GameCard card)
-    {
-        Select(card, false);
-    }
-
-    private void MoveDown(GameCard card)
-    {
-        Select(card, true);
-    }
-
-    private void Select(GameCard card, bool state)
-    {
-        DOTween.Kill(2, true);
-        float dir = state ? 1 : 0;
-        shakeParent.DOPunchPosition(shakeParent.up * selectPunchAmount * dir, scaleTransition, 10, 1);
-        shakeParent.DOPunchRotation(Vector3.forward * (hoverPunchAngle / 2), hoverTransition, 20, 1).SetId(2);
-
-        if (scaleAnimations)
-            transform.DOScale(scaleOnHoverHand, scaleTransition).SetEase(scaleEase);
-
-    }
-
     public void Swap(float dir = 1)
     {
         if (!swapAnimations)
@@ -191,13 +167,13 @@ public class GameCardVisual : MonoBehaviour
 
     private void BeginDrag(GameCard card)
     {
+        shakeParent.DOLocalMoveY(0, scaleTransition);
         canvas.overrideSorting = true;
     }
 
     private void EndDrag(GameCard card)
     {
-        if (card.isHovering)
-            return;
+        shakeParent.DOLocalMoveY(0, scaleTransition);
 
         canvas.overrideSorting = false;
         transform.DOScale(1, scaleTransition).SetEase(scaleEase);
@@ -220,13 +196,7 @@ public class GameCardVisual : MonoBehaviour
 
     private void PointerExit(GameCard card)
     {
-        if (card.isInHand && card.isMine)
-        {
-            shakeParent.DOLocalMoveY(0 * verticalMoveOnHover, scaleTransition);
-        }
-
-        if (card.isDragging)
-            return;
+        shakeParent.DOLocalMoveY(0, scaleTransition);
 
         canvas.overrideSorting = false;
         transform.DOScale(1, scaleTransition).SetEase(scaleEase);
