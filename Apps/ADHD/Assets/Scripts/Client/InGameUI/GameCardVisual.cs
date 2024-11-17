@@ -22,6 +22,8 @@ public class GameCardVisual : MonoBehaviour
     [SerializeField] private Transform shakeParent;
     [SerializeField] private Transform tiltParent;
     [SerializeField] private Image shadowImage;
+    [SerializeField] private Transform cardVisual;
+    [SerializeField] public Image highlight;
 
     [Header("Follow Parameters")]
     [SerializeField] private float followSpeed = 30;
@@ -54,9 +56,13 @@ public class GameCardVisual : MonoBehaviour
     [Header("Curve")]
     [SerializeField] private CurveParameters curve;
 
+    [Header("Shadow Shape")]
+    [SerializeField] private Sprite cardBackSprite;
+    [SerializeField] private Sprite cardFrameSprite;
+
     [Header("Card UI Items")]
-    [SerializeField] public Image cardFrame;
-    [SerializeField] public CardUI cardUI;
+    [SerializeField] private GameObject cardFrontPrefab;
+    [SerializeField] private GameObject cardBackPrefab;
 
     private float curveYOffset;
     private float curveRotationOffset;
@@ -75,18 +81,33 @@ public class GameCardVisual : MonoBehaviour
         parentCard.BeginDragEvent.AddListener(BeginDrag);
         parentCard.EndDragEvent.AddListener(EndDrag);
 
+        //UI
+        GameObject cardFront = Instantiate(cardBackPrefab, cardVisual);
+        shadowImage.sprite = cardBackSprite;
+
         //Initialization
         initalize = true;
     }
 
     public void SetCardData(CardSO cardSO)
     {
-        cardUI.SetCardData(cardSO);
+        foreach (Transform transform in cardVisual)
+        {
+            Destroy(transform.gameObject);
+        }
+
+        GameObject cardFront = Instantiate(cardFrontPrefab, cardVisual);
+        cardFront.GetComponent<CardUI>().SetCardData(cardSO);
+        shadowImage.sprite = cardFrameSprite;
     }
 
     public void UpdateCardData(Card card)
     {
-        cardUI.UpdateCardData(card);
+        CardUI cardUI = GetComponentInChildren<CardUI>();
+        if (cardUI != null)
+        {
+            cardUI.UpdateCardData(card);
+        }
     }
 
     public void UpdateIndex(int length)

@@ -62,35 +62,4 @@ public class HandCardHolder : HorizontalCardHolder
             c.cardVisual.UpdateIndex(transform.childCount);
         }
     }
-
-    public void DrawCard(CardSO cardSO)
-    {
-        GameObject cardSlot = Instantiate(slotPrefab, transform);
-
-        GameCard card = cardSlot.GetComponentInChildren<GameCard>();
-
-        card.PointerEnterEvent.AddListener(CardPointerEnter);
-        card.PointerExitEvent.AddListener(CardPointerExit);
-        card.BeginDragEvent.AddListener(BeginDrag);
-        card.EndDragEvent.AddListener(EndDrag);
-
-        card.name = cardSO.Id;
-        card.isMine = isMine;
-        card.isInHand = true;
-        card.gameObject.tag = isMine ? "MyCard" : "OpponentCard";
-
-        StartCoroutine(Frame());
-
-        IEnumerator Frame()
-        {
-            yield return new WaitForSecondsRealtime(.1f);
-            if (card.cardVisual != null)
-                card.cardVisual.UpdateIndex(transform.childCount);
-
-            cards.Add(card);
-            card.cardVisual.UpdateIndex(transform.childCount);
-
-            card.SetCardData(cardSO);
-        }
-    }
 }

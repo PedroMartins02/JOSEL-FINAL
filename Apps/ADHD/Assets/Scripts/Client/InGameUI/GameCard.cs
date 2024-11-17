@@ -261,7 +261,7 @@ public class GameCard : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDrag
 
     public void ChangeHighlightState(bool isHighlighted, float scaleAmount = 1.25f)
     {
-        cardVisual.cardFrame.color = isHighlighted ? new Color(1f, 0.3f, 0.3f, 1f) : Color.white;
+        cardVisual.highlight.color = isHighlighted ? new Color(1f, 0.3f, 0.3f, 0.3f) : new Color(1f, 1f, 1f, 0f);
         cardVisual.gameObject.transform.localScale = isHighlighted ? new Vector3(scaleAmount, scaleAmount, 1) : new Vector3(1, 1, 1);
     }
 

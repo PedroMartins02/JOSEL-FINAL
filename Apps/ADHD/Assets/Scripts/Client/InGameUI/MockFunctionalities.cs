@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class MockFunctionalities : MonoBehaviour
 {
-    [SerializeField] HandCardHolder handCardHolder;
+    [SerializeField] HorizontalCardHolder cardHolder;
 
     private void Start()
     {
@@ -14,12 +14,12 @@ public class MockFunctionalities : MonoBehaviour
     public void DrawCardMock(string cardSOId)
     {
         CardSO cardSO = CardDatabase.Singleton.GetCardSoOfId(cardSOId);
-        handCardHolder.DrawCard(cardSO);
+        cardHolder.SpawnCard(cardSO);
     }
 
     public void DrawCardMock()
     {
         CardSO cardSO = CardDatabase.Singleton.GetRandomCard();
-        handCardHolder.DrawCard(cardSO);
+        cardHolder.SpawnCard(cardSO);
     }
 }
