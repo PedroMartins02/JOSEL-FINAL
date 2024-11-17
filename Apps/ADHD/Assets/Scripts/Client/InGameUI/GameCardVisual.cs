@@ -3,12 +3,11 @@ using DG.Tweening;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using GameModel;
+using TMPro;
 
 public class GameCardVisual : MonoBehaviour
 {
     private bool initalize = false;
-
-    [SerializeField] public Image sprite;
 
     [Header("Card")]
     public GameCard parentCard;
@@ -20,9 +19,6 @@ public class GameCardVisual : MonoBehaviour
 
     [Header("References")]
     public Transform visualShadow;
-    private float shadowOffset = 20;
-    private Vector2 shadowDistance;
-    private Canvas shadowCanvas;
     [SerializeField] private Transform shakeParent;
     [SerializeField] private Transform tiltParent;
     [SerializeField] private Image shadowImage;
@@ -42,12 +38,8 @@ public class GameCardVisual : MonoBehaviour
     [SerializeField] private float scaleOnHoverHand = 1.5f;
     [SerializeField] private float scaleOnHoverField = 1.25f;
     [SerializeField] private float verticalMoveOnHover = 110;
-    [SerializeField] private float scaleOnSelect = 1.25f;
     [SerializeField] private float scaleTransition = .5f;
     [SerializeField] private Ease scaleEase = Ease.OutBack;
-
-    [Header("Select Parameters")]
-    [SerializeField] private float selectPunchAmount = 20;
 
     [Header("Hover Parameters")]
     [SerializeField] private float hoverPunchAngle = 5;
@@ -62,14 +54,13 @@ public class GameCardVisual : MonoBehaviour
     [Header("Curve")]
     [SerializeField] private CurveParameters curve;
 
+    [Header("Card UI Items")]
+    [SerializeField] public Image cardFrame;
+    [SerializeField] public CardUI cardUI;
+
     private float curveYOffset;
     private float curveRotationOffset;
     private Coroutine pressCoroutine;
-
-    private void Start()
-    {
-        shadowDistance = visualShadow.localPosition;
-    }
 
     public void Initialize(GameCard target, int index = 0)
     {
@@ -77,7 +68,6 @@ public class GameCardVisual : MonoBehaviour
         parentCard = target;
         cardTransform = target.transform;
         canvas = GetComponent<Canvas>();
-        shadowCanvas = visualShadow.GetComponent<Canvas>();
 
         //Event Listening
         parentCard.PointerEnterEvent.AddListener(PointerEnter);
@@ -91,12 +81,12 @@ public class GameCardVisual : MonoBehaviour
 
     public void SetCardData(CardSO cardSO)
     {
-        
+        cardUI.SetCardData(cardSO);
     }
 
     public void UpdateCardData(Card card)
     {
-        
+        cardUI.UpdateCardData(card);
     }
 
     public void UpdateIndex(int length)

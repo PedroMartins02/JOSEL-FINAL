@@ -32,7 +32,7 @@ public class CardUI : MonoBehaviour
 
     void Start()
     {
-        
+
     }
 
     public void SetCardData(CardSO card)
@@ -61,6 +61,30 @@ public class CardUI : MonoBehaviour
         }
     }
 
+    public void UpdateCardData(Card card)
+    {
+        if (card == null)
+            return;
+
+        if (card is UnitCard unitCard)
+        {
+            SetUnitCardUI(unitCard);
+            return;
+        }
+
+        if (card is BattleTacticCard battleTacticCard)
+        {
+            SetBattleTacticCardUI(battleTacticCard);
+            return;
+        }
+
+        if (card is LegendCard legendCard)
+        {
+            SetLegendCardUI(legendCard);
+            return;
+        }
+    }
+
     private void SetGeneralUI(CardSO card)
     {
         CardName.text = card.Name;
@@ -77,6 +101,13 @@ public class CardUI : MonoBehaviour
         HealthText.text = card.Health.ToString();
     }
 
+    private void SetUnitCardUI(UnitCard card)
+    {
+        CardFrame.sprite = UnitFrame;
+        AttackText.text = card.Attack.ToString();
+        HealthText.text = card.Health.ToString();
+    }
+
     private void SetBattleTacticCardUI(BattleTacticCardSO card)
     {
         CardFrame.sprite = BattleTacticFrame;
@@ -85,7 +116,23 @@ public class CardUI : MonoBehaviour
         //Effects
     }
 
+    private void SetBattleTacticCardUI(BattleTacticCard card)
+    {
+        CardFrame.sprite = BattleTacticFrame;
+        AttackIcon.SetActive(false);
+        HealthIcon.SetActive(false);
+        //Effects
+    }
+
     private void SetLegendCardUI(LegendCardSO card)
+    {
+        CardFrame.sprite = LegendFrame;
+        AttackText.text = card.Attack.ToString();
+        HealthText.text = card.Health.ToString();
+        //Effects
+    }
+
+    private void SetLegendCardUI(LegendCard card)
     {
         CardFrame.sprite = LegendFrame;
         AttackText.text = card.Attack.ToString();

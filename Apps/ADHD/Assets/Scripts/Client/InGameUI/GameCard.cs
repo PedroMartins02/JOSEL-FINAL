@@ -5,24 +5,25 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine.UI;
 using GameModel;
+using System;
 
 public class GameCard : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
 {
     private RectTransform cardTransform;
-    public Canvas canvas;
+    [NonSerialized] public Canvas canvas;
     private GraphicRaycaster raycaster;
-    public Image imageComponent;
+    [NonSerialized] public Image imageComponent;
     [SerializeField] private bool instantiateVisual = true;
     private VisualCardsHandler visualHandler;
-    public Vector3 offset;
+    [NonSerialized] public Vector3 offset;
 
     [Header("Movement")]
     [SerializeField] public float moveSpeedLimit = 50;
 
     [Header("Selection")]
     public bool selected;
-    public float selectionOffset = 50;
-    public float hoveringOffset = 1;
+    [NonSerialized] public float selectionOffset = 50;
+    [NonSerialized] public float hoveringOffset = 1;
 
     [Header("Visual")]
     [SerializeField] private GameObject cardVisualPrefab;
@@ -39,8 +40,10 @@ public class GameCard : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDrag
     [HideInInspector] public UnityEvent<GameCard> BeginDragEvent;
     [HideInInspector] public UnityEvent<GameCard> EndDragEvent;
 
+    [Header("Positions")]
     [SerializeField] public bool isInHand = true;
     [SerializeField] public bool isMine = true;
+
     private BoardCardHolder detectedBoardHolder;
     private GameCard detectedCard;
     private GameObject detectedOpponent;
@@ -255,7 +258,7 @@ public class GameCard : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDrag
 
     public void ChangeHighlightState(bool isHighlighted, float scaleAmount = 1.25f)
     {
-        cardVisual.sprite.color = isHighlighted ? new Color(1f, 0.3f, 0.3f, 1f) : Color.white;
+        cardVisual.cardFrame.color = isHighlighted ? new Color(1f, 0.3f, 0.3f, 1f) : Color.white;
         cardVisual.gameObject.transform.localScale = isHighlighted ? new Vector3(scaleAmount, scaleAmount, 1) : new Vector3(1, 1, 1);
     }
 

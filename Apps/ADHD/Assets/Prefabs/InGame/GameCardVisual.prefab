@@ -196,6 +196,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6590904093635969763}
   - component: {fileID: 158465088267484482}
+  - component: {fileID: 2374726808646391768}
   - component: {fileID: 1776968844237133395}
   - component: {fileID: 6110996527897897152}
   - component: {fileID: 2542300039616513297}
@@ -234,6 +235,34 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3502221071760015902}
   m_CullTransparentMesh: 1
+--- !u!114 &2374726808646391768
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3502221071760015902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fcee5032fd845149a6e40ac799b9a00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UnitFrame: {fileID: 21300000, guid: 077e328e02cb3df479c991ec93df90fe, type: 3}
+  BattleTacticFrame: {fileID: 21300000, guid: 9239e7d5d8f66124da959da0113128a9, type: 3}
+  LegendFrame: {fileID: 21300000, guid: 71ccc1e40723e504b80735c06088d2db, type: 3}
+  ElementIcon: {fileID: 1253556300285907849}
+  BlessingsIcon: {fileID: 8053505665041496239}
+  AttackIcon: {fileID: 7269230361920568991}
+  HealthIcon: {fileID: 2647100777786266178}
+  BlessingsText: {fileID: 6847902983162988901}
+  AttackText: {fileID: 4266764196431776754}
+  HealthText: {fileID: 4263104746479018732}
+  CardName: {fileID: 3984468941031504617}
+  CivilizationName: {fileID: 4632087278831218126}
+  ShortText: {fileID: 8608969818511578356}
+  CardArt: {fileID: 4017805668549844466}
+  CardFrame: {fileID: 1111741969075114140}
+  TagArea: {fileID: 1447600371881365632}
 --- !u!114 &1776968844237133395
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -246,7 +275,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fde18a3e9dba4a540a37ee05b74cec64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sprite: {fileID: 1111741969075114140}
   parentCard: {fileID: 0}
   visualShadow: {fileID: 6772982400427213744}
   shakeParent: {fileID: 3799379590952858059}
@@ -262,10 +290,8 @@ MonoBehaviour:
   scaleOnHoverHand: 1.5
   scaleOnHoverField: 1.25
   verticalMoveOnHover: 130
-  scaleOnSelect: 1.25
   scaleTransition: 0.1
   scaleEase: 27
-  selectPunchAmount: 20
   hoverPunchAngle: 5
   hoverTransition: 0.15
   swapAnimations: 1
@@ -273,6 +299,8 @@ MonoBehaviour:
   swapTransition: 0.2
   swapVibrato: 5
   curve: {fileID: 11400000, guid: d4dd399fb2dab44429d866dc2259bb4b, type: 2}
+  cardFrame: {fileID: 1111741969075114140}
+  cardUI: {fileID: 2374726808646391768}
 --- !u!223 &6110996527897897152
 Canvas:
   m_ObjectHideFlags: 0

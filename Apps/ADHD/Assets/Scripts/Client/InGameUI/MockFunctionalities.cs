@@ -16,4 +16,10 @@ public class MockFunctionalities : MonoBehaviour
         CardSO cardSO = CardDatabase.Singleton.GetCardSoOfId(cardSOId);
         handCardHolder.DrawCard(cardSO);
     }
+
+    public void DrawCardMock()
+    {
+        CardSO cardSO = CardDatabase.Singleton.GetRandomCard();
+        handCardHolder.DrawCard(cardSO);
+    }
 }
