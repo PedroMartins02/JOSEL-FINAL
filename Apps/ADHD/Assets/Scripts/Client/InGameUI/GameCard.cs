@@ -220,16 +220,19 @@ public class GameCard : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDrag
     {
         foreach (RaycastResult result in raycastResults)
         {
-            if (result.gameObject.CompareTag("OpponentCard"))
-            {
-                AttackCard(result.gameObject);
-                Debug.Log("Attack Enemy Card");
-            }
-            else if (result.gameObject.CompareTag("OpponentTarget"))
+            if (result.gameObject.CompareTag("OpponentTarget"))
             {
                 AttackOpponent(result.gameObject);
                 Debug.Log("Attack Opponent");
+                break;
             }
+            else if(result.gameObject.CompareTag("OpponentCard"))
+            {
+                AttackCard(result.gameObject);
+                Debug.Log("Attack Enemy Card");
+                break;
+            }
+             
         }
 
         ResetOpponentInteractionHighlights();
