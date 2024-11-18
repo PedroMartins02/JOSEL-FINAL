@@ -73,4 +73,10 @@ public class CardDatabase : MonoBehaviour
     {
         return CardDictionary.ContainsKey(cardId) ? CardDictionary[cardId] : null;
     }
+
+    public CardSO GetRandomCard()
+    {
+        System.Random random = new System.Random();
+        return CardDictionary.Values.ElementAt(random.Next(CardDictionary.Count()));
+    }
 }
