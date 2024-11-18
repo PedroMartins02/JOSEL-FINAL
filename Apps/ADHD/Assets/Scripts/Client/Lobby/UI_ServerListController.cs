@@ -10,8 +10,13 @@ using TMPro;
 
 public class UI_ServerListController : MonoBehaviour
 {
-    [SerializeField] private GameObject lobbyPrefab;
+    [SerializeField] private Transform lobbyTemplate;
     [SerializeField] private Transform lobbyContainer;
+
+    private void Awake()
+    {
+        lobbyTemplate.gameObject.SetActive(false);
+    }
 
     private void Start()
     {
@@ -32,17 +37,19 @@ public class UI_ServerListController : MonoBehaviour
 
     private void UpdateLobbyList(List<Lobby> lobbyList)
     {
-        // Clear the already placed lobbies
         foreach (Transform child in lobbyContainer)
         {
+            if (child == lobbyTemplate) continue;
+
             Destroy(child.gameObject);
         }
 
-        // Instanciate the new found ones
         foreach (Lobby lobby in lobbyList)
         {
-            GameObject lobbyItem = Instantiate(lobbyPrefab, lobbyContainer);
-            UI_Room roomUI = lobbyItem.GetComponent<UI_Room>();
+            Transform lobbyTransform = Instantiate(lobbyTemplate, lobbyContainer);
+            lobbyTransform.gameObject.SetActive(true);
+
+            UI_Room roomUI = lobbyTransform.GetComponent<UI_Room>();
             roomUI.SetLobbyData(lobby);
         }
     }
@@ -51,48 +58,4 @@ public class UI_ServerListController : MonoBehaviour
     {
         LobbyManager.Instance.OnLobbyListChanged -= LobbyManager_OnLobbyListChanged;
     }
-
-    /**
-    [SerializeField] private GameObject lobbyPrefab;
-    [SerializeField] private Transform contentParent;
-
-    void Start()
-    {
-        RefreshServerList();
-    }
-
-    private void RefreshServerList()
-    {
-        ClearLobbies();
-        FetchServersAsync();
-    }
-
-    private void ClearLobbies()
-    {
-        foreach (Transform child in contentParent)
-        {
-            Destroy(child.gameObject);
-        }
-    }
-
-    private async void FetchServersAsync()
-    {
-        var serverList = await RelayManager.Singleton.ListRooms();
-
-        if (!serverList.Any()) { return; } //throw error
-
-        foreach (var server in serverList)
-        {
-            Debug.Log($"Lobby Name: {server.Name}, Players: {server.Players.Count}/{server.MaxPlayers}");
-        }
-
-
-        foreach (var server in serverList)
-        {
-            GameObject lobbyItem = Instantiate(lobbyPrefab, contentParent);
-            RoomUI roomUI = lobbyItem.GetComponent<RoomUI>();
-            roomUI.SetLobbyData(server);
-        }
-    }
-    */
 }
