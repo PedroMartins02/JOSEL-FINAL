@@ -50,6 +50,8 @@ public class GameCard : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDrag
 
     public GameCardStateMachine stateMachine;
 
+    [HideInInspector] public Card cardData;
+
     void Start()
     {
         cardTransform = GetComponent<RectTransform>();
@@ -77,12 +79,33 @@ public class GameCard : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDrag
 
     public void SetCardData(CardSO cardSO)
     {
+        cardData = CreateCardInstance(cardSO);
         cardVisual.SetCardData(cardSO);
     }
 
     public void UpdateCardData(Card card)
     {
+        cardData = card;
         cardVisual.UpdateCardData(card);
+    }
+
+    //this should be moved somewhere else, accessible for other classes, since it´s useful in multiple cases
+    private Card CreateCardInstance(CardSO cardSO)
+    {
+        Type cardSOType = cardSO.GetType();
+        if (cardSOType == typeof(UnitCardSO))
+        {
+            return new UnitCard((UnitCardSO)cardSO);
+        }
+        else if (cardSOType == typeof(BattleTacticCardSO))
+        {
+            return new BattleTacticCard((BattleTacticCardSO)cardSO);
+        } 
+        else if (cardSOType == typeof (LegendCardSO))
+        {
+            return new LegendCard((LegendCardSO)cardSO);
+        }
+        return null;
     }
 
     public void ClampPosition()
