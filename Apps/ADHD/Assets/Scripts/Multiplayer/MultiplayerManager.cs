@@ -49,9 +49,9 @@ public class MultiplayerManager : NetworkBehaviour
 
     public void StartHost()
     {
-        // The connection approval for the host
+        // The even for the host when he needs to approve a connection
         NetworkManager.Singleton.ConnectionApprovalCallback += NetworkManager_ConnectionApprovalCallback;
-        // Populate the NetworkList with the connected player data whene he connects
+        // Host populates the NetworkList with the connected player data when he connects
         NetworkManager.Singleton.OnClientConnectedCallback += NetworkManager_OnClientConnectedCallback;
         // If player disconnects, clear his data from the NetworkList
         NetworkManager.Singleton.OnClientDisconnectCallback += NetworkManager_Server_OnClientDisconnectCallback;
@@ -78,6 +78,14 @@ public class MultiplayerManager : NetworkBehaviour
         {
             clientId = clientId,
         });
+
+        var playerData = AccountManager.Singleton.GetPlayerData();
+        if (playerData == null)
+        {
+            return;
+        }
+
+        SetPlayerNameServerRpc(playerData.Name); ;
         SetPlayerIdServerRpc(AuthenticationService.Instance.PlayerId);
     }
 
@@ -118,7 +126,14 @@ public class MultiplayerManager : NetworkBehaviour
 
     private void NetworkManager_Client_OnClientConnectedCallback(ulong obj)
     {
-        // To tell the server the playerId, use ServerRpc
+        // To tell the server the username and playerId, using ServerRpc
+        var playerData = AccountManager.Singleton.GetPlayerData();
+        if (playerData == null)
+        {
+            return;
+        }
+
+        SetPlayerNameServerRpc(playerData.Name);
         SetPlayerIdServerRpc(AuthenticationService.Instance.PlayerId);
     }
 

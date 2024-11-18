@@ -1,3 +1,4 @@
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class HoverState : GameCardState
@@ -8,6 +9,13 @@ public class HoverState : GameCardState
     {
         card.isHovering = true;
         card.isDragging = false;
+        card.ShowInDetailsSlot();
+    }
+
+    public override void Exit()
+    {
+        card.ClearDetailsSlot();
+        base.Exit();
     }
 
     public override void OnPointerExit(PointerEventData eventData)

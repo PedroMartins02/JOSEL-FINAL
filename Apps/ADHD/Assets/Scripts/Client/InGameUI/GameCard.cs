@@ -6,6 +6,8 @@ using System.Collections;
 using UnityEngine.UI;
 using GameModel;
 using System;
+using DG.Tweening;
+using Unity.VisualScripting;
 
 public class GameCard : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
 {
@@ -50,6 +52,8 @@ public class GameCard : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDrag
 
     public GameCardStateMachine stateMachine;
 
+    [HideInInspector] public Card cardData;
+
     void Start()
     {
         cardTransform = GetComponent<RectTransform>();
@@ -77,12 +81,33 @@ public class GameCard : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDrag
 
     public void SetCardData(CardSO cardSO)
     {
+        cardData = CreateCardInstance(cardSO);
         cardVisual.SetCardData(cardSO);
     }
 
     public void UpdateCardData(Card card)
     {
+        cardData = card;
         cardVisual.UpdateCardData(card);
+    }
+
+    //this should be moved somewhere else, accessible for other classes, since it´s useful in multiple cases
+    private Card CreateCardInstance(CardSO cardSO)
+    {
+        Type cardSOType = cardSO.GetType();
+        if (cardSOType == typeof(UnitCardSO))
+        {
+            return new UnitCard((UnitCardSO)cardSO);
+        }
+        else if (cardSOType == typeof(BattleTacticCardSO))
+        {
+            return new BattleTacticCard((BattleTacticCardSO)cardSO);
+        } 
+        else if (cardSOType == typeof (LegendCardSO))
+        {
+            return new LegendCard((LegendCardSO)cardSO);
+        }
+        return null;
     }
 
     public void ClampPosition()
@@ -274,6 +299,34 @@ public class GameCard : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDrag
     {
         yield return new WaitForEndOfFrame();
         wasDragged = false;
+    }
+
+    public void ShowInDetailsSlot()
+    {
+        Transform detailsSlot = GameObject.FindWithTag("CardDetails").transform;
+
+        if (detailsSlot != null)
+        {
+            ClearDetailsSlot();
+            if (cardVisual != null && cardVisual.cardFront != null)
+            {
+                GameObject cardFront = Instantiate(cardVisual.cardFront, detailsSlot);
+                cardFront.transform.DOScale(2, 0);
+            }
+        }
+    }
+
+    public void ClearDetailsSlot()
+    {
+        Transform detailsSlot = GameObject.FindWithTag("CardDetails").transform;
+
+        if (detailsSlot != null)
+        {
+            foreach(Transform t in detailsSlot)
+            {
+                Destroy(t.gameObject);
+            }
+        }
     }
 
     private void PlayCard(GameObject playerBoardArea)

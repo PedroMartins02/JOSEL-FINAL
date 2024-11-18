@@ -6,6 +6,7 @@ using UnityEngine;
 public class MockFunctionalities : MonoBehaviour
 {
     [SerializeField] HorizontalCardHolder cardHolder;
+    [SerializeField] PlayerInfo playerInfo;
 
     private void Start()
     {
@@ -21,5 +22,21 @@ public class MockFunctionalities : MonoBehaviour
     {
         CardSO cardSO = CardDatabase.Singleton.GetRandomCard();
         cardHolder.SpawnCard(cardSO);
+    }
+
+    public void SetPlayerMyth(string mythId)
+    {
+        CardSO cardSO = CardDatabase.Singleton.GetCardSoOfId(mythId);
+        playerInfo.SetMythImage(cardSO.Art);
+    }
+
+    public void SetPlayerHealth(int n)
+    {
+        playerInfo.SetHealth(n);
+    }
+
+    public void SetPlayerBlessings(int n)
+    {
+        playerInfo.SetBlessings(n);
     }
 }
