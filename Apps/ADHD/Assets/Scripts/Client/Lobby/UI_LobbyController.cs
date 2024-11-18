@@ -83,7 +83,9 @@ public class UI_LobbyController : MonoBehaviour
                     firstPlayer = false;
                 }
                 else
+                {
                     PlayerTwoNameText.text = playerData.playerUsername.ToString();
+                }
             }
         }
     }
