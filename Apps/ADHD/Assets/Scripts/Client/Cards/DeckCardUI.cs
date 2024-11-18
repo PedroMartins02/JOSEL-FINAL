@@ -11,6 +11,8 @@ public class DeckCardUI : MonoBehaviour{
 
     [SerializeField] private Image CardArt;
 
+    private CardSO associatedCard;
+
     void Start()
     {
         
@@ -20,14 +22,27 @@ public class DeckCardUI : MonoBehaviour{
     {
         if (card == null)
             return;
-
+        
         SetGeneralUI(card);
     }
 
+    public CardSO GetAssociatedCard()
+    {
+        return associatedCard;
+    }
+
+    public void Destroy()
+    {
+        DeckEditorManager.Instance.RemoveFromEditingArea(associatedCard);
+        Destroy(gameObject);
+    }
+    
     private void SetGeneralUI(CardSO card)
     {
         CardName.text = card.Name;
 
         CardArt.sprite = card.Art;
+
+        associatedCard = card;
     }
 }

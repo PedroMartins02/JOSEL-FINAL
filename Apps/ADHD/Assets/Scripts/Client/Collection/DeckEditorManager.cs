@@ -12,13 +12,17 @@ using UnityEngine.UI;
 
 public class DeckEditorManager : MonoBehaviour
 {
+    public static DeckEditorManager Instance { get; private set; } //not ideal, lol
+    private Factions faction = 0;
     [SerializeField] private Transform ScrollContent;
     [SerializeField] private GameObject CardPrefab;
     [SerializeField] private GameObject QuantityPrefab;
-    [SerializeField] private GameObject DeckCardPrefab;
+    [SerializeField] private Transform DeckCardTemplate;
     [SerializeField] private Transform MythListPrefab;
     [SerializeField] private Transform EditingAreaPrefab;
     [SerializeField] private HighlightedDeckIdSO HighlightedDeckData;
+    [SerializeField] private TextMeshProUGUI DeckName;
+    private List<CardSO> ListOfSelectedCards = new List<CardSO>();
     
     
 
@@ -30,8 +34,10 @@ public class DeckEditorManager : MonoBehaviour
 
     private void Awake()
     {
+        Instance = this;
         InitializeCardTypeMapping();
         InitializeFilters();
+        DeckCardTemplate.gameObject.SetActive(false);
     }
 
     private void Start()
@@ -167,18 +173,27 @@ public class DeckEditorManager : MonoBehaviour
 
     private void AddToEditingArea(CardSO cardSO)
     {
-        var cardInstance = Instantiate(DeckCardPrefab, EditingAreaPrefab);
-        var cardUI = cardInstance.GetComponent<DeckCardUI>();
-        cardUI.SetCardData(cardSO);
-    }
-
-    private void RemoveFromEditingArea(CardSO cardSO)
-    {
+        Transform cardInstance = Instantiate(DeckCardTemplate, EditingAreaPrefab);
+        cardInstance.gameObject.SetActive(true);
+        ListOfSelectedCards.Add(cardSO);
+        DeckCardUI deckCardUI = cardInstance.GetComponent<DeckCardUI>();
+        deckCardUI.SetCardData(cardSO);
         
     }
 
-    private void ClearEditingArea()
+    public void RemoveFromEditingArea(CardSO cardToRemove)
     {
-
+        ListOfSelectedCards.Remove(cardToRemove);
     }
+
+    public SelectMyth()
+    {
+        //TODO
+    }
+
+    public void SaveDeck()
+    {
+        AccountManager.Singleton.AddDeckToPlayer(new DeckSO(DeckName.text,null,ListOfSelectedCards,0));
+    }
+    
 }
