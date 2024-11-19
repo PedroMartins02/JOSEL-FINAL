@@ -8,23 +8,32 @@ using UnityEngine.UI;
 
 public class UI_LobbyController : MonoBehaviour
 {
-
+    [Header("Lobby Overall")]
     [SerializeField] private TextMeshProUGUI lobbyNameText;
     [SerializeField] private TextMeshProUGUI playerOneNameText;
-    [SerializeField] private Transform PlayerTwoBox;
-    [SerializeField] private TextMeshProUGUI PlayerTwoNameText;
-    [SerializeField] private Transform deckSingleTemplate;
-    [SerializeField] private Transform deckContainer;
-    [SerializeField] private GameObject DeckPrefab;
-    [SerializeField] private Transform ruleSingleTemplate;
-    [SerializeField] private Transform ruleContainer;
 
+    [Header("Player Two")]
+    [SerializeField] private TextMeshProUGUI PlayerTwoNameText;
+    [SerializeField] private Transform PlayerTwoBox;
+
+    [Header("Rules")]
+    [SerializeField] private Transform ruleContainer;
+    [SerializeField] private Transform ruleSingleTemplate;
+
+    [Header("Decks")]
+    [SerializeField] private GameObject DeckPrefab;
+    [SerializeField] private Transform deckContainer;
+    [SerializeField] private Transform deckSingleTemplate;
 
     private void Awake()
     {
         // Hide the deck Template
         deckSingleTemplate.gameObject.SetActive(false);
         ruleSingleTemplate.gameObject.SetActive(false);
+
+        // Hide player two 
+        PlayerTwoNameText.gameObject.SetActive(false);
+        PlayerTwoBox.gameObject.SetActive(false);
     }
 
     private void Start()
@@ -140,6 +149,21 @@ public class UI_LobbyController : MonoBehaviour
                 if (child == ruleSingleTemplate) continue;
                 Destroy(child.gameObject);
             }
+    }
+
+    public void OnBackBtnClick()
+    {
+        LobbyManager.Instance.LeaveLobby();
+        MultiplayerManager.Instance.LeaveMultiplayerInstance();
+
+        SceneLoader.ExitNetworkLoad(SceneLoader.Scene.NavigationScene);
+    }
+
+    public void OnKickPlayerClick()
+    {
+        // Kick player from from Netcode and Lobby
+        LobbyManager.Instance.KickPlayers();
+        MultiplayerManager.Instance.KickPlayers();
     }
 
     private void Hide()

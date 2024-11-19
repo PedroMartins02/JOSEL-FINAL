@@ -85,8 +85,12 @@ namespace GameModel
 
             try
             {
-                int numVal = Int32.Parse(value);
-                this.Value = value;
+                int numVal = 0;
+
+                if (!Int32.TryParse(value, out numVal))
+                    return false;
+
+                this.Value = numVal;
                 return true;
             }
             catch (FormatException e)

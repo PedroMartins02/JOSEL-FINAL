@@ -14,7 +14,9 @@ public class SceneLoader
         DeckCosmeticsScene, //Change cosmetics of a deck
         //Game, //Scene for the game
         Lobby, //Scene for the pre-game lobby
-        DeckBuilder
+        DeckBuilder,
+        LoadingScene,
+        ExitNetworkLoadingScene
     }
 
     private static Scene targetScene;
@@ -35,7 +37,16 @@ public class SceneLoader
         SceneLoader.targetScene = targetScene;
 
         // While the target Scene is Loading, show LoadingScene (need to create)
-        //SceneManager.LoadScene(Scene.LoadingScene.ToString());
+        SceneManager.LoadScene(Scene.LoadingScene.ToString());
+    }
+
+    public static void ExitNetworkLoad(Scene targetScene)
+    {
+        // Load the scene we want to access
+        SceneLoader.targetScene = targetScene;
+
+        // While the target Scene is Loading, show LoadingScene (need to create)
+        SceneManager.LoadScene(Scene.ExitNetworkLoadingScene.ToString());
     }
 
     public static void LoadNetwork(Scene targetScene)

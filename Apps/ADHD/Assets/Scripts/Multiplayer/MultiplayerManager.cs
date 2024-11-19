@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections;
 using Unity.Netcode;
 using Unity.Services.Authentication;
 using UnityEngine;
@@ -207,15 +208,45 @@ public class MultiplayerManager : NetworkBehaviour
         return GetPlayerDataFromClientId(NetworkManager.Singleton.LocalClientId);
     }
 
+    private bool IsPlayerInstanceHost(ulong clientId)
+    {
+        if (IsServer && NetworkManager.Singleton.LocalClientId.Equals(clientId))
+        {
+            return true;
+        }
+
+        return false;
+    }
 
     /**
-     * Method to kick the player from his connection to the host
+     * Method to kick the players from their connection to the host
      */
-    public void KickPlayer(ulong clientId)
+    public void KickPlayers()
     {
-        NetworkManager.Singleton.DisconnectClient(clientId);
-        // Kicking the player doesnt trigger the disconnect callback, so manually clean up the NetworkList
-        NetworkManager_Server_OnClientDisconnectCallback(clientId);
+        foreach(MP_PlayerData playerData in playerDataNetworkList)
+        {
+            if (!IsPlayerInstanceHost(playerData.clientId))
+            {
+                NetworkManager.Singleton.DisconnectClient(playerData.clientId);
+                // Kicking the player doesnt trigger the disconnect callback, so manually clean up the NetworkList
+                NetworkManager_Server_OnClientDisconnectCallback(playerData.clientId);
+
+                playerDataNetworkList.Remove(playerData);
+            }
+        }
+    }
+
+    public void LeaveMultiplayerInstance()
+    {
+        if(NetworkManager.Singleton)
+        {
+            KickPlayers();
+        }
+
+        //playerDataNetworkList.Remove(GetPlayerData());
+        playerDataNetworkList = new NetworkList<MP_PlayerData>();
+
+        NetworkManager.Singleton.Shutdown();
     }
 
     /**
@@ -233,5 +264,16 @@ public class MultiplayerManager : NetworkBehaviour
     public List<GameModel.GameRule> GetLobbyGameRules()
     {
         return this.lobbyGameRules;
+    }
+
+    public override void OnDestroy()
+    {
+
+        base.OnDestroy();
+    }
+
+    void OnApplicationQuit()
+    {
+        Debug.Log("Application ending after " + Time.time + " seconds");
     }
 }

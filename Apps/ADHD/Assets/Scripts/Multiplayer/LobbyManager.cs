@@ -19,7 +19,7 @@ using System.Linq;
  * This Class serves for handling everything Lobby related, from Relay to lobby disconnects and joins
  * 
  */
-public class LobbyManager : MonoBehaviour
+public class LobbyManager : NetworkBehaviour
 {
     public enum LobbyType
     {
@@ -67,14 +67,13 @@ public class LobbyManager : MonoBehaviour
     {
         Instance = this;
 
-        // We will need data from here in other scenes, so dont destroy this object
         DontDestroyOnLoad(gameObject);
 
         // Automatically initialize player into the unity services for now, while not using authentication
         InitializeUnityAuthentication();
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         HandleLobbyHeartbeat();
         //HandlePeriodicListLobbies(); // Disabled Auto Refresh for testing with multiple builds
@@ -370,19 +369,62 @@ public class LobbyManager : MonoBehaviour
     {
         return joinedLobby != null && joinedLobby.HostId == AuthenticationService.Instance.PlayerId;
     }
-
-    public async void KickPlayer(string playerId)
+    
+    public async void LeaveLobby()
     {
-        if (IsLobbyHost())
+        if (joinedLobby != null)
         {
             try
             {
-                await LobbyService.Instance.RemovePlayerAsync(joinedLobby.Id, playerId);
+                await LobbyService.Instance.RemovePlayerAsync(joinedLobby.Id, AuthenticationService.Instance.PlayerId);
+                
+                if (IsLobbyHost())
+                {
+                    KickPlayers();
+                }
+
+                joinedLobby = null;
             }
             catch (LobbyServiceException e)
             {
                 Debug.Log(e);
             }
         }
+    }
+
+    public async void KickPlayers()
+    {
+        if (IsLobbyHost())
+        {
+            try
+            {
+                // Get the other players
+                List<Player> playerList = joinedLobby.Players;
+
+                foreach (Player player in playerList)
+                {
+                    if(!player.Id.Equals(AuthenticationService.Instance.PlayerId))
+                        await LobbyService.Instance.RemovePlayerAsync(joinedLobby.Id, player.Id);
+                }
+            }
+            catch (LobbyServiceException e)
+            {
+                Debug.Log(e);
+            }
+        }
+    }
+
+    public override void OnDestroy()
+    {
+        LeaveLobby();
+
+        // Always invoke the base 
+        base.OnDestroy();
+    }
+
+    void OnApplicationQuit()
+    {
+        LeaveLobby();
+        Debug.Log("Application ending after " + Time.time + " seconds");
     }
 }
