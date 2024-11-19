@@ -9,6 +9,7 @@ TagManager:
   - Slot
   - PlayerBoardArea
   - OpponentTarget
+  - CardDetails
   layers:
   - Default
   - TransparentFX

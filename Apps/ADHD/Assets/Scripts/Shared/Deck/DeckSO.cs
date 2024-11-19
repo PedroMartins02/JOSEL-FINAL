@@ -13,5 +13,14 @@ namespace GameModel
         public CardSO Myth;
         public List<CardSO> Cards;
         public Factions Faction;
+
+
+        public DeckSO(string name, CardSO myth, List<CardSO> cards, Factions faction)
+        {
+            Name = name;
+            Myth = myth;
+            Cards = cards;
+            Faction = faction;
+        }
     }
 }

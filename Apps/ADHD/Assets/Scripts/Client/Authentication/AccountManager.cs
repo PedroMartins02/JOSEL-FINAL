@@ -132,4 +132,9 @@ public class AccountManager : MonoBehaviour
         }
         playerData.SelectedDeckId = 0;
     }
+
+    public void AddDeckToPlayer(DeckSO newDeck)
+    {
+        playerData.DeckCollection.Add(new DeckData(newDeck));
+    }
 }

@@ -64,6 +64,8 @@ public class GameCardVisual : MonoBehaviour
     [SerializeField] private GameObject cardFrontPrefab;
     [SerializeField] private GameObject cardBackPrefab;
 
+    public GameObject cardFront;
+
     private float curveYOffset;
     private float curveRotationOffset;
     private Coroutine pressCoroutine;
@@ -96,7 +98,7 @@ public class GameCardVisual : MonoBehaviour
             Destroy(transform.gameObject);
         }
 
-        GameObject cardFront = Instantiate(cardFrontPrefab, cardVisual);
+        cardFront = Instantiate(cardFrontPrefab, cardVisual);
         cardFront.GetComponent<CardUI>().SetCardData(cardSO);
         shadowImage.sprite = cardFrameSprite;
     }
