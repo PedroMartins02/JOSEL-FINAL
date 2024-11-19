@@ -186,7 +186,7 @@ public class DeckEditorManager : MonoBehaviour
         ListOfSelectedCards.Remove(cardToRemove);
     }
 
-    public SelectMyth()
+    public void SelectMyth()
     {
         //TODO
     }
