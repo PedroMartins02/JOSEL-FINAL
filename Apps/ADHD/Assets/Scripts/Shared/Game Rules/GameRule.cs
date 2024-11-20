@@ -151,10 +151,6 @@ namespace GameModel
                 string valueTypeString = match.Groups["ValueType"].Value;
                 string value = match.Groups["Value"].Value;
 
-                Debug.Log("1: " + targetString);
-                Debug.Log("2: " + valueTypeString);
-                Debug.Log("3: " + value);
-
                 ValueType valueType = (ValueType)Enum.Parse(typeof(ValueType), valueTypeString);
                 RuleTarget target = (RuleTarget)Enum.Parse(typeof(RuleTarget), targetString);
 

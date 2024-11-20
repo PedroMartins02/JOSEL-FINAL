@@ -37,6 +37,14 @@ public class UI_LobbyController : MonoBehaviour
         playerTwoNameText.gameObject.SetActive(false);
         playerTwoKickButton.gameObject.SetActive(false);
         playerTwoBox.gameObject.SetActive(false);
+
+        // Event to listen for lobby rules changes and update them
+        MultiplayerManager.Instance.OnGameRulesListChanged += MultiplayerManager_OnGameRulesListChanged; ;
+    }
+
+    private void MultiplayerManager_OnGameRulesListChanged(object sender, System.EventArgs e)
+    {
+        UpdateRules();
     }
 
     private void Start()
@@ -48,12 +56,6 @@ public class UI_LobbyController : MonoBehaviour
 
         LobbyManager.Instance.OnJoinedLobby += Update_OnJoinedLobby;
         LobbyManager.Instance.OnJoinedLobbyUpdate += Update_OnJoinedLobbyUpdate;
-    }
-
-    private void Update()
-    {
-        if (!MultiplayerManager.Instance.IsServer)
-            Debug.Log("rules number: " + MultiplayerManager.Instance.GetLobbyGameRules().Count);
     }
 
     private void Update_OnJoinedLobby(object sender, LobbyManager.LobbyEventArgs e)

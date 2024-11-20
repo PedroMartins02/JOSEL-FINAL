@@ -27,6 +27,8 @@ public class MultiplayerManager : NetworkBehaviour
     public event EventHandler OnFailedToJoinGame;
     // Event for when the list of Players in the network and their info change
     public event EventHandler OnPlayerDataNetworkListChanged;
+    // Event for when the list of rules in the network and their info change
+    public event EventHandler OnGameRulesListChanged;
 
 
 
@@ -154,7 +156,7 @@ public class MultiplayerManager : NetworkBehaviour
     {
         if (NetworkManager.Singleton.LocalClientId == clientId)
         {
-            this.lobbyGameRules = GameModel.GameRule.DeserializeGameRules(serializedRules);
+            SetLobbyGameRules(GameModel.GameRule.DeserializeGameRules(serializedRules));
         }
     }
 
@@ -274,8 +276,11 @@ public class MultiplayerManager : NetworkBehaviour
      */
     public void SetLobbyGameRules(List<GameModel.GameRule> rules)
     {
-        if(rules != null)
+        if (rules != null)
+        {
             this.lobbyGameRules = rules;
+            OnGameRulesListChanged?.Invoke(this, EventArgs.Empty);
+        }
     }
 
     /**
