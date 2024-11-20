@@ -1543,14 +1543,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lobbyNameText: {fileID: 651393444}
   playerOneNameText: {fileID: 924362693}
-  PlayerTwoNameText: {fileID: 1314843356}
-  PlayerTwoBox: {fileID: 1311288434}
+  playerTwoNameText: {fileID: 1314843356}
+  playerTwoBox: {fileID: 1311288434}
+  playerTwoKickButton: {fileID: 386250418}
   ruleContainer: {fileID: 864697891}
   ruleSingleTemplate: {fileID: 1696071772}
-  DeckPrefab: {fileID: 6168526836885621314, guid: 38e7c213f69388f47bfe29e3fc41a93c,
+  deckPrefab: {fileID: 6168526836885621314, guid: 38e7c213f69388f47bfe29e3fc41a93c,
     type: 3}
   deckContainer: {fileID: 1504972779}
-  deckSingleTemplate: {fileID: 1600297585}
 --- !u!1 &1130693635
 GameObject:
   m_ObjectHideFlags: 0

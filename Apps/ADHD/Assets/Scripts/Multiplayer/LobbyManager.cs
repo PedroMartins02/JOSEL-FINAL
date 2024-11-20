@@ -35,7 +35,7 @@ public class LobbyManager : NetworkBehaviour
     private Lobby joinedLobby;
     private float heartbeatTimer;
     private float listLobbiesTimer;
-    private float lobbyPollTimer = 1;
+    private float lobbyPollTimer = 2;
 
     // Events for before joining lobby
     public event EventHandler OnCreateLobbyStarted;
@@ -252,7 +252,7 @@ public class LobbyManager : NetworkBehaviour
             // Keep created lobby as the joined Lobby
             joinedLobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, MultiplayerManager.MAX_PLAYER_AMOUNT, new CreateLobbyOptions
             {
-                // Data options for the lobby
+                // Data options for the lobby, which includes the lobby type and the game rules as a string
                 IsPrivate = isPrivate,
                 Data = new Dictionary<string, DataObject> {
                     { "Type", new DataObject(
@@ -278,7 +278,7 @@ public class LobbyManager : NetworkBehaviour
                 }
             });
 
-            // Set the Game Rules
+            // Set the Game Rules in the host multiplayer instance
             MultiplayerManager.Instance.SetLobbyGameRules(gameRules);
 
             // Start Hosting and go to LobbyScene, where the main lobby will be
@@ -369,7 +369,12 @@ public class LobbyManager : NetworkBehaviour
     {
         return joinedLobby != null && joinedLobby.HostId == AuthenticationService.Instance.PlayerId;
     }
-    
+
+    public bool IsLobbyHost(string playerId)
+    {
+        return joinedLobby != null && joinedLobby.HostId == playerId;
+    }
+
     public async void LeaveLobby()
     {
         if (joinedLobby != null)

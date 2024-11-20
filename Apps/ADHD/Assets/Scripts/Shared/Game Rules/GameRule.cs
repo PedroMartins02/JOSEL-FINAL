@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using System.Linq;
+using System.Text.RegularExpressions;
 using UnityEngine;
+using UnityEngine.Windows;
 
 namespace GameModel
 {
@@ -119,7 +121,7 @@ namespace GameModel
 
         public override string ToString()
         {
-            return $"GameRule: {Target}, Type: {ValueType}, Value: {Value}";
+            return $"GameRule: {Target}, Type: {ValueType}, Value: {Value.ToString()}";
         }
 
         // Hopefully temporary
@@ -135,6 +137,60 @@ namespace GameModel
             rules.Add(new GameRule("", ValueType.Integer, 1, RuleTarget.MaximumBlessings));
 
             return rules;
+        }
+
+        public static GameRule FromString(string gameRule)
+        {
+            string pattern = @"GameRule: (?<Target>[^,]+), Type: (?<ValueType>[^,]+), Value: (?<Value>.+)";
+
+            Match match = Regex.Match(gameRule, pattern);
+
+            if (match.Success)
+            {
+                string targetString = match.Groups["Target"].Value;
+                string valueTypeString = match.Groups["ValueType"].Value;
+                string value = match.Groups["Value"].Value;
+
+                Debug.Log("1: " + targetString);
+                Debug.Log("2: " + valueTypeString);
+                Debug.Log("3: " + value);
+
+                ValueType valueType = (ValueType)Enum.Parse(typeof(ValueType), valueTypeString);
+                RuleTarget target = (RuleTarget)Enum.Parse(typeof(RuleTarget), targetString);
+
+                if (valueType.Equals(ValueType.Integer))
+                    return new GameRule("", valueType, Int32.Parse(value), target);
+                else if (valueType.Equals(ValueType.String))
+                    return new GameRule("", valueType, value, target);
+
+                return null;
+            }
+            else
+            {
+                throw new ArgumentException("The string format does not match the expected pattern.");
+            }
+        }
+
+        public static string SerializeGameRules(List<GameRule> gameRules)
+        {
+            return string.Join("|", gameRules.Select(rule => rule.ToString()));
+        }
+
+        public static List<GameRule> DeserializeGameRules(string serializedRules)
+        {
+            string[] rules = serializedRules.Split('|');
+            List<GameRule> gameRules = new List<GameRule>();
+
+            foreach (string rule in rules)
+            {
+                if (!string.IsNullOrWhiteSpace(rule))
+                {
+                    GameRule gameRule = GameRule.FromString(rule);
+                    gameRules.Add(gameRule);
+                }
+            }
+
+            return gameRules;
         }
     }
 }

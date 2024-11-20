@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Unity.Collections;
 using Unity.Netcode;
 using Unity.Services.Authentication;
@@ -50,7 +51,7 @@ public class MultiplayerManager : NetworkBehaviour
 
     public void StartHost()
     {
-        // The even for the host when he needs to approve a connection
+        // The event for the host when he needs to approve a connection
         NetworkManager.Singleton.ConnectionApprovalCallback += NetworkManager_ConnectionApprovalCallback;
         // Host populates the NetworkList with the connected player data when he connects
         NetworkManager.Singleton.OnClientConnectedCallback += NetworkManager_OnClientConnectedCallback;
@@ -136,6 +137,25 @@ public class MultiplayerManager : NetworkBehaviour
 
         SetPlayerNameServerRpc(playerData.Name);
         SetPlayerIdServerRpc(AuthenticationService.Instance.PlayerId);
+
+        // Request the Lobby Game Rules
+        RequestRulesServerRpc();
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void RequestRulesServerRpc(ServerRpcParams rpcParams = default)
+    {
+        string serializedRules = GameModel.GameRule.SerializeGameRules(this.lobbyGameRules);
+        SendRulesClientRpc(serializedRules, rpcParams.Receive.SenderClientId);
+    }
+
+    [ClientRpc]
+    private void SendRulesClientRpc(string serializedRules, ulong clientId)
+    {
+        if (NetworkManager.Singleton.LocalClientId == clientId)
+        {
+            this.lobbyGameRules = GameModel.GameRule.DeserializeGameRules(serializedRules);
+        }
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -263,8 +283,12 @@ public class MultiplayerManager : NetworkBehaviour
      */
     public List<GameModel.GameRule> GetLobbyGameRules()
     {
-        return this.lobbyGameRules;
+        if (this.lobbyGameRules != null)
+            return this.lobbyGameRules;
+        else
+            return new List<GameModel.GameRule>();
     }
+
 
     public override void OnDestroy()
     {
