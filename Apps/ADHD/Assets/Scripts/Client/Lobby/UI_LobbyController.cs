@@ -25,6 +25,9 @@ public class UI_LobbyController : MonoBehaviour
     [Header("Decks")]
     [SerializeField] private GameObject deckPrefab;
     [SerializeField] private Transform deckContainer;
+    [SerializeField] private Sprite deckSelectedSprite;
+    [SerializeField] private Sprite deckHooverSprite;
+
 
     private Lobby lobby;
 
@@ -129,8 +132,24 @@ public class UI_LobbyController : MonoBehaviour
         foreach (DeckData deckData in deckLists)
         {
             var deckInstance = Instantiate(deckPrefab, deckContainer);
+
+            // Set the deck data on the UI component attatched to the new game object
             var deckUI = deckInstance.GetComponent<DeckUI>();
             deckUI.SetDeckData(deckData);
+
+            // Setup Button component and event to be able to select deck
+            var deckButton = deckInstance.AddComponent<Button>();
+            ColorBlock colorBlock = deckButton.colors;
+            colorBlock.highlightedColor = Color.red;
+            colorBlock.pressedColor = Color.gray;
+            deckButton.colors = colorBlock;
+
+            deckButton.onClick.AddListener(() =>
+            {
+                MultiplayerManager.Instance.SetPlayerDeck(deckData);
+            });
+
+            deckInstance.SetActive(true);
         }
     }
 

@@ -20,6 +20,7 @@ public class MultiplayerManager : NetworkBehaviour
     private const string PLAYER_PREFS_PLAYER_NAME_MULTIPLAYER = "PlayerNameMultiplayer";
 
     private List<GameModel.GameRule> lobbyGameRules;
+    private DeckData selectedDeckData;
     private NetworkList<MP_PlayerData> playerDataNetworkList;
 
     // Events for Clients establishing connection to the network 
@@ -292,6 +293,23 @@ public class MultiplayerManager : NetworkBehaviour
             return this.lobbyGameRules;
         else
             return new List<GameModel.GameRule>();
+    }
+
+    /**
+     * Method to set this player selected deck
+     */
+    public void SetPlayerDeck(DeckData deckData)
+    {
+        if (deckData != null)
+        {
+            this.selectedDeckData = deckData;
+            Debug.Log("Changed deck to: " + deckData.ToString());
+        }
+    }
+
+    public DeckData GetPlayerDeck()
+    {
+        return this.selectedDeckData;
     }
 
 
