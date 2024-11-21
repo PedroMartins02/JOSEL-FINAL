@@ -1,27 +1,30 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
 public class ContainerDisplay : MonoBehaviour
 {
-    [SerializeField] public Container container;
-
-    [SerializeField] public TextMeshProUGUI nameText;
+    // UI Elements
     [SerializeField] private TextMeshProUGUI descriptionText;
-    [SerializeField] public Image backgroundImage;
-    [SerializeField] public TextMeshProUGUI taskcompletionText;
-    [SerializeField] public TextMeshProUGUI idText;
-    [SerializeField] public TextMeshProUGUI coinsText;
-    void Start()
+    [SerializeField] private TextMeshProUGUI taskcompletionText;
+    [SerializeField] private TextMeshProUGUI coinsText;
+
+    // Assigned mission (ScriptableObject)
+    private Container assignedMission;
+
+    // Assign a mission to this container
+    public void AssignMission(Container mission)
     {
-        //nameText.text = container.name;
-        descriptionText.text = container.description;
-       // backgroundImage.sprite = container.background;
-        taskcompletionText.text = container.task_completion;
-       // idText.text = container.id.ToString();
-        coinsText.text = container.coins.ToString();
+        assignedMission = mission;
+        UpdateUI();
     }
 
+    // Update the UI to reflect the mission details
+    private void UpdateUI()
+    {
+        if (assignedMission == null) return;
+
+        descriptionText.text = assignedMission.description;
+        taskcompletionText.text = assignedMission.task_completion;
+        coinsText.text = assignedMission.coins.ToString();
+    }
 }
