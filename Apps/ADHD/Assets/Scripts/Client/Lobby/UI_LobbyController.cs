@@ -134,17 +134,17 @@ public class UI_LobbyController : MonoBehaviour
                     playerTwoNameText.gameObject.SetActive(true);
                     playerTwoNameText.text = playerData.playerUsername.ToString();
 
-                    // Set the ready icon
-                    SetReadyIconVisible(
-                        LobbySelectReady.Instance.IsPlayerReady(playerData.clientId)
-                    );
-
                     // Set kick button for the host to be able to kick player 2
                     if (LobbyManager.Instance.IsLobbyHost() && MultiplayerManager.Instance.IsServer)
                     {
                         playerTwoKickButton.gameObject.SetActive(true);
                     }
                 }
+
+                // Set the ready icon
+                SetReadyIconVisible(
+                    LobbySelectReady.Instance.IsPlayerReady(playerData.clientId)
+                );
             }
         }
     }
@@ -157,13 +157,13 @@ public class UI_LobbyController : MonoBehaviour
             if (MultiplayerManager.Instance.IsServer)
                 readyIcon.sprite = readyIconSprite;
             else
-                readyIcon.sprite = readyIconSpriteP2;
+                readyIconP2.sprite = readyIconSpriteP2;
         } else
         {
             if (MultiplayerManager.Instance.IsServer)
                 readyIcon.sprite = notReadyIconSprite;
             else
-                readyIcon.sprite = notReadyIconSpriteP2;
+                readyIconP2.sprite = notReadyIconSpriteP2;
         }
     }
 
