@@ -419,6 +419,23 @@ public class LobbyManager : NetworkBehaviour
         }
     }
 
+    public async void DeleteLobby()
+    {
+        if (joinedLobby != null)
+        {
+            try
+            {
+                await LobbyService.Instance.DeleteLobbyAsync(joinedLobby.Id);
+
+                joinedLobby = null;
+            }
+            catch (LobbyServiceException e)
+            {
+                Debug.Log(e);
+            }
+        }
+    }
+
     public override void OnDestroy()
     {
         LeaveLobby();

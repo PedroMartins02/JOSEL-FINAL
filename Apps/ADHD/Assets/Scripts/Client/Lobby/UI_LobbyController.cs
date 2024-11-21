@@ -4,6 +4,7 @@ using Unity.Netcode;
 using Unity.Services.Authentication;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,11 +13,18 @@ public class UI_LobbyController : MonoBehaviour
     [Header("Lobby Overall")]
     [SerializeField] private TextMeshProUGUI lobbyNameText;
     [SerializeField] private TextMeshProUGUI playerOneNameText;
+    [SerializeField] private Button readyButton;
+    [SerializeField] private Image readyIcon;
+    [SerializeField] private Sprite notReadyIconSprite;
+    [SerializeField] private Sprite readyIconSprite;
 
     [Header("Player Two")]
     [SerializeField] private TextMeshProUGUI playerTwoNameText;
     [SerializeField] private Transform playerTwoBox;
     [SerializeField] private Button playerTwoKickButton;
+    [SerializeField] private Image readyIconP2;
+    [SerializeField] private Sprite notReadyIconSpriteP2;
+    [SerializeField] private Sprite readyIconSpriteP2;
 
     [Header("Rules")]
     [SerializeField] private Transform ruleContainer;
@@ -25,8 +33,8 @@ public class UI_LobbyController : MonoBehaviour
     [Header("Decks")]
     [SerializeField] private GameObject deckPrefab;
     [SerializeField] private Transform deckContainer;
-    [SerializeField] private Sprite deckSelectedSprite;
-    [SerializeField] private Sprite deckHooverSprite;
+    //[SerializeField] private Sprite deckSelectedSprite;
+    //[SerializeField] private Sprite deckHooverSprite;
 
 
     private Lobby lobby;
@@ -36,13 +44,21 @@ public class UI_LobbyController : MonoBehaviour
         // Hide the deck Template
         ruleSingleTemplate.gameObject.SetActive(false);
 
+        readyButton.gameObject.SetActive(true);
+        readyIcon.GameObject().gameObject.SetActive(true);
+        readyIconP2.GameObject().gameObject.SetActive(true);
+
         // Hide player two 
         playerTwoNameText.gameObject.SetActive(false);
         playerTwoKickButton.gameObject.SetActive(false);
         playerTwoBox.gameObject.SetActive(false);
 
-        // Event to listen for lobby rules changes and update them
-        MultiplayerManager.Instance.OnGameRulesListChanged += MultiplayerManager_OnGameRulesListChanged; ;
+        // Event for the button here cause why not, since I wanna change the sprite too in the script
+        readyButton.onClick.AddListener(() =>
+        {
+            readyButton.gameObject.SetActive(false);
+            LobbySelectReady.Instance.SetPlayerReady();
+        });
     }
 
     private void MultiplayerManager_OnGameRulesListChanged(object sender, System.EventArgs e)
@@ -59,6 +75,14 @@ public class UI_LobbyController : MonoBehaviour
 
         LobbyManager.Instance.OnJoinedLobby += Update_OnJoinedLobby;
         LobbyManager.Instance.OnJoinedLobbyUpdate += Update_OnJoinedLobbyUpdate;
+        LobbySelectReady.Instance.OnReadyChanged += Update_OnReadyChanged;
+        // Event to listen for lobby rules changes and update them
+        MultiplayerManager.Instance.OnGameRulesListChanged += MultiplayerManager_OnGameRulesListChanged;
+    }
+
+    private void Update_OnReadyChanged(object sender, System.EventArgs e)
+    {
+        UpdateLobby(LobbyManager.Instance.GetLobby());
     }
 
     private void Update_OnJoinedLobby(object sender, LobbyManager.LobbyEventArgs e)
@@ -85,8 +109,6 @@ public class UI_LobbyController : MonoBehaviour
             // Update the players
             UpdatePlayers(lobby);
 
-            //UpdateDeckList();
-
             Show();
         }
     }
@@ -112,12 +134,36 @@ public class UI_LobbyController : MonoBehaviour
                     playerTwoNameText.gameObject.SetActive(true);
                     playerTwoNameText.text = playerData.playerUsername.ToString();
 
-                    if(LobbyManager.Instance.IsLobbyHost() && MultiplayerManager.Instance.IsServer)
+                    // Set the ready icon
+                    SetReadyIconVisible(
+                        LobbySelectReady.Instance.IsPlayerReady(playerData.clientId)
+                    );
+
+                    // Set kick button for the host to be able to kick player 2
+                    if (LobbyManager.Instance.IsLobbyHost() && MultiplayerManager.Instance.IsServer)
                     {
                         playerTwoKickButton.gameObject.SetActive(true);
                     }
                 }
             }
+        }
+    }
+
+    public void SetReadyIconVisible(bool isReady)
+    {
+        readyIcon.gameObject.SetActive(true);
+        if (isReady)
+        {
+            if (MultiplayerManager.Instance.IsServer)
+                readyIcon.sprite = readyIconSprite;
+            else
+                readyIcon.sprite = readyIconSpriteP2;
+        } else
+        {
+            if (MultiplayerManager.Instance.IsServer)
+                readyIcon.sprite = notReadyIconSprite;
+            else
+                readyIcon.sprite = notReadyIconSpriteP2;
         }
     }
 
