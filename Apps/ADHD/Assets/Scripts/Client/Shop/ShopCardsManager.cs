@@ -10,6 +10,7 @@ public class CardsPageManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI tokensText;
     [SerializeField] private Transform contentGrid;
     [SerializeField] private GameObject cardPackPrefab;
+    [SerializeField] private PackPopUp popUp;
 
     void Start()
     {

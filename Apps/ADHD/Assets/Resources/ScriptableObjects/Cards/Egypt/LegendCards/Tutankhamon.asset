@@ -17,7 +17,7 @@ MonoBehaviour:
   ShortText: 
   Description: 
   Art: {fileID: 21300000, guid: 98ddf5a46be3ec94c913f9dccebd73de, type: 3}
-  Faction: 0
+  Faction: 3
   Element: 0
   Blessings: 0
   Attack: 0
