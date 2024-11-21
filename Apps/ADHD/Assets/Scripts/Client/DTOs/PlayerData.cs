@@ -7,11 +7,12 @@ using GameModel;
 [System.Serializable]
 public class PlayerData
 {
-    public string Name { get; set; }
+    public string Name { get; set; } = "PlayerName";
     public List<string> CardCollection { get; set; } = new List<string>();
     public List<DeckData> DeckCollection { get; set; } = new List<DeckData>();
-    public int SelectedDeckId { get; set; }
+    public int SelectedDeckId { get; set; } = 0;
     public List<int> CardBackCollection { get; set; } = new List<int>();
+    public int Tokens { get; set; } = 0;
 
     // Parameterless constructor for JSON deserialization
     public PlayerData()
@@ -25,6 +26,7 @@ public class PlayerData
         DeckCollection = new List<DeckData>();
         SelectedDeckId = 0;
         CardBackCollection = new List<int>();
+        Tokens = 0;
     }
 
     public string ToJson()
