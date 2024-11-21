@@ -34,7 +34,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 148}
+  m_AnchoredPosition: {x: 0, y: 151.7}
   m_SizeDelta: {x: 15, y: 15}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3028588813234173944
@@ -185,7 +185,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 124}
+  m_AnchoredPosition: {x: 0, y: 126.8}
   m_SizeDelta: {x: 120, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8189482711008345020
@@ -426,7 +426,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 077e328e02cb3df479c991ec93df90fe, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a08058fda4460e249a2935db92ef9671, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -505,7 +505,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 101}
+  m_AnchoredPosition: {x: 0, y: 103.3}
   m_SizeDelta: {x: 75, y: 15}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2656283969551959956
@@ -665,9 +665,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fcee5032fd845149a6e40ac799b9a00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UnitFrame: {fileID: 21300000, guid: 077e328e02cb3df479c991ec93df90fe, type: 3}
-  BattleTacticFrame: {fileID: 21300000, guid: 9239e7d5d8f66124da959da0113128a9, type: 3}
-  LegendFrame: {fileID: 21300000, guid: 71ccc1e40723e504b80735c06088d2db, type: 3}
+  UnitFrame: {fileID: 21300000, guid: a08058fda4460e249a2935db92ef9671, type: 3}
+  BattleTacticFrame: {fileID: 21300000, guid: 898df6b444b7b3a418ba4b7f48e1e6df, type: 3}
+  LegendFrame: {fileID: 21300000, guid: 5683229e6633ddd4c8f8dd5843413b34, type: 3}
   ElementIcon: {fileID: 3269547679268906986}
   BlessingsIcon: {fileID: 4047631125350303278}
   AttackIcon: {fileID: 8992613147006613761}

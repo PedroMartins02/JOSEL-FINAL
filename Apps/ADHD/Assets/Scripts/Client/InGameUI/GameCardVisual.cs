@@ -64,7 +64,7 @@ public class GameCardVisual : MonoBehaviour
     [SerializeField] private GameObject cardFrontPrefab;
     [SerializeField] private GameObject cardBackPrefab;
 
-    public GameObject cardFront;
+    [HideInInspector] public GameObject cardFront;
 
     private float curveYOffset;
     private float curveRotationOffset;

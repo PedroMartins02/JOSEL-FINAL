@@ -129,7 +129,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   contentView: {fileID: 2831087306500888726}
-  startPage: {fileID: 4623477723509909156, guid: 2b798260c414af744a31582bc5bcbd40,
+  startPage: {fileID: 4623477723509909156, guid: d42ef218beadafd45baee836ee14b2af,
     type: 3}
 --- !u!1 &5237533762434184918
 GameObject:
@@ -198,7 +198,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: bc2bd22a79752a6439b5bac3855744ef, type: 3}
+  m_Sprite: {fileID: 21300000, guid: cdb98c428d5890047a8436cc66504fac, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -247,7 +247,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 7022410516821496651}
   m_OnClick:
     m_PersistentCalls:
@@ -265,6 +265,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 178087644857871216}
+        m_TargetAssemblyTypeName: ButtonUI, Assembly-CSharp
+        m_MethodName: SetOn
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &178087644857871216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -277,8 +289,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d05af11e81b3df041a56664dd1da4424, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onSprite: {fileID: 21300000, guid: d90a6ebf5e4bcdf4d9b34d9f8ca2afe5, type: 3}
-  offSprite: {fileID: 21300000, guid: bc2bd22a79752a6439b5bac3855744ef, type: 3}
+  onSprite: {fileID: 21300000, guid: 2ae9f6eca1f5ba24aa14e7a46b9ad562, type: 3}
+  offSprite: {fileID: 21300000, guid: cdb98c428d5890047a8436cc66504fac, type: 3}
   isOn: 0
 --- !u!1 &6885104671808033640
 GameObject:
@@ -347,7 +359,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 691e75322cc1c9140bbd1271244f5bee, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a4ccecd743da70b4ca4add91b7624365, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -396,7 +408,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 5950335398280722127}
   m_OnClick:
     m_PersistentCalls:
@@ -414,6 +426,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1847802938408007316}
+        m_TargetAssemblyTypeName: ButtonUI, Assembly-CSharp
+        m_MethodName: SetOn
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1847802938408007316
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -426,8 +450,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d05af11e81b3df041a56664dd1da4424, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onSprite: {fileID: 21300000, guid: 18faa4dcd4a98f64b9efd453eeb46c6a, type: 3}
-  offSprite: {fileID: 21300000, guid: 691e75322cc1c9140bbd1271244f5bee, type: 3}
+  onSprite: {fileID: 21300000, guid: 937063693ce099448ab7a6bdb517b3a3, type: 3}
+  offSprite: {fileID: 21300000, guid: a4ccecd743da70b4ca4add91b7624365, type: 3}
   isOn: 0
 --- !u!1 &8338052557976538237
 GameObject:
@@ -439,9 +463,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2831087306500888726}
   - component: {fileID: 1647770199525929350}
-  - component: {fileID: 5863012256048064192}
   m_Layer: 5
-  m_Name: PlayContent
+  m_Name: ShopContent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -474,36 +497,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8338052557976538237}
   m_CullTransparentMesh: 1
---- !u!114 &5863012256048064192
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8338052557976538237}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &8771703432269855143
 GameObject:
   m_ObjectHideFlags: 0
@@ -571,7 +564,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: eafe0698b30b2eb4b960d0b9432e5bf7, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 30a6282fccc631b48897a97f5edfdf8f, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -638,6 +631,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 9169966267599542908}
+        m_TargetAssemblyTypeName: ButtonUI, Assembly-CSharp
+        m_MethodName: SetOn
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &9169966267599542908
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -650,6 +655,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d05af11e81b3df041a56664dd1da4424, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onSprite: {fileID: 21300000, guid: 8196c1fabcd912643913c154e77d2d64, type: 3}
-  offSprite: {fileID: 21300000, guid: eafe0698b30b2eb4b960d0b9432e5bf7, type: 3}
-  isOn: 0
+  onSprite: {fileID: 21300000, guid: cae703fd61be3ab4ea5d99fbfb6cffdc, type: 3}
+  offSprite: {fileID: 21300000, guid: 30a6282fccc631b48897a97f5edfdf8f, type: 3}
+  isOn: 1
