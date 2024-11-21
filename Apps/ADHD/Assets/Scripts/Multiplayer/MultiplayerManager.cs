@@ -261,7 +261,7 @@ public class MultiplayerManager : NetworkBehaviour
 
     public void LeaveMultiplayerInstance()
     {
-        if(NetworkManager.Singleton)
+        if(IsServer)
         {
             KickPlayers();
         }

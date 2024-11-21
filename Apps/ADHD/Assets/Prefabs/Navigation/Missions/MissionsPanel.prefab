@@ -1,5 +1,53 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &29042660893136562
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4931789435543898854}
+  - component: {fileID: 1824315520877356778}
+  m_Layer: 0
+  m_Name: MissionPoolManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4931789435543898854
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 29042660893136562}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 6.3892517, y: -92.49098, z: 1.7229508}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6738949545016199465}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1824315520877356778
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 29042660893136562}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 745b53468694cdc45b7e9244410c43de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allMissions:
+  - {fileID: 11400000, guid: 4cb06ed295318e746acd6e6a6ac958a4, type: 2}
+  - {fileID: 11400000, guid: 73326577a14fcae4db7b87702a59b8ca, type: 2}
+  - {fileID: 11400000, guid: 7cf82044f45d7774d9a4132e7a806713, type: 2}
 --- !u!1 &261184739254533724
 GameObject:
   m_ObjectHideFlags: 0
@@ -739,12 +787,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d36aeeacba1ea54ba9d4b6d1db1e8c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  container: {fileID: 11400000, guid: 73326577a14fcae4db7b87702a59b8ca, type: 2}
-  nameText: {fileID: 0}
   descriptionText: {fileID: 8415135051498893229}
-  backgroundImage: {fileID: 0}
-  taskcompletionText: {fileID: 0}
-  idText: {fileID: 0}
+  taskcompletionText: {fileID: 3332280529369863819}
   coinsText: {fileID: 4423997086324764215}
 --- !u!114 &7325914830372958068
 MonoBehaviour:
@@ -1229,6 +1273,55 @@ MonoBehaviour:
   m_ChildScaleWidth: 1
   m_ChildScaleHeight: 1
   m_ReverseArrangement: 0
+--- !u!1 &5250870970791745884
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9186848039900044354}
+  - component: {fileID: 1178322472438588383}
+  m_Layer: 0
+  m_Name: MissionManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9186848039900044354
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5250870970791745884}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 6.3892517, y: -92.49098, z: 1.7229508}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6738949545016199465}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1178322472438588383
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5250870970791745884}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96c6959c70071764092546d6800dd3fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  missionPoolManager: {fileID: 1824315520877356778}
+  containerDisplays:
+  - {fileID: 8375808461575426995}
+  - {fileID: 2222328613980504273}
+  - {fileID: 2775920489966132870}
 --- !u!1 &5603151221809854830
 GameObject:
   m_ObjectHideFlags: 0
@@ -1321,12 +1414,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d36aeeacba1ea54ba9d4b6d1db1e8c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  container: {fileID: 11400000, guid: 7cf82044f45d7774d9a4132e7a806713, type: 2}
-  nameText: {fileID: 0}
   descriptionText: {fileID: 520632943669264551}
-  backgroundImage: {fileID: 0}
-  taskcompletionText: {fileID: 0}
-  idText: {fileID: 0}
+  taskcompletionText: {fileID: 8654199045919356704}
   coinsText: {fileID: 4253868661334975606}
 --- !u!114 &6183987799681940270
 MonoBehaviour:
@@ -1781,12 +1870,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d36aeeacba1ea54ba9d4b6d1db1e8c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  container: {fileID: 11400000, guid: 4cb06ed295318e746acd6e6a6ac958a4, type: 2}
-  nameText: {fileID: 0}
   descriptionText: {fileID: 2209510245441950472}
-  backgroundImage: {fileID: 0}
-  taskcompletionText: {fileID: 0}
-  idText: {fileID: 0}
+  taskcompletionText: {fileID: 3999042117847812144}
   coinsText: {fileID: 3098146042972392816}
 --- !u!114 &3192267997856149285
 MonoBehaviour:
@@ -2175,6 +2260,8 @@ RectTransform:
   m_Children:
   - {fileID: 3621507341929302813}
   - {fileID: 4684885172112258298}
+  - {fileID: 4931789435543898854}
+  - {fileID: 9186848039900044354}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}

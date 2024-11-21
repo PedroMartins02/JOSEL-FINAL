@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class InstanceCleanup : MonoBehaviour
 {
-    private void Start()
+    private void Awake()
     {
         if (NetworkManager.Singleton != null)
         {
