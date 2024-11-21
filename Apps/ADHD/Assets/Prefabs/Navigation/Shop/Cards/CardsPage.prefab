@@ -36,8 +36,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -0.5, y: 0}
+  m_SizeDelta: {x: 1.0000072, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &28653762666583402
 CanvasRenderer:
@@ -109,10 +109,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 8126302185620141540}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 3.215, y: 0}
-  m_SizeDelta: {x: 124.7192, y: 50}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 7.5, y: 0}
+  m_SizeDelta: {x: -215, y: -46}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8090483353313367895
 CanvasRenderer:
@@ -329,7 +329,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 5787359834256272288}
   m_OnClick:
     m_PersistentCalls:
@@ -343,6 +343,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3619758120570541818}
+  - component: {fileID: 2562330878398891890}
   m_Layer: 5
   m_Name: CardsPage
   m_TagString: Untagged
@@ -367,9 +368,25 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -15, y: 0}
+  m_SizeDelta: {x: -30, y: -60}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2562330878398891890
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4623477723509909156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76a016d1d2c1c024c840c03c3204c859, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tokensText: {fileID: 7807310798988702695}
+  contentGrid: {fileID: 6415396360996164621}
+  cardPackPrefab: {fileID: 3325175913422385990, guid: d05066206d234fb4eb834b5588fa49f7,
+    type: 3}
 --- !u!1 &4690819637605698048
 GameObject:
   m_ObjectHideFlags: 0
@@ -430,7 +447,7 @@ MonoBehaviour:
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 315, y: 650}
-  m_Spacing: {x: 55, y: 0}
+  m_Spacing: {x: 40, y: 40}
   m_Constraint: 0
   m_ConstraintCount: 2
 --- !u!1001 &998780054901120823
@@ -551,12 +568,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: GreekPack
       objectReference: {fileID: 0}
-    - target: {fileID: 9064540035819774177, guid: d05066206d234fb4eb834b5588fa49f7,
-        type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: a0c413c44b9c25f4d923e6bcd345bb73,
-        type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -686,11 +697,31 @@ PrefabInstance:
       propertyPath: m_Name
       value: RandomPack
       objectReference: {fileID: 0}
+    - target: {fileID: 4092789735386808270, guid: d05066206d234fb4eb834b5588fa49f7,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: -20
+      objectReference: {fileID: 0}
+    - target: {fileID: 4092789735386808270, guid: d05066206d234fb4eb834b5588fa49f7,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 4092789735386808270, guid: d05066206d234fb4eb834b5588fa49f7,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4092789735386808270, guid: d05066206d234fb4eb834b5588fa49f7,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 45
+      objectReference: {fileID: 0}
     - target: {fileID: 9064540035819774177, guid: d05066206d234fb4eb834b5588fa49f7,
         type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: e09e709f2345d394db39861043a87ca6,
+      objectReference: {fileID: 21300000, guid: d08bdb468eafef146855d8f02eca2aca,
         type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -821,6 +852,32 @@ PrefabInstance:
       propertyPath: m_Name
       value: EgyptPack
       objectReference: {fileID: 0}
+    - target: {fileID: 4092789735386808270, guid: d05066206d234fb4eb834b5588fa49f7,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: -20
+      objectReference: {fileID: 0}
+    - target: {fileID: 4092789735386808270, guid: d05066206d234fb4eb834b5588fa49f7,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 4092789735386808270, guid: d05066206d234fb4eb834b5588fa49f7,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4092789735386808270, guid: d05066206d234fb4eb834b5588fa49f7,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 9064540035819774177, guid: d05066206d234fb4eb834b5588fa49f7,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 8451e5e57043e444bb90cf82b501bd4e,
+        type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
