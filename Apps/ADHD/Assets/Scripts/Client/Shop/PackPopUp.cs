@@ -12,18 +12,53 @@ public class PackPopUp : MonoBehaviour
     [SerializeField] private Sprite egyptPack;
     [SerializeField] private Sprite randomPack;
 
+    [Header("Confirmation")]
+    [SerializeField] private Transform purchaseConfirmationPopUp;
     [SerializeField] private Image packImage;
     [SerializeField] private TextMeshProUGUI packPrice;
     [SerializeField] private Button confirmPurchaseButton;
 
+    [Header("Error")]
+    [SerializeField] private Transform purchaseErrorPopUp;
+
+    [Header("Rewards")]
+    [SerializeField] private Transform purchaseRewardsPopUp;
+
     private CardPackUI cardPack;
+
+    private void ShowPopUp(Transform popUp)
+    {
+        HidePopUps();
+        popUp.gameObject.SetActive(true);
+        gameObject.SetActive(true);
+    }
 
     public void HidePopUp()
     {
+        HidePopUps();
         gameObject.SetActive(false);
     }
 
-    public void ShowPopUp(CardPackUI cardPack)
+    private void HidePopUps()
+    {
+        purchaseConfirmationPopUp.gameObject.SetActive(false);
+        purchaseErrorPopUp.gameObject.SetActive(false);
+        purchaseRewardsPopUp.gameObject.SetActive(false);
+    }
+
+    public void ShowRewardsPopUp(List<CardSO> receivedCards)
+    {
+
+        ShowPopUp(purchaseRewardsPopUp);
+    }
+
+    public void ShowErrorPopUp(string errorText)
+    {
+
+        ShowPopUp(purchaseErrorPopUp);
+    }
+
+    public void ShowConfirmationPopUp(CardPackUI cardPack)
     {
         this.cardPack = cardPack;
         switch (cardPack.civilization)
@@ -39,7 +74,7 @@ public class PackPopUp : MonoBehaviour
                 break;
         }
         packPrice.text = cardPack.price.ToString();
-        gameObject.SetActive(true);
+        ShowPopUp(purchaseConfirmationPopUp);
     }
 
     public void SetPurchaseConfirmationHandler(Action<int, Factions?> purchaseConfirmationHandler)

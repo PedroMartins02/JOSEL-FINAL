@@ -55,12 +55,19 @@ public class CardsPageManager : MonoBehaviour
     public void OpenPopUp(CardPackUI cardPack)
     {
         popUp.SetPurchaseConfirmationHandler(ConfirmPurchaseHandler);
-        popUp.ShowPopUp(cardPack);
+        popUp.ShowConfirmationPopUp(cardPack);
     }
 
     public void ConfirmPurchaseHandler(int price, Factions? civilization)
     {
         Debug.Log($"Purchasing a {(civilization == null ? "Random" : civilization.ToString())} pack for {price} tokens");
+        if (CurrencyManager.SpendCurrency(price))
+        {
+
+        } else
+        {
+
+        }
         popUp.HidePopUp();
     }
 }
