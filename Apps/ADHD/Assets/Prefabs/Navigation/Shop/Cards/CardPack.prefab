@@ -132,6 +132,7 @@ MonoBehaviour:
   packNameText: {fileID: 3098643300588238286}
   packImage: {fileID: 9064540035819774177}
   packPriceText: {fileID: 3758849386543339084}
+  purchaseButton: {fileID: 7572677878648118803}
 --- !u!1 &3951051822500668246
 GameObject:
   m_ObjectHideFlags: 0

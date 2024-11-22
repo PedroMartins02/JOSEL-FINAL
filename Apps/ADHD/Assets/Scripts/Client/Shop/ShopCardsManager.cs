@@ -49,5 +49,18 @@ public class CardsPageManager : MonoBehaviour
         GameObject cardPack = Instantiate(cardPackPrefab, contentGrid);
         CardPackUI cardPackUI = cardPack.GetComponent<CardPackUI>();
         cardPackUI.SetPackCivilization(civilization);
+        cardPackUI.SetPurchaseOnClick(OpenPopUp);
+    }
+
+    public void OpenPopUp(CardPackUI cardPack)
+    {
+        popUp.SetPurchaseConfirmationHandler(ConfirmPurchaseHandler);
+        popUp.ShowPopUp(cardPack);
+    }
+
+    public void ConfirmPurchaseHandler(int price, Factions? civilization)
+    {
+        Debug.Log($"Purchasing a {(civilization == null ? "Random" : civilization.ToString())} pack for {price} tokens");
+        popUp.HidePopUp();
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class CardPackUI : MonoBehaviour
 {
@@ -14,9 +15,10 @@ public class CardPackUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI packNameText;
     [SerializeField] private Image packImage;
     [SerializeField] private TextMeshProUGUI packPriceText;
+    [SerializeField] private Button purchaseButton;
 
-    private int price;
-    private Factions? civilization;
+    public int price;
+    public Factions? civilization;
 
     public void SetPackCivilization(Factions? civilization)
     {
@@ -49,6 +51,13 @@ public class CardPackUI : MonoBehaviour
 
     private void SetPackPrice()
     {
-        packPriceText.text = (civilization == null ? 100 : 200).ToString();
+        price = civilization == null ? 100 : 200;
+        packPriceText.text = price.ToString();
+    }
+
+    internal void SetPurchaseOnClick(Action<CardPackUI> openPopUp)
+    {
+        purchaseButton.onClick.RemoveAllListeners();
+        purchaseButton.onClick.AddListener(() => openPopUp(this));
     }
 }
