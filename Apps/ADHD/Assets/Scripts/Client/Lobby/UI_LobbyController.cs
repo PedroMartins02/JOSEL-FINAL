@@ -233,9 +233,14 @@ public class UI_LobbyController : MonoBehaviour
             }
     }
 
-    public void OnBackBtnClick()
+    public async void OnBackBtnClick()
     {
-        LobbyManager.Instance.LeaveLobby();
+
+        if (LobbyManager.Instance.IsLobbyHost())
+            await LobbyManager.Instance.HostLeaveLobby();
+        else
+            await LobbyManager.Instance.LeaveLobby();
+
         MultiplayerManager.Instance.LeaveMultiplayerInstance();
 
         SceneLoader.ExitNetworkLoad(SceneLoader.Scene.NavigationScene);
@@ -245,7 +250,7 @@ public class UI_LobbyController : MonoBehaviour
     {
         // Kick player from from Netcode and Lobby
         LobbyManager.Instance.KickPlayers();
-        MultiplayerManager.Instance.KickPlayers();
+        MultiplayerManager.Instance.KickPlayersFromInstance();
     }
 
     private void Hide()
@@ -256,5 +261,12 @@ public class UI_LobbyController : MonoBehaviour
     private void Show()
     {
         gameObject.SetActive(true);
+    }
+
+    private void OnDestroy()
+    {
+        LobbyManager.Instance.OnJoinedLobby -= Update_OnJoinedLobby;
+        LobbyManager.Instance.OnJoinedLobbyUpdate -= Update_OnJoinedLobbyUpdate;
+        MultiplayerManager.Instance.OnGameRulesListChanged -= MultiplayerManager_OnGameRulesListChanged;
     }
 }

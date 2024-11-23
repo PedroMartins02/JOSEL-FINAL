@@ -375,18 +375,13 @@ public class LobbyManager : NetworkBehaviour
         return joinedLobby != null && joinedLobby.HostId == playerId;
     }
 
-    public async void LeaveLobby()
+    public async Task LeaveLobby()
     {
         if (joinedLobby != null)
         {
             try
             {
                 await LobbyService.Instance.RemovePlayerAsync(joinedLobby.Id, AuthenticationService.Instance.PlayerId);
-                
-                if (IsLobbyHost())
-                {
-                    KickPlayers();
-                }
 
                 joinedLobby = null;
             }
@@ -436,9 +431,40 @@ public class LobbyManager : NetworkBehaviour
         }
     }
 
+    public async Task HostLeaveLobby()
+    {
+        if(joinedLobby != null && IsLobbyHost())
+        {
+            try
+            {
+                // Exit the lobby
+                await LobbyService.Instance.RemovePlayerAsync(joinedLobby.Id, AuthenticationService.Instance.PlayerId);
+
+                // Kick the other players
+                List<Player> playerList = joinedLobby.Players;
+
+                foreach (Player player in playerList)
+                {
+                    if (!player.Id.Equals(AuthenticationService.Instance.PlayerId))
+                        await LobbyService.Instance.RemovePlayerAsync(joinedLobby.Id, player.Id);
+                }
+
+                // Delete the lobby
+                await LobbyService.Instance.DeleteLobbyAsync(joinedLobby.Id);
+
+                joinedLobby = null;
+            }
+            catch (LobbyServiceException e)
+            {
+                Debug.Log(e);
+            }
+        }
+    }
+
     public override void OnDestroy()
     {
-        LeaveLobby();
+        if(joinedLobby != null)
+            LeaveLobby();
 
         // Always invoke the base 
         base.OnDestroy();
@@ -446,7 +472,8 @@ public class LobbyManager : NetworkBehaviour
 
     void OnApplicationQuit()
     {
-        LeaveLobby();
+        if (joinedLobby != null)
+            LeaveLobby();
         Debug.Log("Application ending after " + Time.time + " seconds");
     }
 }
