@@ -16,6 +16,7 @@ public class DeckListsManager : MonoBehaviour
     [SerializeField] private GameObject ConfirmationPopUp;
 
     [SerializeField] private HighlightedDeckIdSO HighlightedDeckData;
+    
 
     private void Start()
     {

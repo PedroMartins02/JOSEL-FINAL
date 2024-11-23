@@ -23,6 +23,7 @@ public class DeckEditorManager : MonoBehaviour
     [SerializeField] private HighlightedDeckIdSO HighlightedDeckData;
     [SerializeField] private TextMeshProUGUI DeckName;
     private List<CardSO> ListOfSelectedCards = new List<CardSO>();
+    private DeckData playerCurrentDeck = new DeckData();
     
     
 
@@ -43,17 +44,14 @@ public class DeckEditorManager : MonoBehaviour
     private void Start()
     {
         UpdateCardsList();
+        
     }
 
     private void UpdateCardsList()
     {
         PlayerData playerData = AccountManager.Singleton.GetPlayerData();
         
-        DeckData playerCurrentDeck = new DeckData();
-
-        if (playerData.DeckCollection.Count < HighlightedDeckData.DeckId) playerCurrentDeck = playerData.DeckCollection[HighlightedDeckData.DeckId];
-        
-        
+        if (playerData.DeckCollection.Count >= HighlightedDeckData.DeckId) playerCurrentDeck = playerData.DeckCollection[HighlightedDeckData.DeckId];
         
         foreach (Transform child in ScrollContent)
         {
@@ -61,11 +59,14 @@ public class DeckEditorManager : MonoBehaviour
         }
 
         List<string> filteredCardCollection = playerData.CardCollection;
-        
+        List<string> cardsInDeck = new List<string>();
         foreach (var cardIdToRemove in playerCurrentDeck.CardList)
         {
+            cardsInDeck.Add(cardIdToRemove);
             filteredCardCollection.Remove(cardIdToRemove);
         }
+        
+        
         
         Dictionary<string, int> cardCount = filteredCardCollection
             .GroupBy(item => item)
@@ -99,6 +100,8 @@ public class DeckEditorManager : MonoBehaviour
                 cardButton.onClick.AddListener(() => AddToEditingArea(card));
             }
         }
+        
+        OnDeckLoad(cardsInDeck);
     }
 
     private void InitializeCardTypeMapping()
@@ -168,6 +171,17 @@ public class DeckEditorManager : MonoBehaviour
         }
         typeFilter[cardType] = !typeFilter[cardType];
         UpdateCardsList();
+    }
+
+    private void OnDeckLoad(List<string> cardsToLoad)
+    {
+        DeckName.text = playerCurrentDeck.Name;
+        
+        foreach (var id in cardsToLoad)
+        {
+            CardSO card = CardDatabase.Singleton.GetCardSoOfId(id);
+            AddToEditingArea(card);
+        }
     }
     
 
