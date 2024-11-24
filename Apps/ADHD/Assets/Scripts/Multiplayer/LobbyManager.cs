@@ -49,6 +49,7 @@ public class LobbyManager : NetworkBehaviour
     public event EventHandler<LobbyEventArgs> OnJoinedLobby;
     public event EventHandler<LobbyEventArgs> OnQuickMatchJoinedLobby;
     public event EventHandler<LobbyEventArgs> OnJoinedLobbyUpdate;
+
     public class LobbyEventArgs : EventArgs
     {
         public Lobby lobby;
@@ -362,6 +363,11 @@ public class LobbyManager : NetworkBehaviour
         return joinedLobby;
     }
 
+    public void ClearJoinedLobby()
+    {
+        this.joinedLobby = null;
+    }
+
     /**
      * Method for returning true if THIS is the host
      */
@@ -403,8 +409,10 @@ public class LobbyManager : NetworkBehaviour
 
                 foreach (Player player in playerList)
                 {
-                    if(!player.Id.Equals(AuthenticationService.Instance.PlayerId))
+                    if (!player.Id.Equals(AuthenticationService.Instance.PlayerId))
+                    {
                         await LobbyService.Instance.RemovePlayerAsync(joinedLobby.Id, player.Id);
+                    }
                 }
             }
             catch (LobbyServiceException e)
@@ -437,9 +445,6 @@ public class LobbyManager : NetworkBehaviour
         {
             try
             {
-                // Exit the lobby
-                await LobbyService.Instance.RemovePlayerAsync(joinedLobby.Id, AuthenticationService.Instance.PlayerId);
-
                 // Kick the other players
                 List<Player> playerList = joinedLobby.Players;
 
@@ -448,6 +453,9 @@ public class LobbyManager : NetworkBehaviour
                     if (!player.Id.Equals(AuthenticationService.Instance.PlayerId))
                         await LobbyService.Instance.RemovePlayerAsync(joinedLobby.Id, player.Id);
                 }
+
+                // Exit the lobby
+                await LobbyService.Instance.RemovePlayerAsync(joinedLobby.Id, AuthenticationService.Instance.PlayerId);
 
                 // Delete the lobby
                 await LobbyService.Instance.DeleteLobbyAsync(joinedLobby.Id);

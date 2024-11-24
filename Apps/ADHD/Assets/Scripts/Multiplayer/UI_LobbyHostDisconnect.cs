@@ -18,6 +18,7 @@ public class UI_LobbyHostDisconnect : MonoBehaviour
         {
             // Server is shutting down
             Show();
+            LobbyManager.Instance.ClearJoinedLobby();
         }
     }
 
