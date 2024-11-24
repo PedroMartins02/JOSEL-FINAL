@@ -79,4 +79,29 @@ public class CardDatabase : MonoBehaviour
         System.Random random = new System.Random();
         return CardDictionary.Values.ElementAt(random.Next(CardDictionary.Count()));
     }
+
+    //this is horrible, but for the scope of the project, i dont care too much : )
+    public List<CardSO> GetPackContents(Factions? civilization)
+    {
+        var eligibleCards = CardDictionary.Values
+        .Where(card => (civilization == null || card.Faction == civilization) && card.GetType() != typeof(MythCardSO))
+        .ToList();
+
+        if (!eligibleCards.Any())
+        {
+            return null;
+        }
+
+        System.Random random = new System.Random();
+        List<CardSO> packContents = new List<CardSO>();
+
+        for (int i = 0; i < 5; i++)
+        {
+            var randomCard = eligibleCards[random.Next(eligibleCards.Count)];
+            packContents.Add(randomCard);
+        }
+
+        return packContents;
+    }
+
 }

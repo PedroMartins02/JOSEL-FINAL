@@ -36,11 +36,20 @@ public class UI_DeckEditorController : MonoBehaviour
 
     private void InstantiateCivButtons()
     {
+        int childCount = 0;
         foreach (Factions faction in Enum.GetValues(typeof(Factions)))
         {
             Transform civTransform = Instantiate(civButtonTemplate, civButtonContainer);
+
+            civTransform.gameObject.GetComponent<UI_CivButtonController>().SetCivData(faction);
             civTransform.gameObject.SetActive(true);
+
+            childCount++;
         }
+
+        RectTransform contentRect = civButtonContainer.GetComponent<RectTransform>();
+        float totalWidth = 250 * childCount + 25 * (childCount - 1);
+        contentRect.sizeDelta = new Vector2(totalWidth, contentRect.sizeDelta.y);
     }
 
     public void ReturnButtonOnClick()
