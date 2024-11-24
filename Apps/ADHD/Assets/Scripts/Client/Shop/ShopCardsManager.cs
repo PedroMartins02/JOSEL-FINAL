@@ -24,6 +24,12 @@ public class CardsPageManager : MonoBehaviour
         InstantiateCardPacks();
     }
 
+    public void AddCurrency() //for development purposes
+    {
+        CurrencyManager.AwardCurrency(1000);
+        UpdateContent();
+    }
+
     private void SetTokens()
     {
         tokensText.text = AccountManager.Singleton.GetPlayerData().Tokens.ToString();
@@ -63,11 +69,25 @@ public class CardsPageManager : MonoBehaviour
         Debug.Log($"Purchasing a {(civilization == null ? "Random" : civilization.ToString())} pack for {price} tokens");
         if (CurrencyManager.SpendCurrency(price))
         {
-
+            List<CardSO> packContents = CardDatabase.Singleton.GetPackContents(civilization);
+            if (packContents == null)
+            {
+                popUp.ShowErrorPopUp("Service is currently unavailable!");
+                CurrencyManager.AwardCurrency(price);
+            } else
+            {
+                popUp.ShowRewardsPopUp(packContents);
+                PlayerData playerData = AccountManager.Singleton.GetPlayerData();
+                foreach (CardSO card in packContents)
+                {
+                    playerData.CardCollection.Add(card.Id);
+                }
+                AccountManager.Singleton.SetPlayerData(playerData, true);
+            }
         } else
         {
-
+            popUp.ShowErrorPopUp("Not enough tokens!");
         }
-        popUp.HidePopUp();
+        UpdateContent();
     }
 }

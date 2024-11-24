@@ -11,6 +11,7 @@ public class PackPopUp : MonoBehaviour
     [SerializeField] private Sprite greekPack;
     [SerializeField] private Sprite egyptPack;
     [SerializeField] private Sprite randomPack;
+    [SerializeField] private GameObject cardPrefab;
 
     [Header("Confirmation")]
     [SerializeField] private Transform purchaseConfirmationPopUp;
@@ -20,9 +21,11 @@ public class PackPopUp : MonoBehaviour
 
     [Header("Error")]
     [SerializeField] private Transform purchaseErrorPopUp;
+    [SerializeField] private TextMeshProUGUI errorText;
 
     [Header("Rewards")]
     [SerializeField] private Transform purchaseRewardsPopUp;
+    [SerializeField] private Transform rewardsList;
 
     private CardPackUI cardPack;
 
@@ -48,13 +51,23 @@ public class PackPopUp : MonoBehaviour
 
     public void ShowRewardsPopUp(List<CardSO> receivedCards)
     {
+        foreach (Transform t in rewardsList)
+        {
+            Destroy(t.gameObject);
+        }
+
+        foreach (CardSO card in receivedCards)
+        {
+            GameObject cardInstance = Instantiate(cardPrefab, rewardsList);
+            cardInstance.GetComponent<CardUI>().SetCardData(card);
+        }
 
         ShowPopUp(purchaseRewardsPopUp);
     }
 
     public void ShowErrorPopUp(string errorText)
     {
-
+        this.errorText.text = errorText;
         ShowPopUp(purchaseErrorPopUp);
     }
 
