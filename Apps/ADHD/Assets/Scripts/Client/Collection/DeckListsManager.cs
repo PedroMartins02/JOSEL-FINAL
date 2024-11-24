@@ -158,7 +158,7 @@ public class DeckListsManager : MonoBehaviour
 
     public void GoToDeckEditorPage()
     {
-        SceneManager.LoadScene("Deck Builder");
+        SceneManager.LoadScene("DeckBuilder");
         //SceneLoader.Load(SceneLoader.Scene.DeckBuilder);
     }
 }
