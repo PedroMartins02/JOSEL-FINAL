@@ -14,21 +14,31 @@ public class LobbySelectReady : NetworkBehaviour
     private void Awake()
     {
         Instance = this;
+    }
 
+    private void Start()
+    {
         playerReadyDictionary = new Dictionary<ulong, bool>();
     }
 
-    public void SetPlayerReady()
+    public void ChangePlayerReady()
     {
-        SetPlayerReadyServerRpc();
+        ChangePlayerReadyServerRpc();
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void SetPlayerReadyServerRpc(ServerRpcParams serverRpcParams = default)
+    private void ChangePlayerReadyServerRpc(ServerRpcParams serverRpcParams = default)
     {
         SetPlayerReadyClientRpc(serverRpcParams.Receive.SenderClientId);
 
-        playerReadyDictionary[serverRpcParams.Receive.SenderClientId] = true;
+        ulong senderClientId = serverRpcParams.Receive.SenderClientId;
+
+        if (playerReadyDictionary.ContainsKey(senderClientId))
+            playerReadyDictionary[senderClientId] = !playerReadyDictionary[senderClientId];
+        else
+            playerReadyDictionary[senderClientId] = true;
+
+        OnReadyChanged?.Invoke(this, EventArgs.Empty);
 
         bool allClientsReady = true;
         if (NetworkManager.Singleton.ConnectedClientsIds.Count == 2)
@@ -59,9 +69,15 @@ public class LobbySelectReady : NetworkBehaviour
     [ClientRpc]
     private void SetPlayerReadyClientRpc(ulong clientId)
     {
-        playerReadyDictionary[clientId] = true;
+        if (!IsServer)
+        {
+            if (playerReadyDictionary.ContainsKey(clientId))
+                playerReadyDictionary[clientId] = !playerReadyDictionary[clientId];
+            else
+                playerReadyDictionary[clientId] = true;
 
-        OnReadyChanged?.Invoke(this, EventArgs.Empty);
+            OnReadyChanged?.Invoke(this, EventArgs.Empty);
+        }
     }
 
     /**

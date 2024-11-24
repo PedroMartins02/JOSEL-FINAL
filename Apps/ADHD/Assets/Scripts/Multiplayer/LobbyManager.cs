@@ -187,6 +187,22 @@ public class LobbyManager : NetworkBehaviour
         }
     }
 
+    public bool IsPlayerInLobby(string playerId)
+    {
+        if (joinedLobby != null && joinedLobby.Players != null)
+        {
+            foreach (Player player in joinedLobby.Players)
+            {
+                if (player.Id == playerId)
+                {
+                    // This player is in this lobby
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     private bool IsPlayerInLobby()
     {
         if (joinedLobby != null && joinedLobby.Players != null)

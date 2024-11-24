@@ -1804,11 +1804,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lobbyNameText: {fileID: 651393444}
-  playerOneNameText: {fileID: 924362693}
   readyButton: {fileID: 1555575322}
-  readyIcon: {fileID: 237605826}
-  notReadyIconSprite: {fileID: 21300000, guid: 99da6891e0f8f064598602dd5e54953e, type: 3}
-  readyIconSprite: {fileID: 21300000, guid: 6b83447caeacdc5498e69ec280e909de, type: 3}
+  playerOneNameText: {fileID: 924362693}
+  readyIconP1: {fileID: 237605826}
+  notReadyIconSpriteP1: {fileID: 21300000, guid: 99da6891e0f8f064598602dd5e54953e,
+    type: 3}
+  readyIconSpriteP1: {fileID: 21300000, guid: 6b83447caeacdc5498e69ec280e909de, type: 3}
   playerTwoNameText: {fileID: 1314843356}
   playerTwoBox: {fileID: 1311288434}
   playerTwoKickButton: {fileID: 386250418}

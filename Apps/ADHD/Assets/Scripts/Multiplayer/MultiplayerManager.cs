@@ -199,12 +199,6 @@ public class MultiplayerManager : NetworkBehaviour
     }
 
 
-    public bool IsPlayerIndexConnected(int playerIndex)
-    {
-        return playerIndex < playerDataNetworkList.Count;
-    }
-
-
     public MP_PlayerData GetPlayerDataFromPlayerId(string playerId)
     {
         foreach (MP_PlayerData playerData in playerDataNetworkList)
@@ -240,9 +234,19 @@ public class MultiplayerManager : NetworkBehaviour
         return GetPlayerDataFromClientId(NetworkManager.Singleton.LocalClientId);
     }
 
-    private bool IsPlayerInstanceHost(ulong clientId)
+    public bool IsPlayerInstanceHost(ulong clientId)
     {
         if (IsServer && NetworkManager.Singleton.LocalClientId.Equals(clientId))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool IsPlayerConnectedClient(ulong clientId)
+    {
+        if (NetworkManager.Singleton.ConnectedClients.ContainsKey(clientId))
         {
             return true;
         }
