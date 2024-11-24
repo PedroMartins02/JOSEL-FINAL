@@ -12,11 +12,13 @@ public class UI_LobbyController : MonoBehaviour
 {
     [Header("Lobby Overall")]
     [SerializeField] private TextMeshProUGUI lobbyNameText;
-    [SerializeField] private TextMeshProUGUI playerOneNameText;
     [SerializeField] private Button readyButton;
-    [SerializeField] private Image readyIcon;
-    [SerializeField] private Sprite notReadyIconSprite;
-    [SerializeField] private Sprite readyIconSprite;
+
+    [Header("Player One")]
+    [SerializeField] private TextMeshProUGUI playerOneNameText;
+    [SerializeField] private Image readyIconP1;
+    [SerializeField] private Sprite notReadyIconSpriteP1;
+    [SerializeField] private Sprite readyIconSpriteP1;
 
     [Header("Player Two")]
     [SerializeField] private TextMeshProUGUI playerTwoNameText;
@@ -45,19 +47,18 @@ public class UI_LobbyController : MonoBehaviour
         ruleSingleTemplate.gameObject.SetActive(false);
 
         readyButton.gameObject.SetActive(true);
-        readyIcon.GameObject().gameObject.SetActive(true);
-        readyIconP2.GameObject().gameObject.SetActive(true);
+        readyIconP1.gameObject.SetActive(true);
 
         // Hide player two 
-        playerTwoNameText.gameObject.SetActive(false);
+        playerTwoNameText.gameObject.SetActive(true);
+        readyIconP2.GameObject().gameObject.SetActive(true);
         playerTwoKickButton.gameObject.SetActive(false);
         playerTwoBox.gameObject.SetActive(false);
 
         // Event for the button here cause why not, since I wanna change the sprite too in the script
         readyButton.onClick.AddListener(() =>
         {
-            readyButton.gameObject.SetActive(false);
-            LobbySelectReady.Instance.SetPlayerReady();
+            LobbySelectReady.Instance.ChangePlayerReady();
         });
     }
 
@@ -128,9 +129,6 @@ public class UI_LobbyController : MonoBehaviour
                 }
                 else
                 {
-                    // Show Player two if there is any
-                    playerTwoBox.gameObject.SetActive(true);
-
                     playerTwoNameText.gameObject.SetActive(true);
                     playerTwoNameText.text = playerData.playerUsername.ToString();
 
@@ -142,26 +140,34 @@ public class UI_LobbyController : MonoBehaviour
                 }
 
                 // Set the ready icon
-                SetReadyIconVisible(
-                    LobbySelectReady.Instance.IsPlayerReady(playerData.clientId)
+                SetReadyIconVisibility(
+                    player.Id, LobbySelectReady.Instance.IsPlayerReady(playerData.clientId)
                 );
             }
         }
+
+        // Show Player two if there is any
+        if(lobby.Players.Count < 2)
+            playerTwoBox.gameObject.SetActive(false);
+        else
+            playerTwoBox.gameObject.SetActive(true);
     }
 
-    public void SetReadyIconVisible(bool isReady)
+    public void SetReadyIconVisibility(string playerId, bool isReady)
     {
-        readyIcon.gameObject.SetActive(true);
-        if (isReady)
+        if (LobbyManager.Instance.IsLobbyHost(playerId))
         {
-            if (MultiplayerManager.Instance.IsServer)
-                readyIcon.sprite = readyIconSprite;
+            readyIconP1.gameObject.SetActive(true);
+            if (isReady)
+                readyIconP1.sprite = readyIconSpriteP1;
             else
-                readyIconP2.sprite = readyIconSpriteP2;
-        } else
+                readyIconP1.sprite = notReadyIconSpriteP1;
+        } 
+        else if (LobbyManager.Instance.IsPlayerInLobby(playerId)) 
         {
-            if (MultiplayerManager.Instance.IsServer)
-                readyIcon.sprite = notReadyIconSprite;
+            readyIconP2.gameObject.SetActive(true);
+            if (isReady)
+                readyIconP2.sprite = readyIconSpriteP2;
             else
                 readyIconP2.sprite = notReadyIconSpriteP2;
         }
@@ -233,9 +239,14 @@ public class UI_LobbyController : MonoBehaviour
             }
     }
 
-    public void OnBackBtnClick()
+    public async void OnBackBtnClick()
     {
-        LobbyManager.Instance.LeaveLobby();
+
+        if (LobbyManager.Instance.IsLobbyHost())
+            await LobbyManager.Instance.HostLeaveLobby();
+        else
+            await LobbyManager.Instance.LeaveLobby();
+
         MultiplayerManager.Instance.LeaveMultiplayerInstance();
 
         SceneLoader.ExitNetworkLoad(SceneLoader.Scene.NavigationScene);
@@ -245,7 +256,7 @@ public class UI_LobbyController : MonoBehaviour
     {
         // Kick player from from Netcode and Lobby
         LobbyManager.Instance.KickPlayers();
-        MultiplayerManager.Instance.KickPlayers();
+        MultiplayerManager.Instance.KickPlayersFromInstance();
     }
 
     private void Hide()
@@ -256,5 +267,12 @@ public class UI_LobbyController : MonoBehaviour
     private void Show()
     {
         gameObject.SetActive(true);
+    }
+
+    private void OnDestroy()
+    {
+        LobbyManager.Instance.OnJoinedLobby -= Update_OnJoinedLobby;
+        LobbyManager.Instance.OnJoinedLobbyUpdate -= Update_OnJoinedLobbyUpdate;
+        MultiplayerManager.Instance.OnGameRulesListChanged -= MultiplayerManager_OnGameRulesListChanged;
     }
 }

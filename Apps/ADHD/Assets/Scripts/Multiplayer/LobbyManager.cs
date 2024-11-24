@@ -49,6 +49,7 @@ public class LobbyManager : NetworkBehaviour
     public event EventHandler<LobbyEventArgs> OnJoinedLobby;
     public event EventHandler<LobbyEventArgs> OnQuickMatchJoinedLobby;
     public event EventHandler<LobbyEventArgs> OnJoinedLobbyUpdate;
+
     public class LobbyEventArgs : EventArgs
     {
         public Lobby lobby;
@@ -184,6 +185,22 @@ public class LobbyManager : NetworkBehaviour
             Debug.Log(e);
             return null;
         }
+    }
+
+    public bool IsPlayerInLobby(string playerId)
+    {
+        if (joinedLobby != null && joinedLobby.Players != null)
+        {
+            foreach (Player player in joinedLobby.Players)
+            {
+                if (player.Id == playerId)
+                {
+                    // This player is in this lobby
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private bool IsPlayerInLobby()
@@ -362,6 +379,11 @@ public class LobbyManager : NetworkBehaviour
         return joinedLobby;
     }
 
+    public void ClearJoinedLobby()
+    {
+        this.joinedLobby = null;
+    }
+
     /**
      * Method for returning true if THIS is the host
      */
@@ -375,18 +397,13 @@ public class LobbyManager : NetworkBehaviour
         return joinedLobby != null && joinedLobby.HostId == playerId;
     }
 
-    public async void LeaveLobby()
+    public async Task LeaveLobby()
     {
         if (joinedLobby != null)
         {
             try
             {
                 await LobbyService.Instance.RemovePlayerAsync(joinedLobby.Id, AuthenticationService.Instance.PlayerId);
-                
-                if (IsLobbyHost())
-                {
-                    KickPlayers();
-                }
 
                 joinedLobby = null;
             }
@@ -408,8 +425,10 @@ public class LobbyManager : NetworkBehaviour
 
                 foreach (Player player in playerList)
                 {
-                    if(!player.Id.Equals(AuthenticationService.Instance.PlayerId))
+                    if (!player.Id.Equals(AuthenticationService.Instance.PlayerId))
+                    {
                         await LobbyService.Instance.RemovePlayerAsync(joinedLobby.Id, player.Id);
+                    }
                 }
             }
             catch (LobbyServiceException e)
@@ -436,9 +455,40 @@ public class LobbyManager : NetworkBehaviour
         }
     }
 
+    public async Task HostLeaveLobby()
+    {
+        if(joinedLobby != null && IsLobbyHost())
+        {
+            try
+            {
+                // Kick the other players
+                List<Player> playerList = joinedLobby.Players;
+
+                foreach (Player player in playerList)
+                {
+                    if (!player.Id.Equals(AuthenticationService.Instance.PlayerId))
+                        await LobbyService.Instance.RemovePlayerAsync(joinedLobby.Id, player.Id);
+                }
+
+                // Exit the lobby
+                await LobbyService.Instance.RemovePlayerAsync(joinedLobby.Id, AuthenticationService.Instance.PlayerId);
+
+                // Delete the lobby
+                await LobbyService.Instance.DeleteLobbyAsync(joinedLobby.Id);
+
+                joinedLobby = null;
+            }
+            catch (LobbyServiceException e)
+            {
+                Debug.Log(e);
+            }
+        }
+    }
+
     public override void OnDestroy()
     {
-        LeaveLobby();
+        if(joinedLobby != null)
+            LeaveLobby();
 
         // Always invoke the base 
         base.OnDestroy();
@@ -446,7 +496,8 @@ public class LobbyManager : NetworkBehaviour
 
     void OnApplicationQuit()
     {
-        LeaveLobby();
+        if (joinedLobby != null)
+            LeaveLobby();
         Debug.Log("Application ending after " + Time.time + " seconds");
     }
 }

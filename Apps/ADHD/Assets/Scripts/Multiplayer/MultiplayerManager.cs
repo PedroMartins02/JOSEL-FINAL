@@ -19,6 +19,7 @@ public class MultiplayerManager : NetworkBehaviour
     public const int MAX_PLAYER_AMOUNT = 2;
     private const string PLAYER_PREFS_PLAYER_NAME_MULTIPLAYER = "PlayerNameMultiplayer";
 
+    private bool _isMultiplayer = false;
     private List<GameModel.GameRule> lobbyGameRules;
     private DeckData selectedDeckData;
     private NetworkList<MP_PlayerData> playerDataNetworkList;
@@ -31,14 +32,17 @@ public class MultiplayerManager : NetworkBehaviour
     // Event for when the list of rules in the network and their info change
     public event EventHandler OnGameRulesListChanged;
 
-
+   
 
     private void Awake()
     {
         Instance = this;
 
         DontDestroyOnLoad(gameObject);
+    }
 
+    private void Start()
+    {
         // Initialize networkList here otherwise error
         playerDataNetworkList = new NetworkList<MP_PlayerData>();
 
@@ -60,6 +64,8 @@ public class MultiplayerManager : NetworkBehaviour
         NetworkManager.Singleton.OnClientConnectedCallback += NetworkManager_OnClientConnectedCallback;
         // If player disconnects, clear his data from the NetworkList
         NetworkManager.Singleton.OnClientDisconnectCallback += NetworkManager_Server_OnClientDisconnectCallback;
+
+        _isMultiplayer = true;
 
         NetworkManager.Singleton.StartHost();
     }
@@ -126,6 +132,9 @@ public class MultiplayerManager : NetworkBehaviour
 
         NetworkManager.Singleton.OnClientDisconnectCallback += NetworkManager_Client_OnClientDisconnectCallback;
         NetworkManager.Singleton.OnClientConnectedCallback += NetworkManager_Client_OnClientConnectedCallback;
+
+        _isMultiplayer = true;
+
         NetworkManager.Singleton.StartClient();
     }
 
@@ -190,12 +199,6 @@ public class MultiplayerManager : NetworkBehaviour
     }
 
 
-    public bool IsPlayerIndexConnected(int playerIndex)
-    {
-        return playerIndex < playerDataNetworkList.Count;
-    }
-
-
     public MP_PlayerData GetPlayerDataFromPlayerId(string playerId)
     {
         foreach (MP_PlayerData playerData in playerDataNetworkList)
@@ -231,9 +234,19 @@ public class MultiplayerManager : NetworkBehaviour
         return GetPlayerDataFromClientId(NetworkManager.Singleton.LocalClientId);
     }
 
-    private bool IsPlayerInstanceHost(ulong clientId)
+    public bool IsPlayerInstanceHost(ulong clientId)
     {
         if (IsServer && NetworkManager.Singleton.LocalClientId.Equals(clientId))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool IsPlayerConnectedClient(ulong clientId)
+    {
+        if (NetworkManager.Singleton.ConnectedClients.ContainsKey(clientId))
         {
             return true;
         }
@@ -244,7 +257,7 @@ public class MultiplayerManager : NetworkBehaviour
     /**
      * Method to kick the players from their connection to the host
      */
-    public void KickPlayers()
+    public void KickPlayersFromInstance()
     {
         foreach(MP_PlayerData playerData in playerDataNetworkList)
         {
@@ -253,21 +266,16 @@ public class MultiplayerManager : NetworkBehaviour
                 NetworkManager.Singleton.DisconnectClient(playerData.clientId);
                 // Kicking the player doesnt trigger the disconnect callback, so manually clean up the NetworkList
                 NetworkManager_Server_OnClientDisconnectCallback(playerData.clientId);
-
-                playerDataNetworkList.Remove(playerData);
             }
         }
     }
 
     public void LeaveMultiplayerInstance()
     {
-        if(IsServer)
+        if (IsServer)
         {
-            KickPlayers();
+            KickPlayersFromInstance();
         }
-
-        //playerDataNetworkList.Remove(GetPlayerData());
-        playerDataNetworkList = new NetworkList<MP_PlayerData>();
 
         NetworkManager.Singleton.Shutdown();
     }
@@ -315,6 +323,20 @@ public class MultiplayerManager : NetworkBehaviour
 
     public override void OnDestroy()
     {
+        if (_isMultiplayer && NetworkManager.Singleton != null)
+        {
+            if (IsServer)
+            {
+                NetworkManager.Singleton.ConnectionApprovalCallback -= NetworkManager_ConnectionApprovalCallback;
+                NetworkManager.Singleton.OnClientConnectedCallback -= NetworkManager_OnClientConnectedCallback;
+                NetworkManager.Singleton.OnClientDisconnectCallback -= NetworkManager_Server_OnClientDisconnectCallback;
+            }
+            else
+            {
+                NetworkManager.Singleton.OnClientDisconnectCallback -= NetworkManager_Client_OnClientDisconnectCallback;
+                NetworkManager.Singleton.OnClientConnectedCallback -= NetworkManager_Client_OnClientConnectedCallback;
+            }
+        }
 
         base.OnDestroy();
     }

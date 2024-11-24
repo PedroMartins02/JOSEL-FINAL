@@ -13,7 +13,7 @@ using UnityEngine.UI;
 public class DeckEditorManager : MonoBehaviour
 {
     public static DeckEditorManager Instance { get; private set; } //not ideal, lol
-    private Factions faction = 0;
+    
     [SerializeField] private Transform ScrollContent;
     [SerializeField] private GameObject CardPrefab;
     [SerializeField] private GameObject QuantityPrefab;
@@ -22,7 +22,10 @@ public class DeckEditorManager : MonoBehaviour
     [SerializeField] private Transform EditingAreaPrefab;
     [SerializeField] private HighlightedDeckIdSO HighlightedDeckData;
     [SerializeField] private TextMeshProUGUI DeckName;
+
+    private Factions faction = 0;
     private List<CardSO> ListOfSelectedCards = new List<CardSO>();
+    private DeckData playerCurrentDeck = null;
     
     
 
@@ -43,25 +46,21 @@ public class DeckEditorManager : MonoBehaviour
     private void Start()
     {
         UpdateCardsList();
+        if(playerCurrentDeck != null) OnDeckLoad(playerCurrentDeck.CardList);
     }
 
     private void UpdateCardsList()
     {
         PlayerData playerData = AccountManager.Singleton.GetPlayerData();
         
-        DeckData playerCurrentDeck = new DeckData();
-
-        if (playerData.DeckCollection.Count < HighlightedDeckData.DeckId) playerCurrentDeck = playerData.DeckCollection[HighlightedDeckData.DeckId];
-        
-        
+        if (playerData.DeckCollection.Count >= HighlightedDeckData.DeckId) playerCurrentDeck = playerData.DeckCollection[HighlightedDeckData.DeckId];
         
         foreach (Transform child in ScrollContent)
         {
             Destroy(child.gameObject);
         }
 
-        List<string> filteredCardCollection = playerData.CardCollection;
-        
+        List<string> filteredCardCollection = new List<string>(playerData.CardCollection);
         foreach (var cardIdToRemove in playerCurrentDeck.CardList)
         {
             filteredCardCollection.Remove(cardIdToRemove);
@@ -99,7 +98,62 @@ public class DeckEditorManager : MonoBehaviour
                 cardButton.onClick.AddListener(() => AddToEditingArea(card));
             }
         }
+        
+        
     }
+    
+    private void UpdateCardsList(List<string> tempCardList)
+    {
+        PlayerData playerData = AccountManager.Singleton.GetPlayerData();
+        
+        foreach (Transform child in ScrollContent)
+        {
+            Destroy(child.gameObject);
+        }
+
+        List<string> filteredCardCollection = new List<string>(playerData.CardCollection);
+        
+        foreach (var cardIdToRemove in tempCardList)
+        {
+            filteredCardCollection.Remove(cardIdToRemove);
+        }
+        
+        Dictionary<string, int> cardCount = filteredCardCollection
+            .GroupBy(item => item)
+            .ToDictionary(g => g.Key, g => g.Count());
+
+        foreach (var kvp in cardCount)
+        {
+            CardSO card = CardDatabase.Singleton.GetCardSoOfId(kvp.Key);
+            if (card.GetType() == typeof(MythCardSO))
+            {
+                continue;
+            }
+
+            if (!FilterCard(card))
+            {
+                continue;
+            }
+            var cardInstance = Instantiate(CardPrefab, ScrollContent);
+            var cardUI = cardInstance.GetComponent<CardUI>();
+            cardUI.SetCardData(card);
+
+            var quantityInstace = Instantiate(QuantityPrefab, cardInstance.transform);
+            var quantityUI = quantityInstace.GetComponent<QuantityUI>();
+            quantityUI.SetQuantity(kvp.Value);
+
+            Button cardButton = cardInstance.GetComponent<Button>();
+
+            if (cardButton != null)
+            {
+                cardButton.onClick.RemoveAllListeners();
+                cardButton.onClick.AddListener(() => AddToEditingArea(card));
+            }
+        }
+        
+        
+    }
+    
 
     private void InitializeCardTypeMapping()
     {
@@ -169,6 +223,17 @@ public class DeckEditorManager : MonoBehaviour
         typeFilter[cardType] = !typeFilter[cardType];
         UpdateCardsList();
     }
+
+    private void OnDeckLoad(List<string> cardsToLoad)
+    {
+        DeckName.text = playerCurrentDeck.Name;
+        
+        foreach (var id in cardsToLoad)
+        {
+            CardSO card = CardDatabase.Singleton.GetCardSoOfId(id);
+            AddToEditingArea(card);
+        }
+    }
     
 
     private void AddToEditingArea(CardSO cardSO)
@@ -176,6 +241,7 @@ public class DeckEditorManager : MonoBehaviour
         Transform cardInstance = Instantiate(DeckCardTemplate, EditingAreaPrefab);
         cardInstance.gameObject.SetActive(true);
         ListOfSelectedCards.Add(cardSO);
+        UpdateCardsList(ListOfSelectedCards.Select(e => e.Id.ToString()).ToList());
         DeckCardUI deckCardUI = cardInstance.GetComponent<DeckCardUI>();
         deckCardUI.SetCardData(cardSO);
         
@@ -184,6 +250,8 @@ public class DeckEditorManager : MonoBehaviour
     public void RemoveFromEditingArea(CardSO cardToRemove)
     {
         ListOfSelectedCards.Remove(cardToRemove);
+        List<string> stringIdList = ListOfSelectedCards.Select(e => e.Id.ToString()).ToList();
+        UpdateCardsList(stringIdList);
     }
 
     public void SelectMyth()
