@@ -15,7 +15,10 @@ EditorBuildSettings:
     path: Assets/Scenes/DeckCosmeticsScene.unity
     guid: 96f5e4958559238429209c0fcef3774b
   - enabled: 1
-    path: Assets/Scenes/Deck Builder.unity
+    path: Assets/Scenes/DeckEditor.unity
+    guid: 32bad979643b06b4e850b94f263ddc0c
+  - enabled: 1
+    path: Assets/Scenes/DeckBuilder.unity
     guid: d461ccfdd7062a94f9de410b03529751
   - enabled: 1
     path: Assets/Scenes/Lobby.unity

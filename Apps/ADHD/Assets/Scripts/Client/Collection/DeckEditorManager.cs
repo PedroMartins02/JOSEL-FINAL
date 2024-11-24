@@ -13,7 +13,7 @@ using UnityEngine.UI;
 public class DeckEditorManager : MonoBehaviour
 {
     public static DeckEditorManager Instance { get; private set; } //not ideal, lol
-    private Factions faction = 0;
+    
     [SerializeField] private Transform ScrollContent;
     [SerializeField] private GameObject CardPrefab;
     [SerializeField] private GameObject QuantityPrefab;
@@ -22,6 +22,8 @@ public class DeckEditorManager : MonoBehaviour
     [SerializeField] private Transform EditingAreaPrefab;
     [SerializeField] private HighlightedDeckIdSO HighlightedDeckData;
     [SerializeField] private TextMeshProUGUI DeckName;
+
+    private Factions faction = 0;
     private List<CardSO> ListOfSelectedCards = new List<CardSO>();
     private DeckData playerCurrentDeck = null;
     

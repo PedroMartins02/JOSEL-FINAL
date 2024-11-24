@@ -88,7 +88,7 @@ public class DeckListsManager : MonoBehaviour
             return;
         }
 
-        Debug.Log($"Create new Deck, clicked on slot {slotIndex}"); //Adicionar aqui a call da scene do deck editor
+        SceneLoader.Load(SceneLoader.Scene.DeckEditor);
     }
 
     public void OnSelectClick()
