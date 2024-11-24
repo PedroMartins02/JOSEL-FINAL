@@ -1,4 +1,5 @@
 using GameModel;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -53,6 +54,7 @@ public class UI_CivButtonController : MonoBehaviour
     {
         civNameText.text = associatedFaction.ToString();
 
-
+        PlayerPrefs.SetInt("ChosenFaction", (int)associatedFaction);
+        PlayerPrefs.Save();
     }
 }

@@ -45,6 +45,11 @@ public class DeckEditorManager : MonoBehaviour
 
     private void Start()
     {
+        // Setting the faction
+        this.faction = (Factions)PlayerPrefs.GetInt("ChosenFaction", 0); // Default to 0 (Greek)
+        
+        Debug.Log("Chosen Faction: " + this.faction);
+
         UpdateCardsList();
         if(playerCurrentDeck != null) OnDeckLoad(playerCurrentDeck.CardList);
     }
