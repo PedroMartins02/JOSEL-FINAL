@@ -16,6 +16,7 @@ public class DeckEditorManager : MonoBehaviour
     
     [SerializeField] private Transform ScrollContent;
     [SerializeField] private GameObject CardPrefab;
+    [SerializeField] private GameObject MythPrefab;
     [SerializeField] private GameObject QuantityPrefab;
     [SerializeField] private Transform DeckCardTemplate;
     [SerializeField] private Transform MythListPrefab;
@@ -26,6 +27,7 @@ public class DeckEditorManager : MonoBehaviour
     private Factions faction = 0;
     private List<CardSO> ListOfSelectedCards = new List<CardSO>();
     private DeckData playerCurrentDeck = null;
+    private CardSO selectedMyth = null;
     
     
 
@@ -59,8 +61,13 @@ public class DeckEditorManager : MonoBehaviour
         PlayerData playerData = AccountManager.Singleton.GetPlayerData();
         
         if (playerData.DeckCollection.Count >= HighlightedDeckData.DeckId) playerCurrentDeck = playerData.DeckCollection[HighlightedDeckData.DeckId];
-        
+
         foreach (Transform child in ScrollContent)
+        {
+            Destroy(child.gameObject);
+        }
+        
+        foreach (Transform child in MythListPrefab)
         {
             Destroy(child.gameObject);
         }
@@ -80,7 +87,10 @@ public class DeckEditorManager : MonoBehaviour
             CardSO card = CardDatabase.Singleton.GetCardSoOfId(kvp.Key);
             if (card.GetType() == typeof(MythCardSO))
             {
-                continue;
+                var mythCardInstance = Instantiate(MythPrefab, MythListPrefab);
+                var mythCardUI = mythCardInstance.GetComponent<MythUI>();
+                selectedMyth = card;
+                mythCardUI.SetMythData((MythCardSO) card);
             }
 
             if (!FilterCard(card))
@@ -91,8 +101,8 @@ public class DeckEditorManager : MonoBehaviour
             var cardUI = cardInstance.GetComponent<CardUI>();
             cardUI.SetCardData(card);
 
-            var quantityInstace = Instantiate(QuantityPrefab, cardInstance.transform);
-            var quantityUI = quantityInstace.GetComponent<QuantityUI>();
+            var quantityInstance = Instantiate(QuantityPrefab, cardInstance.transform);
+            var quantityUI = quantityInstance.GetComponent<QuantityUI>();
             quantityUI.SetQuantity(kvp.Value);
 
             Button cardButton = cardInstance.GetComponent<Button>();
@@ -115,6 +125,11 @@ public class DeckEditorManager : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
+        
+        foreach (Transform child in MythListPrefab)
+        {
+            Destroy(child.gameObject);
+        }
 
         List<string> filteredCardCollection = new List<string>(playerData.CardCollection);
         
@@ -132,7 +147,16 @@ public class DeckEditorManager : MonoBehaviour
             CardSO card = CardDatabase.Singleton.GetCardSoOfId(kvp.Key);
             if (card.GetType() == typeof(MythCardSO))
             {
-                continue;
+                var mythCardInstance = Instantiate(MythPrefab, MythListPrefab);
+                var mythCardUI = mythCardInstance.GetComponent<CardUI>();
+                selectedMyth = card;
+                mythCardUI.SetCardData(card);
+                Button mythCardButton = mythCardInstance.GetComponent<Button>();
+                if (mythCardButton != null)
+                {
+                    mythCardButton.onClick.RemoveAllListeners();
+                    mythCardButton.onClick.AddListener(() => SelectMyth(card));
+                }
             }
 
             if (!FilterCard(card))
@@ -143,8 +167,8 @@ public class DeckEditorManager : MonoBehaviour
             var cardUI = cardInstance.GetComponent<CardUI>();
             cardUI.SetCardData(card);
 
-            var quantityInstace = Instantiate(QuantityPrefab, cardInstance.transform);
-            var quantityUI = quantityInstace.GetComponent<QuantityUI>();
+            var quantityInstance = Instantiate(QuantityPrefab, cardInstance.transform);
+            var quantityUI = quantityInstance.GetComponent<QuantityUI>();
             quantityUI.SetQuantity(kvp.Value);
 
             Button cardButton = cardInstance.GetComponent<Button>();
@@ -209,13 +233,13 @@ public class DeckEditorManager : MonoBehaviour
     public void ChangeFactionFilter(int faction)
     {
         factionsFilter[(Factions)faction] = !factionsFilter[(Factions)faction];
-        UpdateCardsList();
+        UpdateCardsList(ListOfSelectedCards.Select(e => e.Id).ToList());
     }
 
     public void ChangeBlessingsFilter(int blessings)
     {
         blessingsFilter[blessings] = !blessingsFilter[blessings];
-        UpdateCardsList();
+        UpdateCardsList(ListOfSelectedCards.Select(e => e.Id).ToList());
     }
 
     public void ChangeTypeFilter(int type)
@@ -226,7 +250,7 @@ public class DeckEditorManager : MonoBehaviour
             return;
         }
         typeFilter[cardType] = !typeFilter[cardType];
-        UpdateCardsList();
+        UpdateCardsList(ListOfSelectedCards.Select(e => e.Id).ToList());
     }
 
     private void OnDeckLoad(List<string> cardsToLoad)
@@ -259,14 +283,19 @@ public class DeckEditorManager : MonoBehaviour
         UpdateCardsList(stringIdList);
     }
 
-    public void SelectMyth()
+    public void SelectMyth(CardSO myth)
     {
-        //TODO
+        selectedMyth = myth;
     }
 
     public void SaveDeck()
     {
-        AccountManager.Singleton.AddDeckToPlayer(new DeckSO(DeckName.text,null,ListOfSelectedCards,0));
+        AccountManager.Singleton.AddDeckToPlayer(new DeckSO(DeckName.text,selectedMyth,ListOfSelectedCards,0));
+    }
+
+    public void BackButton()
+    {
+        SceneLoader.Load(SceneLoader.Scene.NavigationScene);
     }
     
 }
