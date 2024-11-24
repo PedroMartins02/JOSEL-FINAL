@@ -40,7 +40,10 @@ public class UI_DeckEditorController : MonoBehaviour
         foreach (Factions faction in Enum.GetValues(typeof(Factions)))
         {
             Transform civTransform = Instantiate(civButtonTemplate, civButtonContainer);
+
+            civTransform.gameObject.GetComponent<UI_CivButtonController>().SetCivData(faction);
             civTransform.gameObject.SetActive(true);
+
             childCount++;
         }
 
