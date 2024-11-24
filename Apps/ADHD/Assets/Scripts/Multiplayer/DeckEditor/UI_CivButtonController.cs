@@ -1,6 +1,7 @@
 using GameModel;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +15,11 @@ public class UI_CivButtonController : MonoBehaviour
 
     [Header("Image target")]
     [SerializeField] private Image buttonImage;
+
+    [Header("Content UI")]
+    [SerializeField] private TextMeshProUGUI civNameText;
+    [SerializeField] private TextMeshProUGUI civInfoText;
+
 
     private Factions associatedFaction;
 
@@ -41,5 +47,12 @@ public class UI_CivButtonController : MonoBehaviour
     public Factions GetCivData()
     {
         return this.associatedFaction;
+    }
+
+    public void CivButtonOnClick()
+    {
+        civNameText.text = associatedFaction.ToString();
+
+
     }
 }
