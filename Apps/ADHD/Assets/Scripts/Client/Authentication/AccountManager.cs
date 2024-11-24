@@ -133,8 +133,23 @@ public class AccountManager : MonoBehaviour
         playerData.SelectedDeckId = 0;
     }
 
-    public void AddDeckToPlayer(DeckSO newDeck)
+    public void AddDeckToPlayer(int DeckSlotID, DeckSO newDeck)
     {
+        if(playerData.DeckCollection[DeckSlotID] != null)
+        {
+            EditExistingDeck(DeckSlotID, newDeck);
+            return;
+        }
         playerData.DeckCollection.Add(new DeckData(newDeck));
+    }
+
+    public void EditExistingDeck(int id, DeckSO deckToEdit)
+    {
+        playerData.DeckCollection[id] = new DeckData(deckToEdit);
+    }
+
+    public void DeleteDeck(DeckSO deckToDelete)
+    {
+        playerData.DeckCollection.Remove(new DeckData(deckToDelete));
     }
 }

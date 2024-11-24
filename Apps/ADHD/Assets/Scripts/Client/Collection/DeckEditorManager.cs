@@ -49,7 +49,7 @@ public class DeckEditorManager : MonoBehaviour
     {
         // Setting the faction
         this.faction = (Factions)PlayerPrefs.GetInt("ChosenFaction", 0); // Default to 0 (Greek)
-        
+        //ChangeFactionFilter(PlayerPrefs.GetInt("ChosenFaction", 0));
         Debug.Log("Chosen Faction: " + this.faction);
 
         UpdateCardsList();
@@ -85,12 +85,27 @@ public class DeckEditorManager : MonoBehaviour
         foreach (var kvp in cardCount)
         {
             CardSO card = CardDatabase.Singleton.GetCardSoOfId(kvp.Key);
+
+            if (card.Faction != faction)
+            {
+                continue;
+            }
+            
             if (card.GetType() == typeof(MythCardSO))
             {
                 var mythCardInstance = Instantiate(MythPrefab, MythListPrefab);
                 var mythCardUI = mythCardInstance.GetComponent<MythUI>();
                 selectedMyth = card;
                 mythCardUI.SetMythData((MythCardSO) card);
+                Transform selected = mythCardUI.transform.Find("Selected");
+                selected.gameObject.SetActive(false);
+                Button mythCardButton = mythCardInstance.GetComponent<Button>();
+                if (mythCardButton != null)
+                {
+                    mythCardButton.onClick.RemoveAllListeners();
+                    mythCardButton.onClick.AddListener(() => SelectMyth(mythCardInstance, card));
+                }
+                continue;
             }
 
             if (!FilterCard(card))
@@ -148,15 +163,18 @@ public class DeckEditorManager : MonoBehaviour
             if (card.GetType() == typeof(MythCardSO))
             {
                 var mythCardInstance = Instantiate(MythPrefab, MythListPrefab);
-                var mythCardUI = mythCardInstance.GetComponent<CardUI>();
+                var mythCardUI = mythCardInstance.GetComponent<MythUI>();
                 selectedMyth = card;
-                mythCardUI.SetCardData(card);
+                mythCardUI.SetMythData((MythCardSO)card);
+                Transform selected = mythCardUI.transform.Find("Selected");
+                selected.gameObject.SetActive(false);
                 Button mythCardButton = mythCardInstance.GetComponent<Button>();
                 if (mythCardButton != null)
                 {
                     mythCardButton.onClick.RemoveAllListeners();
-                    mythCardButton.onClick.AddListener(() => SelectMyth(card));
+                    mythCardButton.onClick.AddListener(() => SelectMyth(mythCardInstance, card));
                 }
+                continue;
             }
 
             if (!FilterCard(card))
@@ -283,14 +301,18 @@ public class DeckEditorManager : MonoBehaviour
         UpdateCardsList(stringIdList);
     }
 
-    public void SelectMyth(CardSO myth)
+    public void SelectMyth(GameObject mythCardUI, CardSO myth)
     {
         selectedMyth = myth;
+        Transform selected = mythCardUI.transform.Find("Selected");
+        selected.gameObject.SetActive(true);
+
     }
 
     public void SaveDeck()
     {
-        AccountManager.Singleton.AddDeckToPlayer(new DeckSO(DeckName.text,selectedMyth,ListOfSelectedCards,0));
+        AccountManager.Singleton.AddDeckToPlayer(HighlightedDeckData.DeckId,new DeckSO(DeckName.text,selectedMyth,ListOfSelectedCards,0));
+        BackButton();
     }
 
     public void BackButton()
