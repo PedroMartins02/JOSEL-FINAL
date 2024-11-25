@@ -37,13 +37,25 @@ public class UI_DeckEditorController : MonoBehaviour
     private void InstantiateCivButtons()
     {
         int childCount = 0;
+        bool firstChild = true;
         foreach (Factions faction in Enum.GetValues(typeof(Factions)))
         {
             Transform civTransform = Instantiate(civButtonTemplate, civButtonContainer);
+
+            civTransform.gameObject.GetComponent<UI_CivButtonController>().SetCivData(faction);
             civTransform.gameObject.SetActive(true);
+
             childCount++;
+
+            // Set the default civ
+            if (firstChild)
+            {
+                civTransform.gameObject.GetComponent<UI_CivButtonController>().CivButtonOnClick();
+                firstChild = false;
+            }
         }
 
+        // Set the size for the mister civilizations scroll (goofy ahh)
         RectTransform contentRect = civButtonContainer.GetComponent<RectTransform>();
         float totalWidth = 250 * childCount + 25 * (childCount - 1);
         contentRect.sizeDelta = new Vector2(totalWidth, contentRect.sizeDelta.y);
