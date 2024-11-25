@@ -1,5 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Game.Data;
+using Game.Logic;
+using GameCore.Events;
+using Unity.Collections.LowLevel.Unsafe;
 using UnityEditor;
 using UnityEngine;
 
@@ -9,8 +14,9 @@ namespace GameModel
     {
         public string Name { get; private set; }
         public Card Myth { get; private set; }
-        public List<Card> Cards { get; private set; }
         public Factions Faction { get; private set; }
+
+        private Stack<ICard> cards;
 
         public Deck(DeckSO deckSO)
         {
@@ -18,28 +24,55 @@ namespace GameModel
             //this.Myth = new MythCard(deckSO.Myth);
             this.Faction = deckSO.Faction;
 
-            this.Cards = new List<Card>();
+            this.cards = new();
 
             InitializeCards(deckSO.Cards);
+            Shuffle();
         }
 
         private void InitializeCards(List<CardSO> cardSOList)
         {
-            foreach (object cardSO in cardSOList)
+            foreach (CardSO cardSO in cardSOList)
             {
                 if (cardSO.GetType() == typeof(UnitCardSO))
                 {
-                    Cards.Add(new UnitCard((UnitCardSO)cardSO));
+                    cards.Push(new UnitCard((UnitCardData)cardSO.CardData));
                 }
                 else if (cardSO.GetType() == typeof(LegendCardSO))
                 {
-                    Cards.Add(new LegendCard((LegendCardSO)cardSO));
+                    cards.Push(new LegendCard((LegendCardData)cardSO.CardData));
                 }
                 else if (cardSO.GetType() == typeof(BattleTacticCardSO))
                 {
-                    Cards.Add(new BattleTacticCard((BattleTacticCardSO)cardSO));
+                    cards.Push(new BattleTacticCard((BattleTacticCardData)cardSO.CardData));
                 }
             }
         }
+
+        public void Shuffle()
+        {
+            var cardList = cards.ToList();
+            var random = new System.Random();
+
+            cardList = cardList.OrderBy(c => random.Next()).ToList();
+
+            cards = new Stack<ICard>(cardList);
+        }
+
+        public ICard DrawCard()
+        {
+            if (cards.Count > 0)
+            {
+                ICard card = cards.Pop();
+                EventManager.TriggerEvent(GameEventsEnum.CardDrawn, card);
+
+                return card;
+            }
+
+            EventManager.TriggerEvent(GameEventsEnum.DeckExhausted);
+            return null;
+        }
+
+        public int CardsRemaining => cards.Count;
     }
 }
