@@ -66,7 +66,6 @@ public class CardsPageManager : MonoBehaviour
 
     public void ConfirmPurchaseHandler(int price, Factions? civilization)
     {
-        Debug.Log($"Purchasing a {(civilization == null ? "Random" : civilization.ToString())} pack for {price} tokens");
         if (CurrencyManager.SpendCurrency(price))
         {
             List<CardSO> packContents = CardDatabase.Singleton.GetPackContents(civilization);

@@ -151,7 +151,7 @@ public abstract class HorizontalCardHolder : MonoBehaviour
         card.EndDragEvent.RemoveListener(EndDrag);
 
         cards.Remove(card);
-        card.cardVisual.UpdateIndex(transform.childCount);
+        UpdateIndexes();
     }
 
     public void AddCard(GameCard card)
@@ -162,10 +162,10 @@ public abstract class HorizontalCardHolder : MonoBehaviour
         card.EndDragEvent.AddListener(EndDrag);
 
         cards.Add(card);
-        card.cardVisual.UpdateIndex(transform.childCount);
+        UpdateIndexes();
     }
 
-    public void SpawnCard(CardSO cardSO)
+    public void SpawnCard(CardSO? cardSO)
     {
         GameObject cardSlot = Instantiate(slotPrefab, transform);
 
@@ -186,13 +186,22 @@ public abstract class HorizontalCardHolder : MonoBehaviour
         IEnumerator Frame()
         {
             yield return new WaitForSecondsRealtime(.1f);
-            if (card.cardVisual != null)
-                card.cardVisual.UpdateIndex(transform.childCount);
 
             cards.Add(card);
-            card.cardVisual.UpdateIndex(transform.childCount);
+            UpdateIndexes();
 
-            card.SetCardData(cardSO);
+            if (cardSO != null)
+            {
+                card.SetCardData(cardSO);
+            }
+        }
+    }
+
+    public void UpdateIndexes()
+    {
+        for (int i = 0; i < cards.Count(); i++)
+        {
+            cards[i].cardVisual.UpdateIndex(i);
         }
     }
 }

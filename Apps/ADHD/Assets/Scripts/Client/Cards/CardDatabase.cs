@@ -77,7 +77,11 @@ public class CardDatabase : MonoBehaviour
     public CardSO GetRandomCard()
     {
         System.Random random = new System.Random();
-        return CardDictionary.Values.ElementAt(random.Next(CardDictionary.Count()));
+        var eligibleCards = CardDictionary.Values
+        .Where(card => card.GetType() != typeof(MythCardSO))
+        .ToList();
+
+        return eligibleCards[random.Next(eligibleCards.Count)];
     }
 
     //this is horrible, but for the scope of the project, i dont care too much : )

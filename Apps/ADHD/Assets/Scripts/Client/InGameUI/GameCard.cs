@@ -329,21 +329,78 @@ public class GameCard : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDrag
         }
     }
 
-    private void PlayCard(GameObject playerBoardArea)
+    private void PlayCardEffect(bool isToDestroy)
     {
-        // TRY PLAY CARD 
-        // if can't play card, don't run the code below
+        Transform effectSlot = GameObject.FindWithTag("CardEffect").transform;
+        if (effectSlot != null)
+        {
+            if (cardVisual != null && cardVisual.cardFront != null)
+            {
+                GameObject cardFront = Instantiate(cardVisual.cardFront, effectSlot);
+                cardFront.transform.DOScale(2, 0);
 
+                StartCoroutine(WaitSeconds(1f, cardFront));
+            }
+        }
+
+        if (isToDestroy)
+        {
+            HorizontalCardHolder horizontalCardHolder = GetComponentInParent<HorizontalCardHolder>();
+            horizontalCardHolder.RemoveCard(this);
+            cardVisual.gameObject.SetActive(false);
+        }
+
+
+        IEnumerator WaitSeconds(float seconds, GameObject cardFront)
+        {
+            yield return new WaitForSecondsRealtime(seconds); 
+            if (effectSlot != null)
+            {
+                Destroy(cardFront);
+            }
+
+            if (isToDestroy)
+            {
+                Destroy(transform.parent.gameObject);
+            }
+        }
+    }
+
+    private void PlayCardOnBoard(GameObject playerBoardArea)
+    {
         HorizontalCardHolder horizontalCardHolder = GetComponentInParent<HorizontalCardHolder>();
         horizontalCardHolder.RemoveCard(this);
+        horizontalCardHolder.UpdateIndexes();
 
         RectTransform cardSlotTransform = cardTransform.parent as RectTransform;
         cardSlotTransform.SetParent(playerBoardArea.transform);
 
         horizontalCardHolder = GetComponentInParent<HorizontalCardHolder>();
         horizontalCardHolder.AddCard(this);
-
+        horizontalCardHolder.UpdateIndexes();
         isInHand = false;
+    }
+
+    private void PlayCard(GameObject playerBoardArea)
+    {
+        if (cardData.GetType() == typeof(BattleTacticCard))
+        {
+            //TRY PLAY BATTLE TACTIC
+            // if can't play card, don't run the code below
+            PlayCardEffect(true);
+        } 
+        else if (cardData.GetType() == typeof(UnitCard))
+        {
+            // TRY PLAY CARD 
+            // if can't play card, don't run the code below
+            PlayCardOnBoard(playerBoardArea);
+        } else if (cardData.GetType() == typeof(LegendCard))
+        {
+            // TRY PLAY CARD 
+            // if can't play card, don't run the code below
+            PlayCardOnBoard(playerBoardArea);
+            PlayCardEffect(false);
+        }
     }
 
     private void AttackCard(GameObject targetCard)
