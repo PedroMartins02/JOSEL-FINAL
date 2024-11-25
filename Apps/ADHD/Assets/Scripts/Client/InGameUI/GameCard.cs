@@ -7,7 +7,10 @@ using UnityEngine.UI;
 using GameModel;
 using System;
 using DG.Tweening;
+using Game.Data;
 using Unity.VisualScripting;
+using Game.Logic.Actions;
+using Game.Logic;
 
 public class GameCard : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
 {
@@ -85,6 +88,14 @@ public class GameCard : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDrag
         cardVisual.SetCardData(cardSO);
     }
 
+    public void SetCardData(ICard card)
+    {
+        cardData = card as Card;
+
+        CardSO cardSO = CardDatabase.Singleton.GetCardSoOfId(card.Data.Id);
+        cardVisual.SetCardData(cardSO);
+    }
+
     public void UpdateCardData(Card card)
     {
         cardData = card;
@@ -97,15 +108,15 @@ public class GameCard : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDrag
         Type cardSOType = cardSO.GetType();
         if (cardSOType == typeof(UnitCardSO))
         {
-            return new UnitCard((UnitCardSO)cardSO);
+            return new UnitCard((UnitCardData)cardSO.CardData);
         }
         else if (cardSOType == typeof(BattleTacticCardSO))
         {
-            return new BattleTacticCard((BattleTacticCardSO)cardSO);
+            return new BattleTacticCard((BattleTacticCardData)cardSO.CardData);
         } 
         else if (cardSOType == typeof (LegendCardSO))
         {
-            return new LegendCard((LegendCardSO)cardSO);
+            return new LegendCard((LegendCardData)cardSO.CardData);
         }
         return null;
     }
@@ -368,6 +379,9 @@ public class GameCard : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDrag
 
     private void PlayCardOnBoard(GameObject playerBoardArea)
     {
+        PlayCardAction action = new(cardData);
+        ActionQueueManager.Instance.AddAction(action);
+
         HorizontalCardHolder horizontalCardHolder = GetComponentInParent<HorizontalCardHolder>();
         horizontalCardHolder.RemoveCard(this);
         horizontalCardHolder.UpdateIndexes();
@@ -406,6 +420,19 @@ public class GameCard : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDrag
     private void AttackCard(GameObject targetCard)
     {
         // TRY ATTACK CARD
+
+        targetCard.TryGetComponent(out GameCard target);
+
+        try
+        {
+            AttackCardAction action = new(cardData, target.cardData);
+
+            ActionQueueManager.Instance.AddAction(action);
+        }
+        catch (Exception e)
+        {
+            Debug.LogException(e);
+        }
     }
 
     private void AttackOpponent(GameObject targetOpponent)

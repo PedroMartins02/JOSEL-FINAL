@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Game.Data;
 
 public class CardDatabase : MonoBehaviour
 {
@@ -51,10 +52,10 @@ public class CardDatabase : MonoBehaviour
     private delegate Card CardConstructor(CardSO cardSO);
     private static readonly Dictionary<Type, CardConstructor> cardConstructors = new Dictionary<Type, CardConstructor>
     {
-        { typeof(UnitCardSO), cardSO => new UnitCard((UnitCardSO)cardSO) },
-        { typeof(BattleTacticCardSO), cardSO => new BattleTacticCard((BattleTacticCardSO)cardSO) },
-        { typeof(LegendCardSO), cardSO => new LegendCard((LegendCardSO)cardSO) },
-        { typeof(MythCardSO), cardSO => new MythCard((MythCardSO)cardSO) }
+        { typeof(UnitCardSO), cardSO => new UnitCard((UnitCardData)cardSO.CardData) },
+        { typeof(BattleTacticCardSO), cardSO => new BattleTacticCard((BattleTacticCardData)cardSO.CardData) },
+        { typeof(LegendCardSO), cardSO => new LegendCard((LegendCardData)cardSO.CardData) },
+        { typeof(MythCardSO), cardSO => new MythCard(cardSO.CardData) }
     };
 
     public Card GetCardOfId(string cardId)

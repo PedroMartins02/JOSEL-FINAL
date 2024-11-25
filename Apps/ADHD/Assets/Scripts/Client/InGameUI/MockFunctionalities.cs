@@ -1,3 +1,5 @@
+using Game.Logic.Actions;
+using GameCore.Events;
 using GameModel;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,20 +10,32 @@ public class MockFunctionalities : MonoBehaviour
     [SerializeField] HorizontalCardHolder cardHolder;
     [SerializeField] PlayerInfo playerInfo;
 
+    [SerializeField] DeckSO deckSO;
+    [SerializeField] bool IsMine;
+
+    private Deck deck;
+    private Hand hand;
+
     private void Start()
     {
+        deck = new(deckSO);
+        hand = new(5);
     }
 
     public void DrawCardMock(string cardSOId)
     {
         CardSO cardSO = CardDatabase.Singleton.GetCardSoOfId(cardSOId);
+
         cardHolder.SpawnCard(cardSO);
     }
 
     public void DrawCardMock()
     {
-        CardSO cardSO = CardDatabase.Singleton.GetRandomCard();
-        cardHolder.SpawnCard(cardSO);
+        EventManager.Subscribe(GameEventsEnum.CardAddedToHand, SpawnCard);
+
+        DrawCardAction action = new(deck, hand, IsMine);
+
+        ActionQueueManager.Instance.AddAction(action);
     }
 
     public void SetPlayerMyth(string mythId)
@@ -38,5 +52,15 @@ public class MockFunctionalities : MonoBehaviour
     public void SetPlayerBlessings(int n)
     {
         playerInfo.SetBlessings(n);
+    }
+
+    private void SpawnCard(object obj) 
+    {
+        EventManager.Unsubscribe(GameEventsEnum.CardAddedToHand, SpawnCard);
+
+        if (obj is CardAddedToHandEventArgs args) 
+        {
+            cardHolder.SpawnCard(args.Card, args.IsMine);
+        }
     }
 }

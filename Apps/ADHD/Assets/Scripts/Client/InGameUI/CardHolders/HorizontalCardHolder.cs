@@ -4,6 +4,8 @@ using UnityEngine;
 using DG.Tweening;
 using System.Linq;
 using GameModel;
+using Game.Data;
+using Game.Logic;
 
 public abstract class HorizontalCardHolder : MonoBehaviour
 {
@@ -56,6 +58,8 @@ public abstract class HorizontalCardHolder : MonoBehaviour
                     cards[i].cardVisual.UpdateIndex(transform.childCount);
             }
         }
+
+
     }
 
     protected virtual void BeginDrag(GameCard card)
@@ -202,6 +206,40 @@ public abstract class HorizontalCardHolder : MonoBehaviour
         for (int i = 0; i < cards.Count(); i++)
         {
             cards[i].cardVisual.UpdateIndex(i);
+        }
+    }
+
+    public void SpawnCard(ICard cardToSpawn, bool spawnCard)
+    {
+        if (spawnCard != isMine)
+            return;
+
+        GameObject cardSlot = Instantiate(slotPrefab, transform);
+
+        GameCard card = cardSlot.GetComponentInChildren<GameCard>();
+
+        card.PointerEnterEvent.AddListener(CardPointerEnter);
+        card.PointerExitEvent.AddListener(CardPointerExit);
+        card.BeginDragEvent.AddListener(BeginDrag);
+        card.EndDragEvent.AddListener(EndDrag);
+
+        card.name = cardToSpawn.Data.Id;
+        card.isMine = isMine;
+        card.isInHand = true;
+        card.gameObject.tag = isMine ? "MyCard" : "OpponentCard";
+
+        StartCoroutine(Frame());
+
+        IEnumerator Frame()
+        {
+            yield return new WaitForSecondsRealtime(.1f);
+            if (card.cardVisual != null)
+                card.cardVisual.UpdateIndex(transform.childCount);
+
+            cards.Add(card);
+            card.cardVisual.UpdateIndex(transform.childCount);
+
+            card.SetCardData(cardToSpawn);
         }
     }
 }

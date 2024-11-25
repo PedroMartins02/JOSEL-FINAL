@@ -104,8 +104,8 @@ public class CardUI : MonoBehaviour
     private void SetUnitCardUI(UnitCard card)
     {
         CardFrame.sprite = UnitFrame;
-        AttackText.text = card.Attack.ToString();
-        HealthText.text = card.Health.ToString();
+        AttackText.text = card.CurrentAttack.ToString();
+        HealthText.text = card.CurrentHealth.ToString();
     }
 
     private void SetBattleTacticCardUI(BattleTacticCardSO card)
@@ -135,8 +135,8 @@ public class CardUI : MonoBehaviour
     private void SetLegendCardUI(LegendCard card)
     {
         CardFrame.sprite = LegendFrame;
-        AttackText.text = card.Attack.ToString();
-        HealthText.text = card.Health.ToString();
+        AttackText.text = card.CurrentAttack.ToString();
+        HealthText.text = card.CurrentHealth.ToString();
         //Effects
     }
 }
