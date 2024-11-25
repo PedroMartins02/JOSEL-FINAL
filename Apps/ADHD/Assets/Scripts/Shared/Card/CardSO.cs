@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Game.Data;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -10,6 +11,8 @@ namespace GameModel
 {
     public class CardSO : ScriptableObject
     {
+        public virtual CardData CardData { get; }
+
         [Header("Card ID")]
         public string Id;
 
