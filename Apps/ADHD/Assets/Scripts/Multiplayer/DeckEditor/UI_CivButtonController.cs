@@ -55,6 +55,7 @@ public class UI_CivButtonController : MonoBehaviour
     {
         civNameText.text = associatedFaction.ToString();
 
+        PlayerPrefs.SetInt("isNewDeck", 1);
         PlayerPrefs.SetInt("ChosenFaction", (int)associatedFaction);
         PlayerPrefs.Save();
     }

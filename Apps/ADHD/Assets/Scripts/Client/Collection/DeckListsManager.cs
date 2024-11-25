@@ -80,14 +80,25 @@ public class DeckListsManager : MonoBehaviour
     {
         PlayerData playerData = AccountManager.Singleton.GetPlayerData();
         List<DeckData> deckLists = playerData.DeckCollection;
+                
         if (deckLists.Count > slotIndex)
         {
             HighlightedDeckData.DeckId = slotIndex;
             ShowPopUp(OptionsPopUp);
             Debug.Log($"Selected Deck {slotIndex}");
+
+            // Keep the selected deck name and select code
+            PlayerPrefs.SetInt("isNewDeck", 1);
+            PlayerPrefs.SetInt("SlotIndex", slotIndex);
+            PlayerPrefs.SetString("ChosenDeckName", deckLists[slotIndex].Name);
+            PlayerPrefs.Save();
+
             return;
         }
 
+        PlayerPrefs.SetInt("isNewDeck", 0);
+        PlayerPrefs.SetInt("SlotIndex", slotIndex);
+        PlayerPrefs.Save();
         SceneLoader.Load(SceneLoader.Scene.DeckEditor);
     }
 

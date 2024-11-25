@@ -73,7 +73,7 @@ public class DeckCosmeticsManager : MonoBehaviour
     public void OnBackClick()
     {
         SaveSelection();
-        SceneManager.LoadScene("NavigationScene");
+        SceneLoader.ExitNetworkLoad(SceneLoader.Scene.NavigationScene);
     }
 
     private void SaveSelection()

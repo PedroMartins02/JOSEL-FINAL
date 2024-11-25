@@ -32,8 +32,10 @@ public class DeckEditorManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI DeckName;
 
     private Factions faction;
+    private DeckData playerCurrentDeck;
+    private int slotIndex;
+
     private List<CardSO> ListOfSelectedCards = new List<CardSO>();
-    private DeckData playerCurrentDeck = null;
     private CardSO selectedMyth = null;
     
     
@@ -58,13 +60,35 @@ public class DeckEditorManager : MonoBehaviour
 
     private void Start()
     {
-        // Setting the faction
+        // Get the faction adn the deck
         this.faction = (Factions)PlayerPrefs.GetInt("ChosenFaction", 0); // Default to 0 (Greek)
+
+        // Verify if its creating a new deck (value = 0) or not (value = 1)
+        List<DeckData> playerDeckData = AccountManager.Singleton.GetPlayerData().DeckCollection;
         
+        if (PlayerPrefs.GetInt("isNewDeck", 0) == 1)
+        {
+            foreach (DeckData deck in playerDeckData)
+            {
+                if (deck.Name.Equals(PlayerPrefs.GetString("ChosenDeckName", null)))
+                {
+                    this.playerCurrentDeck = deck;
+                    OnDeckLoad(deck);
+                }
+            }
+        } else
+        {
+            DeckData newDeck = new DeckData(); ;
+            this.playerCurrentDeck = newDeck;
+            OnDeckLoad(newDeck);
+        }
+
+        // Set the slot index that was click in the menu
+        this.slotIndex = PlayerPrefs.GetInt("SlotIndex", 0);
+
+
         // Change Faction for the deck
         ChangeFactionFilter((int)this.faction);
-
-        if(playerCurrentDeck != null) OnDeckLoad(playerCurrentDeck.CardList);
     }
     
     private void UpdateCardsList(List<string> tempCardList)
@@ -221,7 +245,7 @@ public class DeckEditorManager : MonoBehaviour
     public void ChangeFactionFilter(int faction)
     {
         factionsFilter[(Factions)faction] = !factionsFilter[(Factions)faction];
-        UpdateCardsList(new List<string>());
+        UpdateCardsList(ListOfSelectedCards.Select(e => e.Id).ToList());
     }
 
     public void ChangeBlessingsFilter(int blessings)
@@ -241,14 +265,15 @@ public class DeckEditorManager : MonoBehaviour
         UpdateCardsList(ListOfSelectedCards.Select(e => e.Id).ToList());
     }
 
-    private void OnDeckLoad(List<string> cardsToLoad)
+    private void OnDeckLoad(DeckData deck)
     {
-        DeckName.text = playerCurrentDeck.Name;
+        DeckName.text = deck.Name;
         
-        foreach (var id in cardsToLoad)
+        foreach (var id in deck.CardList)
         {
             CardSO card = CardDatabase.Singleton.GetCardSoOfId(id);
             AddToEditingArea(card);
+            ListOfSelectedCards.Add(card);
         }
     }
     
@@ -285,7 +310,7 @@ public class DeckEditorManager : MonoBehaviour
 
     public void SaveDeck()
     {
-        AccountManager.Singleton.AddDeckToPlayer(HighlightedDeckData.DeckId,new DeckSO(DeckName.text,selectedMyth,ListOfSelectedCards,0));
+        AccountManager.Singleton.AddDeckToPlayer(this.slotIndex, new DeckSO(DeckName.text,selectedMyth,ListOfSelectedCards,this.faction));
         BackButton();
     }
 
