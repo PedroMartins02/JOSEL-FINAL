@@ -29,10 +29,11 @@ public class DeckEditorManager : MonoBehaviour
     [Header("Other")]
     [SerializeField] private GameObject QuantityPrefab;
     [SerializeField] private HighlightedDeckIdSO HighlightedDeckData;
-    [SerializeField] private TextMeshProUGUI DeckName;
+    [SerializeField] private TMP_InputField deckNameInput;
 
     private Factions faction;
     private DeckData playerCurrentDeck;
+    private string deckName;
     private int slotIndex;
 
     private List<CardSO> ListOfSelectedCards = new List<CardSO>();
@@ -60,32 +61,37 @@ public class DeckEditorManager : MonoBehaviour
 
     private void Start()
     {
-        // Get the faction adn the deck
-        this.faction = (Factions)PlayerPrefs.GetInt("ChosenFaction", 0); // Default to 0 (Greek)
-
         // Verify if its creating a new deck (value = 0) or not (value = 1)
         List<DeckData> playerDeckData = AccountManager.Singleton.GetPlayerData().DeckCollection;
         
         if (PlayerPrefs.GetInt("isNewDeck", 0) == 1)
         {
+            // Get the faction and the deck
             foreach (DeckData deck in playerDeckData)
             {
                 if (deck.Name.Equals(PlayerPrefs.GetString("ChosenDeckName", null)))
                 {
+                    CardSO firstCard = CardDatabase.Singleton.GetCardSoOfId(deck.CardList[1]);
+                    this.faction = firstCard.Faction;
+
                     this.playerCurrentDeck = deck;
                     OnDeckLoad(deck);
                 }
             }
         } else
         {
+            this.faction = (Factions)PlayerPrefs.GetInt("ChosenFaction", 0); // Default to 0 (Greek)
+
             DeckData newDeck = new DeckData(); ;
             this.playerCurrentDeck = newDeck;
             OnDeckLoad(newDeck);
         }
 
+        Debug.Log("FACTION DETECTED: " + faction);
+
         // Set the slot index that was click in the menu
         this.slotIndex = PlayerPrefs.GetInt("SlotIndex", 0);
-
+        Debug.Log("SLOT DETECTED: " + slotIndex);
 
         // Change Faction for the deck
         ChangeFactionFilter((int)this.faction);
@@ -216,7 +222,7 @@ public class DeckEditorManager : MonoBehaviour
         factionsFilter = new Dictionary<Factions, bool>();
         foreach (Factions faction in Enum.GetValues(typeof(Factions)))
         {
-            factionsFilter.Add(faction, true);
+            factionsFilter.Add(faction, false);
         }
 
         blessingsFilter = new Dictionary<int, bool>();
@@ -269,13 +275,12 @@ public class DeckEditorManager : MonoBehaviour
 
     private void OnDeckLoad(DeckData deck)
     {
-        DeckName.text = deck.Name;
+        deckNameInput.text = deck.Name;
         
         foreach (var id in deck.CardList)
         {
             CardSO card = CardDatabase.Singleton.GetCardSoOfId(id);
             AddToEditingArea(card);
-            ListOfSelectedCards.Add(card);
         }
     }
     
@@ -313,7 +318,8 @@ public class DeckEditorManager : MonoBehaviour
 
     public void SaveDeck()
     {
-        AccountManager.Singleton.AddDeckToPlayer(this.slotIndex, new DeckSO(DeckName.text,selectedMyth,ListOfSelectedCards,this.faction));
+        this.deckName = deckNameInput.text.IsEmpty() ? "New Deck" : deckNameInput.text;
+        AccountManager.Singleton.AddDeckToPlayer(this.slotIndex, new DeckSO(deckName,selectedMyth,ListOfSelectedCards,this.faction));
         BackButton();
     }
 

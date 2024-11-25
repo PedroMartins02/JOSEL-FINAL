@@ -133,11 +133,14 @@ public class AccountManager : MonoBehaviour
         playerData.SelectedDeckId = 0;
     }
 
-    public void AddDeckToPlayer(int DeckSlotID, DeckSO newDeck)
+    public void AddDeckToPlayer(int DeckSlotIndex, DeckSO newDeck)
     {
-        if(playerData.DeckCollection[DeckSlotID] != null)
+        Debug.Log("colection size = " + playerData.DeckCollection.Count);
+        Debug.Log("slot índex = " + DeckSlotIndex);
+        if (playerData.DeckCollection.Count > DeckSlotIndex)
         {
-            EditExistingDeck(DeckSlotID, newDeck);
+            Debug.Log("save edit reached");
+            EditExistingDeck(DeckSlotIndex, newDeck);
             return;
         }
         playerData.DeckCollection.Add(new DeckData(newDeck));
