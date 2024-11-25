@@ -44,6 +44,7 @@ public abstract class HorizontalCardHolder : MonoBehaviour
             card.EndDragEvent.AddListener(EndDrag);
             card.name = cardCount.ToString();
             card.isMine = isMine;
+            card.isInHand = GetType() == typeof(HandCardHolder);
             card.gameObject.tag = isMine ? "MyCard" : "OpponentCard";
             cardCount++;
         }
