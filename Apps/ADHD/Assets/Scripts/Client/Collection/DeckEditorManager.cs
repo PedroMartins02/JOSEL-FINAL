@@ -86,7 +86,7 @@ public class DeckEditorManager : MonoBehaviour
         }
 
         // We need to remove certain cards from the list of the player's collection if they are already selected
-        List<string> filteredCardCollection = playerData.CardCollection;
+        List<string> filteredCardCollection = new List<string>(playerData.CardCollection);
 
         foreach (var cardIdToRemove in tempCardList)
         {
