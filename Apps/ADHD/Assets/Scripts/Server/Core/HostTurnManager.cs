@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using GameCore.Events;
 using GameModel;
 
 namespace GameCore
@@ -19,24 +20,18 @@ namespace GameCore
 
         public void StartTurn() 
         {
-            if (_currentPlayerIdx == 0)
-                EventManager.TriggerEvent("RoundStart", null);
-
             Player currentPlayer = _players[_currentPlayerIdx];
 
-            EventManager.TriggerEvent("TurnStart", currentPlayer);
+            EventManager.TriggerEvent(GameEventsEnum.TurnStarted, currentPlayer);
         }
 
         public void EndTurn() 
         {
             Player currentPlayer = _players[_currentPlayerIdx];
 
-            EventManager.TriggerEvent("TurnEnd", currentPlayer);
+            EventManager.TriggerEvent(GameEventsEnum.TurnEnded, currentPlayer);
 
             _currentPlayerIdx = (_currentPlayerIdx + 1) % _players.Count;
-
-            if (_currentPlayerIdx == 0)
-                EventManager.TriggerEvent("RoundEnd", null);
 
             StartTurn();
         }
