@@ -350,7 +350,6 @@ public class GameCard : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDrag
             cardVisual.gameObject.SetActive(false);
         }
 
-
         IEnumerator WaitSeconds(float seconds, GameObject cardFront)
         {
             yield return new WaitForSecondsRealtime(seconds); 
