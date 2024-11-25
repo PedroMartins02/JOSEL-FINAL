@@ -181,14 +181,16 @@ public class DeckEditorManager : MonoBehaviour
         
         // Lastly, we need to resize the containers for the scroll to work (rafa bad kittie)
         // Set the size for the myth scroll (goofy ahh math version)
-        RectTransform mythRect = mythContainer.GetComponent<RectTransform>();
-        float mythTotalHeight = mythRect.rect.height * mythCardsCount + 60 * (mythCardsCount - 1);
-        mythRect.sizeDelta = new Vector2(mythRect.sizeDelta.x, mythTotalHeight);
+        RectTransform mythContRect = mythContainer.GetComponent<RectTransform>();
+        RectTransform mythTemplateRect = mythTemplate.GetComponent<RectTransform>();
+        float mythTotalHeight = mythTemplateRect.rect.height * mythCardsCount + 60 * (mythCardsCount - 1);
+        mythContRect.sizeDelta = new Vector2(mythContRect.sizeDelta.x, mythTotalHeight);
         // Set the size for the card collection scroll
-        RectTransform colecRect = cardCollectionContainer.GetComponent<RectTransform>();
+        RectTransform colecContRect = cardCollectionContainer.GetComponent<RectTransform>();
+        RectTransform colecTempRect = cardCollectionTemplate.GetComponent<RectTransform>();
         int aproxRows = DivideRoundingUp(colecCardsCount, 3);
-        float colecTotalHeight = mythRect.rect.height * aproxRows + 40 * (aproxRows - 1);
-        mythRect.sizeDelta = new Vector2(mythRect.sizeDelta.x, mythTotalHeight);
+        float colecTotalHeight = colecTempRect.rect.height * aproxRows + 40 * (aproxRows - 1);
+        colecContRect.sizeDelta = new Vector2(colecContRect.sizeDelta.x, colecTotalHeight);
     }
 
     private int DivideRoundingUp(int x, int y)
@@ -288,9 +290,10 @@ public class DeckEditorManager : MonoBehaviour
         deckCardUI.SetCardData(cardSO);
 
         // Set the size for the selected cards scroll
-        RectTransform editRect = selectedCardsContainer.GetComponent<RectTransform>();
-        float totalHeight = editRect.rect.height * ListOfSelectedCards.Count + 60 * (ListOfSelectedCards.Count - 1);
-        editRect.sizeDelta = new Vector2(editRect.sizeDelta.x, totalHeight);
+        RectTransform editContRect = selectedCardsContainer.GetComponent<RectTransform>();
+        RectTransform editTempRect = selectedCardsTemplate.GetComponent<RectTransform>();
+        float totalHeight = editTempRect.rect.height * ListOfSelectedCards.Count + 10 * (ListOfSelectedCards.Count - 1);
+        editContRect.sizeDelta = new Vector2(editContRect.sizeDelta.x, totalHeight);
     }
 
     public void RemoveFromEditingArea(CardSO cardToRemove)
