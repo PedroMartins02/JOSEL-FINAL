@@ -52,9 +52,9 @@ public class CardDatabase : MonoBehaviour
     private delegate Card CardConstructor(CardSO cardSO);
     private static readonly Dictionary<Type, CardConstructor> cardConstructors = new Dictionary<Type, CardConstructor>
     {
+        { typeof(LegendCardSO), cardSO => new LegendCard((LegendCardData)cardSO.CardData) },
         { typeof(UnitCardSO), cardSO => new UnitCard((UnitCardData)cardSO.CardData) },
         { typeof(BattleTacticCardSO), cardSO => new BattleTacticCard((BattleTacticCardData)cardSO.CardData) },
-        { typeof(LegendCardSO), cardSO => new LegendCard((LegendCardData)cardSO.CardData) },
         { typeof(MythCardSO), cardSO => new MythCard(cardSO.CardData) }
     };
 

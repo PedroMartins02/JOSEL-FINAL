@@ -11,6 +11,7 @@ public class AuthenticationManager : MonoBehaviour
 {
     [SerializeField] private GameObject LogInPanel;
     [SerializeField] private GameObject RegisterPanel;
+    [SerializeField] private GameObject LoadingPanel;
 
     [SerializeField] private TMP_InputField LogInUsername;
     [SerializeField] private TMP_InputField LogInPassword;
@@ -27,6 +28,7 @@ public class AuthenticationManager : MonoBehaviour
     {
         await UnityServices.InitializeAsync();
         SetupEvents();
+        SetLoading(false);
 
         DisplayCurrentPanel();
     }
@@ -51,6 +53,12 @@ public class AuthenticationManager : MonoBehaviour
         RegisterErrorText.text = string.Empty;
     }
 
+    public void SetLoading(bool loadingState)
+    {
+        LoadingPanel.SetActive(loadingState);
+        //...
+    }
+
     public void ToggleScreen()
     {
         IsShowingLogIn = !IsShowingLogIn;
@@ -70,6 +78,7 @@ public class AuthenticationManager : MonoBehaviour
             LoginErrorText.text = "Password cannot be empty!";
             return;
         }
+        SetLoading(true);
         LoginUser(LogInUsername.text, LogInPassword.text);
     }
 
@@ -91,6 +100,7 @@ public class AuthenticationManager : MonoBehaviour
             RegisterErrorText.text = "Passwords do not match!";
             return;
         }
+        SetLoading(true);
         RegisterUser(RegisterUsername.text, RegisterPassword.text);
 
     }
@@ -105,16 +115,19 @@ public class AuthenticationManager : MonoBehaviour
         AuthenticationService.Instance.SignInFailed += (err) =>
         {
             Debug.LogError(err);
+            SetLoading(false);
         };
 
         AuthenticationService.Instance.SignedOut += () =>
         {
             Debug.Log("Player signed out.");
+            SetLoading(false);
         };
 
         AuthenticationService.Instance.Expired += () =>
         {
             Debug.Log("Player session expired.");
+            SetLoading(false);
         };
     }
 
@@ -165,7 +178,8 @@ public class AuthenticationManager : MonoBehaviour
         AccountManager.Singleton.SetPlayerData(playerData);
         await AccountManager.Singleton.LoadData();
         //SceneManager.LoadScene("TutorialScene");
-        SceneManager.LoadScene("NavigationScene");
+        //SceneManager.LoadScene("NavigationScene");
+        SceneLoader.Load("NavigationScene");
     }
 
     private async void OnLoginSuccess(string username)
@@ -178,6 +192,7 @@ public class AuthenticationManager : MonoBehaviour
         PlayerData playerData = new PlayerData(username);
         AccountManager.Singleton.SetPlayerData(playerData);
         await AccountManager.Singleton.LoadData();
-        SceneManager.LoadScene("NavigationScene");
+        //SceneManager.LoadScene("NavigationScene");
+        SceneLoader.Load("NavigationScene");
     }
 }

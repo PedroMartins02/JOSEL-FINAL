@@ -42,6 +42,12 @@ public class CardUI : MonoBehaviour
 
         SetGeneralUI(card);
 
+        if (card is LegendCardSO legendCard)
+        {
+            SetLegendCardUI(legendCard);
+            return;
+        }
+
         if (card is UnitCardSO unitCard)
         {
             SetUnitCardUI(unitCard);
@@ -53,18 +59,18 @@ public class CardUI : MonoBehaviour
             SetBattleTacticCardUI(battleTacticCard);
             return;
         }
-
-        if (card is LegendCardSO legendCard)
-        {
-            SetLegendCardUI(legendCard);
-            return;
-        }
     }
 
     public void UpdateCardData(Card card)
     {
         if (card == null)
             return;
+
+        if (card is LegendCard legendCard)
+        {
+            SetLegendCardUI(legendCard);
+            return;
+        }
 
         if (card is UnitCard unitCard)
         {
@@ -75,12 +81,6 @@ public class CardUI : MonoBehaviour
         if (card is BattleTacticCard battleTacticCard)
         {
             SetBattleTacticCardUI(battleTacticCard);
-            return;
-        }
-
-        if (card is LegendCard legendCard)
-        {
-            SetLegendCardUI(legendCard);
             return;
         }
     }
