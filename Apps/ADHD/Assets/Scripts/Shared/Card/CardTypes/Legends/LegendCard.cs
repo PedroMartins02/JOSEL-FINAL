@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Game.Data;
 using GameModel;
 using UnityEngine;
 
@@ -7,9 +8,9 @@ namespace GameModel
 {
     public class LegendCard : UnitCard
     {
-        public LegendCard(LegendCardSO cardSO) : base(cardSO.MapToUnitCardSO())
+        public LegendCard(LegendCardData cardData) : base(cardData)
         {
-            Effects = cardSO.Effects;
+            CurrentEffects = cardData.Effects;
         }
     }
 }
