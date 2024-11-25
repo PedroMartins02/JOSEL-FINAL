@@ -1,56 +1,91 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using GameCore.Events;
+using UnityEngine;
 
-namespace GameModel
+namespace Game.Logic.Actions
 {
-    public static class ActionQueueManager
+    public class ActionQueueManager : MonoBehaviour
     {
-        private static Queue<Action> actionQueue = new Queue<Action>();
+        public static ActionQueueManager Instance { get; private set; }
+
+        private Queue<IAction> actionQueue;
+        private Queue<IAction> priorityActionQueue;
+
         private static bool isProcessing = false;
 
-        public static void AddAction(Action action)
+        private void Awake()
         {
-            actionQueue.Enqueue(action);
-        }
-
-        public static void AddPriorityAction(Action action)
-        {
-            var newQueue = new Queue<Action>();
-            newQueue.Enqueue(action);
-
-            while (actionQueue.Count > 0)
+            if (Instance == null)
             {
-                newQueue.Enqueue(actionQueue.Dequeue());
+                Instance = this;
+            }
+            else
+            {
+                Destroy(gameObject);
             }
 
-            actionQueue = newQueue;
+            actionQueue = new();
+            priorityActionQueue = new();
         }
 
-        private async static Task ProcessNextAction()
+        public void AddAction(IAction action)
         {
-            if (isProcessing) return;
+            actionQueue.Enqueue(action);
 
+            if (!isProcessing)
+            {
+                Debug.Log("Processing Actions");
+                StartCoroutine(ProcessActions());
+            }
+        }
+
+        public void AddPriorityAction(IAction action)
+        {
+            actionQueue.Enqueue(action);
+
+            if (!isProcessing)
+            {
+                StartCoroutine(ProcessActions());
+            }
+        }
+
+        public IEnumerator ProcessActions()
+        {
             isProcessing = true;
 
-            if (actionQueue.Count > 0)
+            while (priorityActionQueue.Count > 0 || actionQueue.Count > 0)
             {
-                Action nextAction = actionQueue.Dequeue();
+                IAction nextAction = null;
 
-                await nextAction.Execute();
+                if (priorityActionQueue.Count > 0)
+                {
+                    nextAction = priorityActionQueue.Dequeue();
+                }
+                else if (actionQueue.Count > 0)
+                {
+                    nextAction = actionQueue.Dequeue();
+                }
+
+                if (nextAction != null && nextAction.IsLegal())
+                {
+                    yield return StartCoroutine(nextAction.Execute());
+
+                    EventManager.TriggerEvent(GameEventsEnum.ActionExecuted, nextAction);
+                }
+                else
+                {
+                    Debug.Log("Action was Illegal");
+                    // Illegal Action
+                    yield return null;
+                }
             }
 
             isProcessing = false;
         }
 
-        public async static void ProcessAllPendingActions()
-        {
-            while (actionQueue.Count > 0)
-            {
-                await ProcessNextAction();
-            }
-        }
-
-        public static void ClearQueue()
+        public void ClearQueue()
         {
             actionQueue.Clear();
         }
