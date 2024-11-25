@@ -540,6 +540,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardHolder: {fileID: 1962970745}
   playerInfo: {fileID: 0}
+  deckSO: {fileID: 11400000, guid: 3dfcae397214c694786faa679b06ddd3, type: 2}
+  IsMine: 0
 --- !u!114 &239355892
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -927,6 +929,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &283029189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 283029187}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce1a1b66291f0054685c863e1b81046d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &307438339
 GameObject:
   m_ObjectHideFlags: 0
@@ -981,6 +995,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardHolder: {fileID: 916103269}
   playerInfo: {fileID: 0}
+  deckSO: {fileID: 11400000, guid: 3dfcae397214c694786faa679b06ddd3, type: 2}
+  IsMine: 0
 --- !u!114 &307438342
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1280,6 +1296,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 475691180}
   m_CullTransparentMesh: 1
+--- !u!1 &512618797
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 512618799}
+  - component: {fileID: 512618798}
+  m_Layer: 0
+  m_Name: CombatSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &512618798
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 512618797}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90aeda569de0f8348a2cab74214cc65e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &512618799
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 512618797}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &519869945
 GameObject:
   m_ObjectHideFlags: 0
@@ -2035,6 +2095,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardHolder: {fileID: 0}
   playerInfo: {fileID: 566213197866761609}
+  deckSO: {fileID: 11400000, guid: 3dfcae397214c694786faa679b06ddd3, type: 2}
+  IsMine: 0
 --- !u!114 &993453951
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2336,6 +2398,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardHolder: {fileID: 262770986}
   playerInfo: {fileID: 0}
+  deckSO: {fileID: 11400000, guid: 3dfcae397214c694786faa679b06ddd3, type: 2}
+  IsMine: 1
 --- !u!114 &1163597589
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2840,6 +2904,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardHolder: {fileID: 0}
   playerInfo: {fileID: 566213197866761609}
+  deckSO: {fileID: 11400000, guid: 3dfcae397214c694786faa679b06ddd3, type: 2}
+  IsMine: 0
 --- !u!114 &1495142226
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3777,6 +3843,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardHolder: {fileID: 262770986}
   playerInfo: {fileID: 0}
+  deckSO: {fileID: 11400000, guid: 3dfcae397214c694786faa679b06ddd3, type: 2}
+  IsMine: 0
 --- !u!1001 &566213197866761608
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3918,6 +3986,7 @@ SceneRoots:
   - {fileID: 1636591618}
   - {fileID: 1132820487}
   - {fileID: 931955163}
+  - {fileID: 512618799}
   - {fileID: 671217150}
   - {fileID: 359951520}
   - {fileID: 283029188}
