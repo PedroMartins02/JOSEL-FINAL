@@ -1,37 +1,57 @@
 using System;
 using System.Collections.Generic;
 
-namespace GameCore
+namespace GameCore.Events
 {
     public static class EventManager
     {
-        private static Dictionary<string, Action<object>> eventDictionary = new Dictionary<string, Action<object>>();
+        private static Dictionary<GameEventsEnum, Action<object>> eventDictionary = new Dictionary<GameEventsEnum, Action<object>>();
 
-        public static void Subscribe(string eventName, Action<object> listener)
-        {
-            if (eventDictionary.TryGetValue(eventName, out var thisEvent))
-            {
-                eventDictionary[eventName] = thisEvent + listener;
-            }
-            else
-            {
-                eventDictionary.Add(eventName, listener);
-            }
-        }
+        private static readonly object _lock = new object();
 
-        public static void Unsubscribe(string eventName, Action<object> listener)
+        public static void Subscribe(GameEventsEnum eventType, Action<object> listener)
         {
-            if (eventDictionary.TryGetValue(eventName, out var thisEvent))
+            lock (_lock)
             {
-                eventDictionary[eventName] -= listener;
+                if (eventDictionary.TryGetValue(eventType, out var thisEvent))
+                {
+                    eventDictionary[eventType] = thisEvent + listener;
+                }
+                else
+                {
+                    eventDictionary.Add(eventType, listener);
+                }
             }
         }
 
-        public static void TriggerEvent(string eventName, object parameter = null)
+        public static void Unsubscribe(GameEventsEnum eventType, Action<object> listener)
         {
-            if (eventDictionary.TryGetValue(eventName, out var thisEvent))
+            lock (_lock)
             {
-                thisEvent?.Invoke(parameter);
+                if (eventDictionary.TryGetValue(eventType, out var thisEvent))
+                {
+                    thisEvent -= listener;
+
+                    if (thisEvent == null)
+                    {
+                        eventDictionary.Remove(eventType);
+                    }
+                    else
+                    {
+                        eventDictionary[eventType] = thisEvent;
+                    }
+                }
+            }
+        }
+
+        public static void TriggerEvent(GameEventsEnum eventType, object parameter = null)
+        {
+            lock (_lock)
+            {
+                if (eventDictionary.TryGetValue(eventType, out var thisEvent))
+                {
+                    thisEvent?.Invoke(parameter);
+                }
             }
         }
     }
