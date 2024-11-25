@@ -21,6 +21,9 @@ public abstract class HorizontalCardHolder : MonoBehaviour
     [SerializeField] protected int cardsToSpawn = 7;
     public List<GameCard> cards;
 
+    [Header("Curve")]
+    [SerializeField] public CurveParameters curve;
+
     protected bool isCrossing = false;
     [SerializeField] protected bool tweenCardReturn = true;
 
@@ -43,6 +46,7 @@ public abstract class HorizontalCardHolder : MonoBehaviour
             card.EndDragEvent.AddListener(EndDrag);
             card.name = cardCount.ToString();
             card.isMine = isMine;
+            card.isInHand = GetType() == typeof(HandCardHolder);
             card.gameObject.tag = isMine ? "MyCard" : "OpponentCard";
             cardCount++;
         }
@@ -52,11 +56,7 @@ public abstract class HorizontalCardHolder : MonoBehaviour
         IEnumerator Frame()
         {
             yield return new WaitForSecondsRealtime(.1f);
-            for (int i = 0; i < cards.Count; i++)
-            {
-                if (cards[i].cardVisual != null)
-                    cards[i].cardVisual.UpdateIndex(transform.childCount);
-            }
+            UpdateIndexes();
         }
 
 
@@ -165,6 +165,11 @@ public abstract class HorizontalCardHolder : MonoBehaviour
         card.BeginDragEvent.AddListener(BeginDrag);
         card.EndDragEvent.AddListener(EndDrag);
 
+        if (card.cardVisual != null)
+        {
+            card.cardVisual.curve = curve;
+        }
+
         cards.Add(card);
         UpdateIndexes();
     }
@@ -180,7 +185,7 @@ public abstract class HorizontalCardHolder : MonoBehaviour
         card.BeginDragEvent.AddListener(BeginDrag);
         card.EndDragEvent.AddListener(EndDrag);
 
-        card.name = cardSO.Id;
+        card.name = "unknown";
         card.isMine = isMine;
         card.isInHand = true;
         card.gameObject.tag = isMine ? "MyCard" : "OpponentCard";
@@ -196,6 +201,7 @@ public abstract class HorizontalCardHolder : MonoBehaviour
 
             if (cardSO != null)
             {
+                card.name = cardSO.Id;
                 card.SetCardData(cardSO);
             }
         }
@@ -206,6 +212,7 @@ public abstract class HorizontalCardHolder : MonoBehaviour
         for (int i = 0; i < cards.Count(); i++)
         {
             cards[i].cardVisual.UpdateIndex(i);
+            cards[i].cardVisual.curve = curve;
         }
     }
 

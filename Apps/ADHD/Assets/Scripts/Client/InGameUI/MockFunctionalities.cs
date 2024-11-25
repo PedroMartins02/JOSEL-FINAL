@@ -22,6 +22,11 @@ public class MockFunctionalities : MonoBehaviour
         hand = new(5);
     }
 
+    public void OpponentDrawCard()
+    {
+        cardHolder.SpawnCard(null);
+    }
+
     public void DrawCardMock(string cardSOId)
     {
         CardSO cardSO = CardDatabase.Singleton.GetCardSoOfId(cardSOId);

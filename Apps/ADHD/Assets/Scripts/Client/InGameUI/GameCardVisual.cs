@@ -54,7 +54,7 @@ public class GameCardVisual : MonoBehaviour
     [SerializeField] private int swapVibrato = 5;
 
     [Header("Curve")]
-    [SerializeField] private CurveParameters curve;
+    [SerializeField] public CurveParameters curve;
 
     [Header("Shadow Shape")]
     [SerializeField] private Sprite cardBackSprite;
