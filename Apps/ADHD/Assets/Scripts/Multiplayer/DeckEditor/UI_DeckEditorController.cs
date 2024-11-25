@@ -63,7 +63,7 @@ public class UI_DeckEditorController : MonoBehaviour
 
     public void ReturnButtonOnClick()
     {
-        SceneLoader.Load(SceneLoader.Scene.NavigationScene);
+        SceneLoader.ExitNetworkLoad(SceneLoader.Scene.NavigationScene);
     }
 
     public void ContinueOnClick()

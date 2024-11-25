@@ -27,6 +27,7 @@ public class UI_CivButtonController : MonoBehaviour
     public void SetCivData(Factions faction)
     {
         associatedFaction = faction;
+
         if (Factions.Greek.Equals(faction))
         {
             buttonImage.sprite = greekSprite;
