@@ -13,6 +13,8 @@ public class PlayerData
     public int SelectedDeckId { get; set; } = 0;
     public List<int> CardBackCollection { get; set; } = new List<int>();
     public int Tokens { get; set; } = 0;
+    public int MMR { get; set; } = 400;
+    public List<bool> MatchHistory { get; set; } = new List<bool>();
 
     // Parameterless constructor for JSON deserialization
     public PlayerData()
@@ -27,6 +29,8 @@ public class PlayerData
         SelectedDeckId = 0;
         CardBackCollection = new List<int>();
         Tokens = 0;
+        MMR = 400;
+        MatchHistory = new List<bool>();
     }
 
     public string ToJson()
