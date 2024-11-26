@@ -32,4 +32,17 @@ public class DeckData
             CardList.Add(cardSO.Id);
         }
     }
+
+    public DeckData(DeckSO deck, int cardBackId)
+    {
+        Name = deck.Name;
+        CardBackId = cardBackId;
+        MythId = deck.Myth.Id;
+        CardList = new List<string>();
+        
+        foreach (CardSO cardSO in deck.Cards)
+        {
+            CardList.Add(cardSO.Id);
+        }
+    }
 }
