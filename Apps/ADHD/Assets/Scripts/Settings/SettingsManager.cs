@@ -42,7 +42,7 @@ public class SettingsManager : MonoBehaviour
 
   public void SaveSettings()
   {
-	Debug.Log("inside save settings");
+	Debug.Log("Saving settings...");
 	PlayerPrefs.SetInt("Settings FullScreen", isFullScreen ? 1 : 0);
 	PlayerPrefs.SetInt("Settings Resolution", resolutionIndex);
 	PlayerPrefs.SetInt("Settings Master Volume", masterVolumeIndex);
@@ -53,18 +53,14 @@ public class SettingsManager : MonoBehaviour
   
   public void ApplySettings()
   {
+	Debug.Log("Applying settings");
 	// Set Resolution for desktop environments
-	if (Application.platform == RuntimePlatform.WindowsPlayer)
+	Screen.fullScreen = isFullScreen;
+	Resolution[] resolutions = Screen.resolutions;
+
+	if (resolutionIndex >= 0 && resolutionIndex < resolutions.Length)
 	{
-	  Screen.fullScreen = isFullScreen;
-	  Resolution[] resolutions = Screen.resolutions;
-
-	  Debug.Log("Res index: " + resolutionIndex);
-
-	  if (resolutionIndex >= 0 && resolutionIndex < resolutions.Length)
-	  {
-		Screen.SetResolution(resolutions[resolutionIndex].width, resolutions[resolutionIndex].height, isFullScreen);
-	  }
+	  Screen.SetResolution(resolutions[resolutionIndex].width, resolutions[resolutionIndex].height, isFullScreen);
 	}
 
 	// Set game Volumes
