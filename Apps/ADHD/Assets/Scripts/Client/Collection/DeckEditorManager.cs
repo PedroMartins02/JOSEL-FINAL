@@ -197,6 +197,11 @@ public class DeckEditorManager : MonoBehaviour
         int aproxRows = DivideRoundingUp(colecCardsCount, 3);
         float colecTotalHeight = colecTempRect.rect.height * aproxRows + 40 * (aproxRows - 1);
         colecContRect.sizeDelta = new Vector2(colecContRect.sizeDelta.x, colecTotalHeight);
+        // Set the size for the selected cards scroll
+        RectTransform editContRect = selectedCardsContainer.GetComponent<RectTransform>();
+        RectTransform editTempRect = selectedCardsTemplate.GetComponent<RectTransform>();
+        float totalHeight = 115 * ListOfSelectedCards.Count + 30 + 10 * (ListOfSelectedCards.Count - 1);
+        editContRect.sizeDelta = new Vector2(editContRect.sizeDelta.x, totalHeight);
     }
 
     private int DivideRoundingUp(int x, int y)
@@ -293,12 +298,6 @@ public class DeckEditorManager : MonoBehaviour
         UpdateCardsList(ListOfSelectedCards.Select(e => e.Id.ToString()).ToList());
         DeckCardUI deckCardUI = cardInstance.GetComponent<DeckCardUI>();
         deckCardUI.SetCardData(cardSO);
-
-        // Set the size for the selected cards scroll
-        RectTransform editContRect = selectedCardsContainer.GetComponent<RectTransform>();
-        RectTransform editTempRect = selectedCardsTemplate.GetComponent<RectTransform>();
-        float totalHeight = editTempRect.rect.height * ListOfSelectedCards.Count + 10 * (ListOfSelectedCards.Count - 1);
-        editContRect.sizeDelta = new Vector2(editContRect.sizeDelta.x, totalHeight);
     }
 
     public void RemoveFromEditingArea(CardSO cardToRemove)
