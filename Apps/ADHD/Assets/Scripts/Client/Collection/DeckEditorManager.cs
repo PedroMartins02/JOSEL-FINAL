@@ -35,6 +35,7 @@ public class DeckEditorManager : MonoBehaviour
     private DeckData playerCurrentDeck;
     private string deckName;
     private int slotIndex;
+    private int deckCardBackID = 0; //Variable to store chosen deck back customization.
 
     private List<CardSO> ListOfSelectedCards = new List<CardSO>();
     private CardSO selectedMyth = null;
@@ -73,7 +74,7 @@ public class DeckEditorManager : MonoBehaviour
                 {
                     CardSO firstCard = CardDatabase.Singleton.GetCardSoOfId(deck.CardList[1]);
                     this.faction = firstCard.Faction;
-
+                    deckCardBackID = deck.CardBackId;
                     this.playerCurrentDeck = deck;
                     OnDeckLoad(deck);
                 }
@@ -318,7 +319,7 @@ public class DeckEditorManager : MonoBehaviour
     public void SaveDeck()
     {
         this.deckName = deckNameInput.text.IsEmpty() ? "New Deck" : deckNameInput.text;
-        AccountManager.Singleton.AddDeckToPlayer(this.slotIndex, new DeckSO(deckName,selectedMyth,ListOfSelectedCards,this.faction));
+        AccountManager.Singleton.AddDeckToPlayer(this.slotIndex, this.deckCardBackID, new DeckSO(deckName,selectedMyth,ListOfSelectedCards,this.faction));
         BackButton();
     }
 
