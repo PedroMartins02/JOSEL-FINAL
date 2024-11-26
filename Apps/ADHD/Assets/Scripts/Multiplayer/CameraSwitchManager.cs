@@ -4,26 +4,14 @@ using UnityEngine.XR;
 
 public class CameraSwitchManager : MonoBehaviour
 {
-    public static CameraSwitchManager Instance { get; private set; }
-
-    private Camera pcCamera;
-    private GameObject vrRig;
-    private Canvas canvas;
+    [SerializeField] private Camera pcCamera;
+    [SerializeField] private GameObject vrRig;
+    [SerializeField] private Canvas canvas;
 
     private void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-
-            // Subscribe to the sceneLoaded event
-            SceneManager.sceneLoaded += OnSceneLoaded;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        // Subscribe to the sceneLoaded event
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     private void Start()
@@ -38,6 +26,7 @@ public class CameraSwitchManager : MonoBehaviour
 
     public void UpdateCameraAndCanvas()
     {
+        /*
         // OBtain the VR rig, the canvas and the main camera
         pcCamera = Camera.main;
         
@@ -48,6 +37,7 @@ public class CameraSwitchManager : MonoBehaviour
         }
 
         canvas = FindObjectOfType<Canvas>();
+        */
 
         // Switch settings
         if (XRSettings.isDeviceActive)
