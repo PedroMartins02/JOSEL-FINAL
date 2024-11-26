@@ -541,6 +541,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3918036372191373244}
   - component: {fileID: 7746624439248067978}
+  - component: {fileID: 4535298057631408719}
   m_Layer: 5
   m_Name: SettingsPanel
   m_TagString: Untagged
@@ -585,6 +586,20 @@ MonoBehaviour:
   contentView: {fileID: 7945504089218712640}
   startPage: {fileID: 2696659286446230158, guid: a529bd96a46ace041838afc7899d35b2,
     type: 3}
+--- !u!114 &4535298057631408719
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2600058602380722947}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0dc3d40a85e6cac4faf63de0aa5d23a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  generalButton: {fileID: 6850770400621741688}
+  videoButton: {fileID: 4715741874050990260}
 --- !u!1 &6846630630079871493
 GameObject:
   m_ObjectHideFlags: 0
@@ -654,8 +669,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 12.5, y: 0}
-  m_SizeDelta: {x: 435, y: 120}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 460, y: 120}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8294782949185348886
 CanvasRenderer:
