@@ -48,5 +48,7 @@ public class AudioManager : MonoBehaviour
 	SettingsManager.Instance.sfxVolumeIndex = sfxVol;
 	SettingsManager.Instance.SaveSettings();
 	SettingsManager.Instance.ApplySettings();
+
+	// TODO: modify the volume values
   }
 }
