@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using TMPro;
+using System.Linq;
 using Unity.Netcode;
 using Unity.Services.Authentication;
 using Unity.Services.Lobbies;
@@ -7,6 +8,7 @@ using Unity.Services.Lobbies.Models;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class UI_LobbyController : MonoBehaviour
 {
@@ -183,7 +185,7 @@ public class UI_LobbyController : MonoBehaviour
 
         foreach (DeckData deckData in deckLists)
         {
-            var deckInstance = Instantiate(deckPrefab, deckContainer);
+            GameObject deckInstance = Instantiate(deckPrefab, deckContainer);
 
             // Set the deck data on the UI component attatched to the new game object
             var deckUI = deckInstance.GetComponent<DeckUI>();
@@ -203,6 +205,26 @@ public class UI_LobbyController : MonoBehaviour
 
             deckInstance.SetActive(true);
         }
+
+        if (deckContainer.GetChild(0) != null)
+        {
+            Debug.Log("Arrived");
+            // Set the size for the deck scroll
+            RectTransform contentRect = deckContainer.GetComponent<RectTransform>();
+            RectTransform firstChild = deckContainer.GetChild(0).GetComponent<RectTransform>(); ;
+
+            int aproxRows = DivideRoundingUp(deckLists.Count, 3);
+
+            float totalHeight = 350 * aproxRows + 20 + 50 * (aproxRows - 1);
+            contentRect.sizeDelta = new Vector2(contentRect.sizeDelta.x, totalHeight);
+        }
+    }
+
+    private int DivideRoundingUp(int x, int y)
+    {
+        int remainder;
+        int quotient = Math.DivRem(x, y, out remainder);
+        return remainder == 0 ? quotient : quotient + 1;
     }
 
     private void ClearDeckList()
