@@ -300,7 +300,12 @@ public class LobbyManager : NetworkBehaviour
 
             // Start Hosting and go to LobbyScene, where the main lobby will be
             MultiplayerManager.Instance.StartHost();
-            SceneLoader.LoadNetwork(SceneLoader.Scene.Lobby);
+
+            //Only change scenes if its a custom match
+            if (LobbyType.CustomMatch.Equals(lobbyType))
+            {
+                SceneLoader.LoadNetwork(SceneLoader.Scene.Lobby);
+            }
         }
         catch (LobbyServiceException e)
         {
@@ -316,8 +321,18 @@ public class LobbyManager : NetworkBehaviour
     public async void QuickMatchLobby()
     {
         OnQuickMatchStarted?.Invoke(this, EventArgs.Empty);
+        
         try
         {
+            // Set the deck for the quick match
+            PlayerData playerData = AccountManager.Singleton.GetPlayerData();
+            List<DeckData> deckLists = playerData.DeckCollection;
+
+            int deckId = playerData.SelectedDeckId > deckLists.Count ? 0 : playerData.SelectedDeckId;
+
+            DeckData deck = deckLists[deckId];
+            MultiplayerManager.Instance.SetPlayerDeck(deck);
+
             // Firstly, we try to join an available Quick Match lobby
             List<Lobby> lobbyList = await ListLobbiesOfType(LobbyType.QuickMatch);
 
