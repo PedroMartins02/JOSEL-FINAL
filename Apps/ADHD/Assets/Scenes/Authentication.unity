@@ -22173,7 +22173,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   InitialPosition: 1
   textCommitField: {fileID: 0}
-  textHandler: {fileID: 0}
+  textHandler: {fileID: 654024297}
   leftControllerRootTransform: {fileID: 875430276}
   leftControllerDirectTransform: {fileID: 1363759066}
   rightControllerRootTransform: {fileID: 1860736898}
@@ -22249,8 +22249,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5559ceb2f045344f8505d78bab0e7f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  usernameField: {fileID: 0}
-  passwordField: {fileID: 0}
+  usernameField: {fileID: 2102634432}
+  passwordField: {fileID: 1476292489}
 --- !u!1001 &654452421
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -68600,7 +68600,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1886922073
 RectTransform:
   m_ObjectHideFlags: 0
