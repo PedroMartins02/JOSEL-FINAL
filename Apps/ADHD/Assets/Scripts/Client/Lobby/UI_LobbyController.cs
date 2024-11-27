@@ -39,7 +39,7 @@ public class UI_LobbyController : MonoBehaviour
     [Header("Decks")]
     [SerializeField] private GameObject deckPrefab;
     [SerializeField] private Transform deckContainer;
-    [SerializeField] private Sprite deckSelectedSprite;
+    [SerializeField] private Shader deckSelectedShader;
 
 
     private Lobby lobby;
@@ -207,7 +207,12 @@ public class UI_LobbyController : MonoBehaviour
             highlight.transform.SetParent(deckInstance.transform, false);
 
             Image highlightImage = highlight.AddComponent<Image>();
-            highlightImage.color = new Color(1f, 1f, 0f, 1f);
+
+            // Shader for gradient time!
+            Material gradientMaterial = new Material(this.deckSelectedShader);
+            gradientMaterial.SetColor("_Color", new Color(1f, 0.843f, 0f, 1f));
+            gradientMaterial.SetFloat("_Radius", 0.5f);
+            highlightImage.material = gradientMaterial;
 
             RectTransform highlightRect = highlight.GetComponent<RectTransform>();
             highlightRect.anchorMin = Vector2.zero;
