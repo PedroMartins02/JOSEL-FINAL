@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ebde07a14ac7007409d3fb05a7c66441, type: 3}
-  m_Name: Phalanx Formation
+  m_Name: Feigned Retreat
   m_EditorClassIdentifier: 
-  Id: 368f-1134146
-  Name: Phalanx Formation
-  ShortText: Tight infantry formation
-  Description: The phalanx formation was a powerful defensive strategy used to protect
-    soldiers in close combat.
-  Art: {fileID: 21300000, guid: d2ac8250a6d765f459d19299f741b3ea, type: 3}
+  Id: f9e3-33308
+  Name: Feigned Retreat
+  ShortText: Tactical withdrawal to lure enemies
+  Description: A strategic withdrawal to make the enemy overcommit, then counterattack
+    decisively.
+  Art: {fileID: 0}
   Faction: 0
   Element: 3
   Blessings: 2
