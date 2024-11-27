@@ -16,6 +16,7 @@ public class UI_QuickGameController : MonoBehaviour
     
     private float elapsedTime;
     private bool isTimerRunning;
+    private bool isJoiningMatch;
 
     private void Awake()
     {
@@ -23,7 +24,12 @@ public class UI_QuickGameController : MonoBehaviour
 
         cancelQueueBtn.onClick.AddListener(() =>
         {
-
+            if (LobbyManager.Instance.IsLobbyHost() && !isJoiningMatch)
+            {
+                LobbyManager.Instance.DeleteLobby();
+                StopTimer();
+                queue.SetActive(false);
+            }
         });
     }
 
@@ -34,6 +40,10 @@ public class UI_QuickGameController : MonoBehaviour
         LobbyManager.Instance.OnJoinedLobbyUpdate += LobbyManager_OnJoinedLobbyUpdate;
 
         isTimerRunning = false;
+        isJoiningMatch = false;
+
+        cancelQueueBtn.enabled = true;
+
     }
 
     private void LobbyManager_OnJoinedLobbyUpdate(object sender, System.EventArgs e)
@@ -44,7 +54,8 @@ public class UI_QuickGameController : MonoBehaviour
             StopTimer();
             timerText.text = "MATCH FOUND";
             cancelQueueBtn.enabled = false;
-            //cancelQueueBtn.gameObject.SetActive(false);
+            isJoiningMatch = true;
+            cancelQueueBtn.gameObject.SetActive(false);
             StartCoroutine(WaitCoroutine());
         }
         else if (LobbyManager.Instance.GetLobby().Players.Count > 1)
@@ -52,6 +63,8 @@ public class UI_QuickGameController : MonoBehaviour
             StopTimer();
             timerText.text = "MATCH FOUND";
             cancelQueueBtn.enabled = false;
+            isJoiningMatch = true;
+            cancelQueueBtn.gameObject.SetActive(false);
             LobbyManager.Instance.ClearJoinedLobby();
         }
     }
