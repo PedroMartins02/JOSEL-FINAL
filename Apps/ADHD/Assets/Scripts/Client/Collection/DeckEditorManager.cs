@@ -30,6 +30,7 @@ public class DeckEditorManager : MonoBehaviour
     [SerializeField] private GameObject QuantityPrefab;
     [SerializeField] private HighlightedDeckIdSO HighlightedDeckData;
     [SerializeField] private TMP_InputField deckNameInput;
+    [SerializeField] private TextMeshProUGUI errorText;
 
     private Factions faction;
     private DeckData playerCurrentDeck;
@@ -289,10 +290,68 @@ public class DeckEditorManager : MonoBehaviour
             AddToEditingArea(card);
         }
     }
+
+    private bool CardTypeCounter(Type type, int limit)
+    {
+        int strikeCounter = 0;
+        foreach (CardSO card in ListOfSelectedCards)
+        {
+            if (card.GetType() == type)
+            {
+                strikeCounter++;
+            }
+
+            if (strikeCounter >= limit) return true;
+        }
+
+        return false;
+    }
     
+    private bool CardRepeatCounter(string cardId, int limit)
+    {
+        int strikeCounter = 0;
+        foreach (CardSO card in ListOfSelectedCards)
+        {
+            if (cardId == card.Id)
+            {
+                strikeCounter++;
+            }
+
+            if (strikeCounter >= limit) return true;
+        }
+
+        return false;
+    }
 
     private void AddToEditingArea(CardSO cardSO)
     {
+        
+        if (ListOfSelectedCards.Count == 20)
+        {
+            errorText.text = "You already have the maximum cards in a deck!";
+            return;
+        }
+        
+        if (cardSO.GetType() == typeof(UnitCardSO) || cardSO.GetType() == typeof(BattleTacticCardSO))
+        {
+            if (CardRepeatCounter(cardSO.Id, 3))
+            {
+                errorText.text = "You cannot have more than 3 of the same card!";
+                return;
+            }
+        }
+        if (cardSO.GetType() == typeof(LegendCardSO))
+        {
+            if (CardTypeCounter(cardSO.GetType(), 3))
+            {
+                errorText.text = "You cannot have more than 3 of legend cards!";
+                return;
+            }
+        }
+
+
+        
+        
         Transform cardInstance = Instantiate(selectedCardsTemplate, selectedCardsContainer);
         cardInstance.gameObject.SetActive(true);
         ListOfSelectedCards.Add(cardSO);
