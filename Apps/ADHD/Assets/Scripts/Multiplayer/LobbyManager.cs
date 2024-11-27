@@ -47,7 +47,6 @@ public class LobbyManager : NetworkBehaviour
 
     // Events for after joining lobby
     public event EventHandler<LobbyEventArgs> OnJoinedLobby;
-    public event EventHandler<LobbyEventArgs> OnQuickMatchJoinedLobby;
     public event EventHandler<LobbyEventArgs> OnJoinedLobbyUpdate;
 
     public class LobbyEventArgs : EventArgs
@@ -280,8 +279,6 @@ public class LobbyManager : NetworkBehaviour
                 }
             });
 
-            OnJoinedLobby?.Invoke(this, new LobbyEventArgs { lobby = joinedLobby });
-
             // Relay for p2p multiplayer
             string relayJoinCode = await RelayAllocation();
 
@@ -300,6 +297,8 @@ public class LobbyManager : NetworkBehaviour
 
             // Start Hosting and go to LobbyScene, where the main lobby will be
             MultiplayerManager.Instance.StartHost();
+
+            OnJoinedLobby?.Invoke(this, new LobbyEventArgs { lobby = joinedLobby });
 
             //Only change scenes if its a custom match
             if (LobbyType.CustomMatch.Equals(lobbyType))
@@ -349,7 +348,7 @@ public class LobbyManager : NetworkBehaviour
             {
                 CreateLobby(
                     "QuickMatchLobby",
-                    true,
+                    false,
                     LobbyManager.LobbyType.QuickMatch,
                     GameModel.GameRule.GetDefaultRules()
                 );
@@ -388,6 +387,20 @@ public class LobbyManager : NetworkBehaviour
             OnJoinFailed?.Invoke(this, EventArgs.Empty);
         }
     }
+
+
+    public void JoinQuickMatchGame()
+    {
+        JoinQuickMatchGameServerRpc();
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void JoinQuickMatchGameServerRpc(ServerRpcParams rpcParams = default)
+    {
+        LobbyManager.Instance.DeleteLobby();
+        SceneLoader.LoadNetwork(SceneLoader.Scene.Game);
+    }
+
 
     public Lobby GetLobby()
     {
@@ -502,17 +515,12 @@ public class LobbyManager : NetworkBehaviour
 
     public override void OnDestroy()
     {
-        if(joinedLobby != null)
-            LeaveLobby();
-
         // Always invoke the base 
         base.OnDestroy();
     }
 
     void OnApplicationQuit()
     {
-        if (joinedLobby != null)
-            LeaveLobby();
         Debug.Log("Application ending after " + Time.time + " seconds");
     }
 }

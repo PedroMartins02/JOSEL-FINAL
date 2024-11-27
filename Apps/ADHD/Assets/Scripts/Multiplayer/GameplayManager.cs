@@ -11,19 +11,28 @@ public class GameplayManager : NetworkBehaviour
     public static GameplayManager Instance { get; private set; }
 
     // Events
-    public event EventHandler OnGameFinishedLoading;
+    //public event EventHandler OnGameFinishedLoading;
 
     // Variables
-    private NetworkVariable<float> gameTimer;
+    //private NetworkVariable<float> gameTimer;
 
+    private void Awake()
+    {
+        if (LobbyManager.Instance != null)
+        {
+            Destroy(LobbyManager.Instance.gameObject);
+        }
+    }
 
     private void Start()
     {
 
     }
 
+    /*
     public override void OnNetworkSpawn()
     {
+        
         if (IsServer)
         {
             // Assign to event for when a player disconnects
@@ -31,8 +40,9 @@ public class GameplayManager : NetworkBehaviour
             // Event for when the game scene is loaded
             NetworkManager.Singleton.SceneManager.OnLoadEventCompleted += SceneManager_OnLoadEventCompleted;
         }
-    }
 
+    }
+    
     private void NetworkManager_OnClientDisconnectCallback(ulong obj)
     {
         throw new NotImplementedException();
@@ -51,5 +61,5 @@ public class GameplayManager : NetworkBehaviour
     private void SetInitialSettingsClientRpc()
     {
         
-    }
+    }*/
 }

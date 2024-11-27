@@ -1075,6 +1075,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   queue: {fileID: 5400452526020887523}
   timerText: {fileID: 6243131984689887515}
+  cancelQueueBtn: {fileID: 5859695849344429280}
 --- !u!1 &8641223213537364451
 GameObject:
   m_ObjectHideFlags: 0

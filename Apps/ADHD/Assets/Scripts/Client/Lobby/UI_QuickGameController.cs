@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
+using Unity.Netcode;
 using Unity.Services.Lobbies.Models;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -10,6 +12,7 @@ public class UI_QuickGameController : MonoBehaviour
 {
     [SerializeField] private GameObject queue;
     [SerializeField] private TextMeshProUGUI timerText;
+    [SerializeField] private Button cancelQueueBtn;
     
     private float elapsedTime;
     private bool isTimerRunning;
@@ -17,14 +20,48 @@ public class UI_QuickGameController : MonoBehaviour
     private void Awake()
     {
         queue.SetActive(false);
+
+        cancelQueueBtn.onClick.AddListener(() =>
+        {
+
+        });
     }
 
     private void Start()
     {
-        LobbyManager.Instance.OnQuickMatchStarted += LobbyManager_OnQuickMatchStarted; ;
-        LobbyManager.Instance.OnQuickMatchFailed += LobbyManager_OnQuickMatchFailed; ;
+        LobbyManager.Instance.OnQuickMatchStarted += LobbyManager_OnQuickMatchStarted;
+        LobbyManager.Instance.OnQuickMatchFailed += LobbyManager_OnQuickMatchFailed;
+
+        MultiplayerManager.Instance.OnPlayerDataNetworkListChanged += MultiplayerManager_OnPlayerDataNetworkListChanged;
 
         isTimerRunning = false;
+    }
+
+    private void MultiplayerManager_OnPlayerDataNetworkListChanged(object sender, System.EventArgs e)
+    {
+        Debug.Log("LOBBY QUICK MATCH PLAYERS: " + LobbyManager.Instance.GetLobby().Players.Count);
+        if (LobbyManager.Instance.IsLobbyHost() && LobbyManager.Instance.GetLobby().Players.Count > 1)
+        {
+            StopTimer();
+            timerText.text = "MATCH FOUND";
+            cancelQueueBtn.enabled = false;
+            //cancelQueueBtn.gameObject.SetActive(false);
+            StartCoroutine(WaitCoroutine());
+        }
+        else if (LobbyManager.Instance.GetLobby().Players.Count > 1)
+        {
+            StopTimer();
+            timerText.text = "MATCH FOUND";
+            cancelQueueBtn.enabled = false;
+            LobbyManager.Instance.ClearJoinedLobby();
+        }
+    }
+
+    IEnumerator WaitCoroutine()
+    {
+        yield return new WaitForSeconds(5);
+
+        LobbyManager.Instance.JoinQuickMatchGame();
     }
 
     private void Update()
@@ -72,5 +109,13 @@ public class UI_QuickGameController : MonoBehaviour
     public void FindGame()
     {
         LobbyManager.Instance.QuickMatchLobby();
+    }
+
+    private void OnDestroy()
+    {
+        LobbyManager.Instance.OnQuickMatchStarted -= LobbyManager_OnQuickMatchStarted;
+        LobbyManager.Instance.OnQuickMatchFailed -= LobbyManager_OnQuickMatchFailed;
+
+        MultiplayerManager.Instance.OnPlayerDataNetworkListChanged -= MultiplayerManager_OnPlayerDataNetworkListChanged;
     }
 }
