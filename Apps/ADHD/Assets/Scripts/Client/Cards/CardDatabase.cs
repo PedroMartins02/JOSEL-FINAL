@@ -109,4 +109,12 @@ public class CardDatabase : MonoBehaviour
         return packContents;
     }
 
+    public List<CardSO> GetAllMyths()
+    {
+        var eligibleCards = CardDictionary.Values
+        .Where(card => card.GetType() == typeof(MythCardSO))
+        .ToList();
+
+        return eligibleCards;
+    }
 }
