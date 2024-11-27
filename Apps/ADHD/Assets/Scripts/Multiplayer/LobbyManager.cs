@@ -47,7 +47,6 @@ public class LobbyManager : NetworkBehaviour
 
     // Events for after joining lobby
     public event EventHandler<LobbyEventArgs> OnJoinedLobby;
-    public event EventHandler<LobbyEventArgs> OnJoinedQuickMatchLobby;
     public event EventHandler<LobbyEventArgs> OnJoinedLobbyUpdate;
 
     public class LobbyEventArgs : EventArgs
@@ -156,11 +155,10 @@ public class LobbyManager : NetworkBehaviour
     {
         try
         {
-            QueryLobbiesOptions queryLobbiesOptions = new QueryLobbiesOptions
-            {
-                // We'll list only lobbies with available slots (more than 0 slots)
-                // Count = 6,
-                Filters = new List<QueryFilter> {
+
+            // We'll list only lobbies with available slots (more than 0 slots)
+            // Count = 6,
+            List<QueryFilter> filters = new List<QueryFilter> {
                   new QueryFilter(
                       field: QueryFilter.FieldOptions.AvailableSlots,
                       value: "0",
@@ -170,8 +168,30 @@ public class LobbyManager : NetworkBehaviour
                       field: QueryFilter.FieldOptions.S1,
                       value: type.ToString(),
                       op: QueryFilter.OpOptions.EQ)
-                }
             };
+
+            // Filter MMR in QuickMAtch
+            if (LobbyType.QuickMatch.Equals(type)) 
+            {
+                // Lower bound
+                int myMMR = AccountManager.Singleton.GetPlayerData().MMR;
+                filters.Add(new QueryFilter(
+                field: QueryFilter.FieldOptions.N1,
+                value: (myMMR - 150).ToString(),
+                op: QueryFilter.OpOptions.GT));
+
+                // Upper bound
+                filters.Add(new QueryFilter(
+                    field: QueryFilter.FieldOptions.N1,
+                    value: (myMMR + 150).ToString(),
+                    op: QueryFilter.OpOptions.LT));
+            }
+
+            QueryLobbiesOptions queryLobbiesOptions = new QueryLobbiesOptions
+            {
+                Filters = filters
+            };
+
             QueryResponse queryResponse = await LobbyService.Instance.QueryLobbiesAsync(queryLobbiesOptions);
 
             OnLobbyListChanged?.Invoke(this, new OnLobbyListChangedEventArgs
@@ -276,6 +296,11 @@ public class LobbyManager : NetworkBehaviour
                         visibility: DataObject.VisibilityOptions.Public, 
                         value: lobbyType.ToString(),
                         index: DataObject.IndexOptions.S1) 
+                    },
+                    { "MMR", new DataObject(
+                        visibility: DataObject.VisibilityOptions.Public,
+                        value: AccountManager.Singleton.GetPlayerData().MMR.ToString(),
+                        index: DataObject.IndexOptions.N1)
                     }
                 }
             });

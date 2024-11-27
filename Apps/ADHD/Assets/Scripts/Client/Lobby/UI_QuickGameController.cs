@@ -124,6 +124,9 @@ public class UI_QuickGameController : MonoBehaviour
 
     private void OnDestroy()
     {
+        if(LobbyManager.Instance != null) 
+            LobbyManager.Instance.LeaveLobby();
+
         LobbyManager.Instance.OnQuickMatchStarted -= LobbyManager_OnQuickMatchStarted;
         LobbyManager.Instance.OnQuickMatchFailed -= LobbyManager_OnQuickMatchFailed;
         LobbyManager.Instance.OnJoinedLobbyUpdate -= LobbyManager_OnJoinedLobbyUpdate;
