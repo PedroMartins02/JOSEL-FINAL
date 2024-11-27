@@ -9,6 +9,8 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using System.Drawing;
+using Color = UnityEngine.Color;
 
 public class UI_LobbyController : MonoBehaviour
 {
@@ -37,11 +39,12 @@ public class UI_LobbyController : MonoBehaviour
     [Header("Decks")]
     [SerializeField] private GameObject deckPrefab;
     [SerializeField] private Transform deckContainer;
-    //[SerializeField] private Sprite deckSelectedSprite;
-    //[SerializeField] private Sprite deckHooverSprite;
+    [SerializeField] private Sprite deckSelectedSprite;
 
 
     private Lobby lobby;
+    private Button previousSelectedBtn;
+    private GameObject previousHighlight;
 
     private void Awake()
     {
@@ -183,32 +186,77 @@ public class UI_LobbyController : MonoBehaviour
         PlayerData accountData = AccountManager.Singleton.GetPlayerData();
         List<DeckData> deckLists = accountData.DeckCollection;
 
+        bool isFirst = true;
         foreach (DeckData deckData in deckLists)
         {
             GameObject deckInstance = Instantiate(deckPrefab, deckContainer);
 
             // Set the deck data on the UI component attatched to the new game object
-            var deckUI = deckInstance.GetComponent<DeckUI>();
+            DeckUI deckUI = deckInstance.GetComponent<DeckUI>();
             deckUI.SetDeckData(deckData);
 
             // Setup Button component and event to be able to select deck
-            var deckButton = deckInstance.AddComponent<Button>();
+            Button deckButton = deckInstance.AddComponent<Button>();
             ColorBlock colorBlock = deckButton.colors;
             colorBlock.highlightedColor = Color.red;
             colorBlock.pressedColor = Color.gray;
             deckButton.colors = colorBlock;
 
+            // Adding highlight game object because WHY IS IT GOOFY
+            GameObject highlight = new GameObject("HighlightGO");
+            highlight.transform.SetParent(deckInstance.transform, false);
+
+            Image highlightImage = highlight.AddComponent<Image>();
+            highlightImage.color = new Color(1f, 1f, 0f, 1f);
+
+            RectTransform highlightRect = highlight.GetComponent<RectTransform>();
+            highlightRect.anchorMin = Vector2.zero;
+            highlightRect.anchorMax = Vector2.one;
+            highlightRect.offsetMin = Vector2.zero;
+            highlightRect.offsetMax = Vector2.zero;
+
+            highlightImage.raycastTarget = true;
+
+            highlight.SetActive(false);
+
+            // Set the event for selecting the deck to be used in-game :D
             deckButton.onClick.AddListener(() =>
             {
-                MultiplayerManager.Instance.SetPlayerDeck(deckData);
+                DeckData previousDeck = MultiplayerManager.Instance.GetPlayerDeck();
+
+                if (previousDeck == null)
+                {
+                    MultiplayerManager.Instance.SetPlayerDeck(deckData);
+                    deckButton.enabled = false;
+                    highlight.SetActive(true);
+                    this.previousSelectedBtn = deckButton;
+                    this.previousHighlight = highlight;
+                }
+                if (previousDeck != null && !previousDeck.Equals(deckData))
+                {
+                    MultiplayerManager.Instance.SetPlayerDeck(deckData);
+                    this.previousHighlight.SetActive(false);
+                    this.previousSelectedBtn.enabled = true;
+
+                    deckButton.enabled = false;
+                    highlight.SetActive(true);
+                    this.previousSelectedBtn = deckButton;
+                    this.previousHighlight = highlight;
+                }
             });
+
+            // Assign the first dick as the selected one
+            if (isFirst)
+            {
+                deckButton.onClick.Invoke();
+                isFirst = false;
+            }
 
             deckInstance.SetActive(true);
         }
 
         if (deckContainer.GetChild(0) != null)
         {
-            Debug.Log("Arrived");
             // Set the size for the deck scroll
             RectTransform contentRect = deckContainer.GetComponent<RectTransform>();
             RectTransform firstChild = deckContainer.GetChild(0).GetComponent<RectTransform>(); ;
