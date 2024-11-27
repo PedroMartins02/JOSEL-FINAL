@@ -104,7 +104,21 @@ public class AccountManager : MonoBehaviour
             playerData.CardBackCollection.Add(0);
             dataChanged = true;
         }
+        LoadAllMyths(playerData.CardCollection);
         SetPlayerData(playerData, dataChanged);
+    }
+
+    private void LoadAllMyths(List<string> currentCollection)
+    {
+        List<CardSO> myths = CardDatabase.Singleton.GetAllMyths();
+
+        foreach (CardSO myth in myths)
+        {
+            if (!currentCollection.Contains(myth.Id))
+            {
+                currentCollection.Add(myth.Id);
+            }
+        }
     }
 
     private DeckSO LoadStarterDeckCards()
