@@ -47,6 +47,7 @@ public class LobbyManager : NetworkBehaviour
 
     // Events for after joining lobby
     public event EventHandler<LobbyEventArgs> OnJoinedLobby;
+    public event EventHandler<LobbyEventArgs> OnJoinedQuickMatchLobby;
     public event EventHandler<LobbyEventArgs> OnJoinedLobbyUpdate;
 
     public class LobbyEventArgs : EventArgs

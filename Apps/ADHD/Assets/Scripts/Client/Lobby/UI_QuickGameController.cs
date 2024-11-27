@@ -31,13 +31,12 @@ public class UI_QuickGameController : MonoBehaviour
     {
         LobbyManager.Instance.OnQuickMatchStarted += LobbyManager_OnQuickMatchStarted;
         LobbyManager.Instance.OnQuickMatchFailed += LobbyManager_OnQuickMatchFailed;
-
-        MultiplayerManager.Instance.OnPlayerDataNetworkListChanged += MultiplayerManager_OnPlayerDataNetworkListChanged;
+        LobbyManager.Instance.OnJoinedLobbyUpdate += LobbyManager_OnJoinedLobbyUpdate;
 
         isTimerRunning = false;
     }
 
-    private void MultiplayerManager_OnPlayerDataNetworkListChanged(object sender, System.EventArgs e)
+    private void LobbyManager_OnJoinedLobbyUpdate(object sender, System.EventArgs e)
     {
         Debug.Log("LOBBY QUICK MATCH PLAYERS: " + LobbyManager.Instance.GetLobby().Players.Count);
         if (LobbyManager.Instance.IsLobbyHost() && LobbyManager.Instance.GetLobby().Players.Count > 1)
@@ -95,7 +94,6 @@ public class UI_QuickGameController : MonoBehaviour
 
     private void StopTimer()
     {
-        queue.SetActive(false);
         isTimerRunning = false;
     }
 
@@ -115,7 +113,6 @@ public class UI_QuickGameController : MonoBehaviour
     {
         LobbyManager.Instance.OnQuickMatchStarted -= LobbyManager_OnQuickMatchStarted;
         LobbyManager.Instance.OnQuickMatchFailed -= LobbyManager_OnQuickMatchFailed;
-
-        MultiplayerManager.Instance.OnPlayerDataNetworkListChanged -= MultiplayerManager_OnPlayerDataNetworkListChanged;
+        LobbyManager.Instance.OnJoinedLobbyUpdate -= LobbyManager_OnJoinedLobbyUpdate;
     }
 }

@@ -59,7 +59,7 @@ public class LobbySelectReady : NetworkBehaviour
         if (allClientsReady)
         {
             LobbyManager.Instance.DeleteLobby();
-            SceneLoader.LoadNetwork(SceneLoader.Scene.GameCleanupScene);
+            SceneLoader.LoadNetwork(SceneLoader.Scene.Game);
         }
     }
 

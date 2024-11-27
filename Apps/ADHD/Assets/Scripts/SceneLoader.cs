@@ -17,8 +17,7 @@ public class SceneLoader
         DeckEditor,
         DeckBuilder,
         LoadingScene,
-        ExitNetworkLoadingScene,
-        GameCleanupScene
+        ExitNetworkLoadingScene
     }
 
     private static Scene targetScene;
