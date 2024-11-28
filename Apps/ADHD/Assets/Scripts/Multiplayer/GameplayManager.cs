@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Game.Logic;
 using GameModel;
@@ -17,6 +18,9 @@ public class GameplayManager : NetworkBehaviour
     }
 
     public NetworkVariable<GameState> CurrentGameState = new NetworkVariable<GameState>(GameState.WaitingForPlayers);
+
+    // Events
+    public event EventHandler OnGameStart;
 
 
     private void Awake()
@@ -75,9 +79,6 @@ public class GameplayManager : NetworkBehaviour
     {
         if (IsServer)
         {
-            CurrentGameState.Value = GameState.Playing;
-
-
 
             StartGameClientRpc();
         }
@@ -86,7 +87,9 @@ public class GameplayManager : NetworkBehaviour
     [ClientRpc]
     private void StartGameClientRpc()
     {
+        CurrentGameState.Value = GameState.Playing;
 
+        OnGameStart?.Invoke(this, EventArgs.Empty);
     }
 
     public void BroadcastActionExecuted(ActionData actionData)

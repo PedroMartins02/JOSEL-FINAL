@@ -29,36 +29,6 @@ public abstract class HorizontalCardHolder : MonoBehaviour
 
     protected virtual void Start()
     {
-        for (int i = 0; i < cardsToSpawn; i++)
-        {
-            Instantiate(slotPrefab, transform);
-        }
-
-        rect = GetComponent<RectTransform>();
-        cards = GetComponentsInChildren<GameCard>().ToList();
-        int cardCount = 0;
-
-        foreach (GameCard card in cards)
-        {
-            card.PointerEnterEvent.AddListener(CardPointerEnter);
-            card.PointerExitEvent.AddListener(CardPointerExit);
-            card.BeginDragEvent.AddListener(BeginDrag);
-            card.EndDragEvent.AddListener(EndDrag);
-            card.name = cardCount.ToString();
-            card.isMine = isMine;
-            card.isInHand = GetType() == typeof(HandCardHolder);
-            card.gameObject.tag = isMine ? "MyCard" : "OpponentCard";
-            cardCount++;
-        }
-
-        StartCoroutine(Frame());
-
-        IEnumerator Frame()
-        {
-            yield return new WaitForSecondsRealtime(.1f);
-            UpdateIndexes();
-        }
-
 
     }
 
