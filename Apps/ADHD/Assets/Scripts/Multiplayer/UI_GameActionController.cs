@@ -1,7 +1,9 @@
+using Game.Data;
 using Game.Logic;
+using GameCore.Events;
 using GameModel;
-using System;
 using TMPro;
+using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
@@ -23,6 +25,7 @@ public class UI_GameActionController : NetworkBehaviour
     private void Start()
     {
         GameplayManager.Instance.OnCurrentGameStateChanged += GameplayManager_OnStateChange;
+
         
         healthImage.fillAmount = 1;
         oppHealthImage.fillAmount = 1;
@@ -30,9 +33,11 @@ public class UI_GameActionController : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        GameplayManager.Instance.OnCurrentGameStateChanged += GameplayManager_OnStateChange; ;
+        GameplayManager.Instance.OnCurrentGameStateChanged += GameplayManager_OnStateChange;
 
         base.OnNetworkSpawn();
+
+        EventManager.Subscribe(GameEventsEnum.CardDrawn, OnCardDrawnEvent);
     }
 
     private void GameplayManager_OnStateChange(object sender, GameplayManager.GameStateEventArgs e)
@@ -50,7 +55,11 @@ public class UI_GameActionController : NetworkBehaviour
         foreach(ulong clientId in NetworkManager.Singleton.ConnectedClientsIds)
         {
             UpdateHealthbarClientRpc(clientId);
-            UpdateMythClientRpc(clientId);
+
+            GameModel.Player player = PlayerManager.Instance.GetPlayerByClientId(clientId);
+            UpdateMythClientRpc(clientId, player.playerData.MythCard.Data.Id);
+
+            Debug.Log("Here");
         }
     }
 
@@ -75,13 +84,11 @@ public class UI_GameActionController : NetworkBehaviour
     }
 
     [ClientRpc]
-    public void UpdateMythClientRpc(ulong clientId)
+    public void UpdateMythClientRpc(ulong clientId, FixedString64Bytes mythSOId)
     {
-        GameModel.Player player = PlayerManager.Instance.GetPlayerByClientId(clientId);
+        CardSO mythSO = CardDatabase.Singleton.GetCardSoOfId(mythSOId.ToString());
 
-        CardSO mythSO = CardDatabase.Singleton.GetCardSoOfId(player.MythCard.Data.Id);
-
-        if (player != null && mythSO != null)
+        if (mythSO != null)
         {
             if (NetworkManager.Singleton.LocalClientId.Equals(clientId))
             {
@@ -91,6 +98,38 @@ public class UI_GameActionController : NetworkBehaviour
             {
                 oppMythVisual.sprite = mythSO.Art;
             }
+        }
+    }
+
+    public void OnCardDrawnEvent(object args) 
+    {
+        if (args.GetType() != typeof(CardDrawnEventArgs))
+            return;
+
+        CardDrawnEventArgs cardDrawnArgs = (CardDrawnEventArgs)args;
+
+        Debug.Log(NetworkManager.Singleton.LocalClientId + " = " + cardDrawnArgs.PlayerID);
+
+        if (NetworkManager.Singleton.LocalClientId.Equals(cardDrawnArgs.PlayerID))
+        {
+            myHand.SpawnCardClientRpc(cardDrawnArgs.CardData, cardDrawnArgs.PlayerID);
+        }
+        else
+        {
+            opponentHand.SpawnCardClientRpc(cardDrawnArgs.CardData, cardDrawnArgs.PlayerID);
+        }
+    }
+
+    [ClientRpc]
+    public void DrawCardClientRpc(ulong clientId, CardDataSnapshot cardData)
+    {
+        if (NetworkManager.Singleton.LocalClientId.Equals(clientId))
+        {
+            myHand.SpawnCardClientRpc(cardData, clientId);
+        } 
+        else 
+        {
+            opponentHand.SpawnCardClientRpc(cardData, clientId);
         }
     }
 

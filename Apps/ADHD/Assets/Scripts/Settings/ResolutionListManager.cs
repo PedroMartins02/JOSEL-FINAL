@@ -8,7 +8,6 @@ public class ResolutionListManager : MonoBehaviour
 {
   [Header("Managers")]
   public VideoSettingUpdater videoSettings;
-  public ButtonUI buttonManager;
 
   [Header("List Generation")]
   public GameObject resolutionItemPrefab;
@@ -71,7 +70,7 @@ public class ResolutionListManager : MonoBehaviour
 	  return;
 
 	btn.Select();
-	videoSettings.ChangeResolution(resolutionIndex);
+	//videoSettings.ChangeResolution(resolutionIndex);
 	Debug.Log(resolutions[resolutionIndex].ToString() + " selected (index: " + resolutionIndex + ")");
   }
 }

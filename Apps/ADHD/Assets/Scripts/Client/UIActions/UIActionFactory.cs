@@ -11,7 +11,7 @@ namespace Game.Logic.Actions.UI
             switch (actionData.ActionType)
             {
                 case ActionType.DrawCard:
-                    return new UIDrawCardAction(actionData.CardId, actionData.PlayerId);
+                    return new UIDrawCardAction(actionData.CardData, actionData.PlayerId);
                 case ActionType.PlayCard:
 
                     break;

@@ -1,5 +1,8 @@
 using System;
+using Game.Logic;
 using GameModel;
+using Unity.VisualScripting;
+using UnityEngine.InputSystem;
 
 namespace Game.Data
 {
@@ -14,6 +17,9 @@ namespace Game.Data
         public readonly Factions Faction;
         public readonly Elements Element;
 
+        // Only set after the card gets registered in the CardManager
+        public readonly int GameID;
+
         public CardData(string id, string name, string shortText, string description, int blessings, Factions faction, Elements element)
         {
             Id = id;
@@ -23,6 +29,19 @@ namespace Game.Data
             Blessings = blessings;
             Faction = faction;
             Element = element;
+        }
+
+        public CardData(CardData cardData, int gameID)
+        {
+            Id = cardData.Id;
+            Name = cardData.Name;
+            ShortText = cardData.ShortText;
+            Description = cardData.Description;
+            Blessings = cardData.Blessings;
+            Faction = cardData.Faction;
+            Element = cardData.Element;
+
+            GameID = gameID;
         }
     }
 }

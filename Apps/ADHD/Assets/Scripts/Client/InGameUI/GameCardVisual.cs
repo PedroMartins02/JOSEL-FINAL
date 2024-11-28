@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using GameModel;
 using TMPro;
+using Game.Data;
 
 public class GameCardVisual : MonoBehaviour
 {
@@ -91,7 +92,7 @@ public class GameCardVisual : MonoBehaviour
         initalize = true;
     }
 
-    public void SetCardData(CardSO cardSO)
+    public void SetCardData(CardDataSnapshot cardData)
     {
         foreach (Transform transform in cardVisual)
         {
@@ -99,16 +100,16 @@ public class GameCardVisual : MonoBehaviour
         }
 
         cardFront = Instantiate(cardFrontPrefab, cardVisual);
-        cardFront.GetComponent<CardUI>().SetCardData(cardSO);
+        cardFront.GetComponent<CardUI>().SetCardData(cardData);
         shadowImage.sprite = cardFrameSprite;
     }
 
-    public void UpdateCardData(Card card)
+    public void UpdateCardData(CardDataSnapshot cardData)
     {
         CardUI cardUI = GetComponentInChildren<CardUI>();
         if (cardUI != null)
         {
-            cardUI.UpdateCardData(card);
+            cardUI.UpdateCardData(cardData);
         }
     }
 

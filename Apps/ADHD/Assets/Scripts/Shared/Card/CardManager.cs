@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Game.Data;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering;
 
 namespace Game.Logic
 {
@@ -21,16 +23,31 @@ namespace Game.Logic
             } 
         }
 
-        private Dictionary<ulong, ICard> cards = new Dictionary<ulong, ICard>();
+        private Dictionary<int, ICard> cards = new();
+        private int nextAvailableId = 0;
 
         private CardManager() 
         {
-            cards = new Dictionary<ulong, ICard>();
+            cards = new();
         }
 
-        public void RegisterCard(ulong cardId, ICard card)
+        public int RegisterCard(ICard card)
         {
+            int cardId = nextAvailableId;
+            nextAvailableId++;
+
             cards.Add(cardId, card);
+
+            return cardId;
+        }
+
+        public bool UpdateCard(ICard card)
+        {
+            if (!cards.ContainsKey(card.Data.GameID))
+                return false;
+
+            cards[card.Data.GameID] = card;
+            return true;
         }
 
         public ICard CreateCard(ulong cardId)
@@ -39,15 +56,25 @@ namespace Game.Logic
             return null;
         }
 
-        public void RemoveCard(ulong cardId)
+        public void RemoveCard(int cardId)
         {
             cards.Remove(cardId);
         }
 
-        public ICard GetCardByNetworkId(ulong cardId)
+        public ICard GetCardByNetworkId(int cardId)
         {
             cards.TryGetValue(cardId, out ICard card);
             return card;
+        }
+
+        public CardDataSnapshot GetCardSnapshot(int cardId)
+        {
+            cards.TryGetValue(cardId, out ICard card);
+
+            if (card == null)
+                return new CardDataSnapshot { };
+
+            return card.GetDataSnapshot();
         }
     }
 }
