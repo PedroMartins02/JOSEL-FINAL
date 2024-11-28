@@ -24,7 +24,7 @@ public class VideoSettingUpdater : MonoBehaviour
 	SetBaseVideoSettings();
   }
   
-  public void SaveVideoSettings()
+  public void SaveAndApplyVideoSettings()
   {
 	SettingsManager.Instance.resolutionIndex = resolutionIndex;
 	SettingsManager.Instance.isFullScreen = isFullscreen;
@@ -34,11 +34,24 @@ public class VideoSettingUpdater : MonoBehaviour
   
   public void SetBaseVideoSettings()
   {
-	resolutionText.text = Screen.currentResolution.ToString();
-	displayText.text = SettingsManager.Instance.isFullScreen ? "FullScreen" : "Windowed";
-	resolutionIndex = SettingsManager.Instance.resolutionIndex;
+	resolutionIndex = SettingsManager.Instance.GetCurrentResolutionIndex();
 	isFullscreen = SettingsManager.Instance.isFullScreen;
+	resolutionText.text = Screen.resolutions[resolutionIndex].width + "x" + Screen.resolutions[resolutionIndex].height;
+	displayText.text = SettingsManager.Instance.isFullScreen ? "FullScreen" : "Windowed";
 
-	Debug.Log("Current Res (by index stored): " + Screen.resolutions[resolutionIndex].ToString());
+	//Debug.Log("Current Res (by index stored): " + Screen.resolutions[resolutionIndex].ToString());
+  }
+
+  public void ChangeResolution(int resolutionIndex)
+  {
+	this.resolutionIndex = resolutionIndex;
+	resolutionText.text = Screen.resolutions[resolutionIndex].width + "x" + Screen.resolutions[resolutionIndex].height;
+  }
+
+  public void ChangeDisplay(bool fullscreen)
+  {
+	Debug.Log("Fullscreen? " + isFullscreen);
+	isFullscreen = fullscreen;
+	displayText.text = isFullscreen? "FullScreen" : "Windowed";
   }
 }

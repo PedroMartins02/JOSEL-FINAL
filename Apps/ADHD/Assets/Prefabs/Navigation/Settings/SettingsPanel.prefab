@@ -161,6 +161,7 @@ MonoBehaviour:
   onSprite: {fileID: 21300000, guid: 65ceffdab21a2d947bae0070bb5044cc, type: 3}
   offSprite: {fileID: 21300000, guid: 4e3e24368d5f64b43bdd67caa0f5360f, type: 3}
   isOn: 0
+  isStartup: 1
 --- !u!1 &1299918023233255864
 GameObject:
   m_ObjectHideFlags: 0
@@ -322,6 +323,7 @@ MonoBehaviour:
   onSprite: {fileID: 21300000, guid: 95dc9ce5ceb922e42bba5734f41784fb, type: 3}
   offSprite: {fileID: 21300000, guid: 6fa1e42b83a2e5b4d93b8976a6421dd2, type: 3}
   isOn: 0
+  isStartup: 1
 --- !u!1 &1605860597170519593
 GameObject:
   m_ObjectHideFlags: 0
@@ -584,8 +586,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   contentView: {fileID: 7945504089218712640}
-  startPage: {fileID: 2696659286446230158, guid: a529bd96a46ace041838afc7899d35b2,
-    type: 3}
+  startPage: {fileID: 0}
 --- !u!114 &4535298057631408719
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -918,3 +919,4 @@ MonoBehaviour:
   onSprite: {fileID: 21300000, guid: 9237e97fa94d31b40b57ac25ca38b490, type: 3}
   offSprite: {fileID: 21300000, guid: 9ca6f0a37ec591f459bae0fe67832761, type: 3}
   isOn: 1
+  isStartup: 1
