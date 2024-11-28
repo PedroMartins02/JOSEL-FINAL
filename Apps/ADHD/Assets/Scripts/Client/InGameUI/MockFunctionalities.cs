@@ -7,6 +7,7 @@ using UnityEngine;
 
 public class MockFunctionalities : MonoBehaviour
 {
+    /*
     [SerializeField] HorizontalCardHolder cardHolder;
     [SerializeField] PlayerInfo playerInfo;
 
@@ -36,9 +37,9 @@ public class MockFunctionalities : MonoBehaviour
     {
         EventManager.Subscribe(GameEventsEnum.CardAddedToHand, SpawnCard);
 
-        DrawCardAction action = new(deck, hand, IsMine);
+        //DrawCardAction action = new(deck, hand, IsMine);
 
-        ActionQueueManager.Instance.AddAction(action);
+        //ActionQueueManager.Instance.AddAction(action);
     }
 
     public void SetPlayerMyth(string mythId)
@@ -61,9 +62,10 @@ public class MockFunctionalities : MonoBehaviour
     {
         EventManager.Unsubscribe(GameEventsEnum.CardAddedToHand, SpawnCard);
 
+        /*
         if (obj is CardAddedToHandEventArgs args) 
         {
             cardHolder.SpawnCard(args.Card, args.IsMine);
         }
-    }
+    }*/
 }
