@@ -30,15 +30,11 @@ namespace Game.Logic.Actions
             return true; // attacker.CanAttack && defender.IsTargatable;
         }
 
-        public IEnumerator Execute()
+        public void Execute()
         {
             combatSystem.AttackCard(attacker, defender);
 
-            // Should wait for animations and other things here
-
             attacker.HandleAction(CardActions.Attack);
-
-            yield return null;
         }
     }
 }

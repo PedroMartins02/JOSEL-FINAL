@@ -1,5 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 using GameModel;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -44,5 +48,36 @@ public class DeckData
         {
             CardList.Add(cardSO.Id);
         }
+    }
+
+    public static string SerializeDeckData(DeckData deckData)
+    {
+        StringBuilder result = new StringBuilder();
+
+        result.Append(deckData.CardBackId.ToString());
+        result.Append('|');
+        result.Append(deckData.MythId);
+        result.Append('|');
+        result.Append(string.Join("|", deckData.CardList.Select(cardId => cardId)));
+
+        Debug.Log("Serialized Deck Data: " + result.ToString());
+
+        return result.ToString();
+    }
+
+    public static DeckData DeserializeDeckData(string serializedDeckData)
+    {
+        string[] data = serializedDeckData.Split('|');
+        DeckData deckData = new();
+        List<string> cardList = new(data);
+
+        deckData.CardBackId = int.Parse(data[0]);
+        deckData.MythId = data[1];
+
+        cardList.RemoveRange(0, 2);
+
+        deckData.CardList = cardList;
+
+        return deckData;
     }
 }

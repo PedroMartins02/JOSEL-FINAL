@@ -28,7 +28,7 @@ namespace Game.Logic.Actions
             return true; // TODO: Adicionar condição para verificar se é o turno do jogador ou não
         }
 
-        public IEnumerator Execute()
+        public void Execute()
         {
             for (int i = 0; i < numberOfCards; i++)
             {
@@ -51,8 +51,6 @@ namespace Game.Logic.Actions
                     }
                 }
             }
-
-            yield return null;
         }
     }
 

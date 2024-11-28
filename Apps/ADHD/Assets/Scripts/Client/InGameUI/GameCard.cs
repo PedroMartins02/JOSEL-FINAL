@@ -378,8 +378,10 @@ public class GameCard : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDrag
 
     private void PlayCardOnBoard(GameObject playerBoardArea)
     {
+        /*
         PlayCardAction action = new(cardData);
         ActionQueueManager.Instance.AddAction(action);
+        */
 
         HorizontalCardHolder horizontalCardHolder = GetComponentInParent<HorizontalCardHolder>();
         horizontalCardHolder.RemoveCard(this);

@@ -65,7 +65,7 @@ public class CardDatabase : MonoBehaviour
             return null;
 
         if (cardConstructors.TryGetValue(cardSO.GetType(), out CardConstructor constructor))
-            return constructor(cardSO); 
+            return constructor(cardSO);
 
         return null;
     }

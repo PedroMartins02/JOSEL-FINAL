@@ -18,8 +18,6 @@ public class MockFunctionalities : MonoBehaviour
 
     private void Start()
     {
-        deck = new(deckSO);
-        hand = new(5);
     }
 
     public void OpponentDrawCard()
