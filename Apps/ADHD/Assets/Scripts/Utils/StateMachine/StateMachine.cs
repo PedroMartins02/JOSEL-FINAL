@@ -26,6 +26,8 @@ namespace Game.Utils.Logic
 
         public void SetState(TStateType newStateType)
         {
+            if (!states.ContainsKey(newStateType)) return;
+
             CurrentState?.ExitState();
             CurrentState = states[newStateType];
             CurrentState.EnterState();
