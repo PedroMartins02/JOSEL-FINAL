@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Container_3
   m_EditorClassIdentifier: 
   description: Win a game without spell cards
-  task_completion: 0/1
   coins: 15
+  progress: 5
+  scale: 1

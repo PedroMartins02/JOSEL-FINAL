@@ -2,14 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.InputSystem;
 
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 
 [ExecuteInEditMode()]
-
 public class ProgressBar : MonoBehaviour
 {
 #if UNITY_EDITOR
@@ -21,30 +19,27 @@ public class ProgressBar : MonoBehaviour
     }
 #endif
 
-    public int minimum;
-    public int maximum;
-    public int current;
-    public Image mask;
+    public Container container; // Reference to the Container ScriptableObject
     public Image fill;
     public Color color;
+
     void Start()
     {
-        
+        UpdateProgress();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        GetCurrentFill();
+        UpdateProgress();
     }
 
-    void GetCurrentFill()
+    void UpdateProgress()
     {
-        float currentOffset = current - minimum;
-        float maximumOffset = maximum - minimum;
-        float fillAmount = currentOffset / maximumOffset;
-        mask.fillAmount = fillAmount;
-
-        fill.color = color;
+        if (container != null)
+        {
+            float fillAmount = (float)container.progress * container.scale;
+            fill.fillAmount = fillAmount;
+            fill.color = color;
+        }
     }
 }

@@ -24,7 +24,6 @@ public class ContainerDisplay : MonoBehaviour
         if (assignedMission == null) return;
 
         descriptionText.text = assignedMission.description;
-        taskcompletionText.text = assignedMission.task_completion;
         coinsText.text = assignedMission.coins.ToString();
     }
 }

@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Container_1
   m_EditorClassIdentifier: 
   description: Play 2 Spell Cards
-  task_completion: 1/2
   coins: 10
+  progress: 3
+  scale: 2
