@@ -247,8 +247,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2831087306500888726}
   - {fileID: 6106673503038478809}
+  - {fileID: 2831087306500888726}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -447,6 +447,7 @@ MonoBehaviour:
   onSprite: {fileID: 21300000, guid: f9177e56bc8f118419026b6db7bfd249, type: 3}
   offSprite: {fileID: 21300000, guid: 793b58ae3ca91da47afbff849ffd66d0, type: 3}
   isOn: 1
+  isStartup: 1
 --- !u!1 &6885104671808033640
 GameObject:
   m_ObjectHideFlags: 0
@@ -608,6 +609,7 @@ MonoBehaviour:
   onSprite: {fileID: 21300000, guid: 8c4e971acd0823e4f924b6d5b004053c, type: 3}
   offSprite: {fileID: 21300000, guid: 8a710d521ada6bb40a95ff07c1af7826, type: 3}
   isOn: 0
+  isStartup: 1
 --- !u!1 &7678909018398144449
 GameObject:
   m_ObjectHideFlags: 0
@@ -888,3 +890,4 @@ MonoBehaviour:
   onSprite: {fileID: 21300000, guid: 571068e3d373ff34f9864ea1492e4d70, type: 3}
   offSprite: {fileID: 21300000, guid: 2262066b1607eee49b2739952922ccff, type: 3}
   isOn: 0
+  isStartup: 1
