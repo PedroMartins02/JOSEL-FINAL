@@ -42,7 +42,6 @@ public class UI_GameActionController : NetworkBehaviour
 
     private void GameplayManager_OnStateChange(object sender, GameplayManager.GameStateEventArgs e)
     {
-        Debug.Log("WRRAAAAA final");
         if (IsServer && e.gameState.Equals(GameplayManager.GameState.Playing))
         {
             GameInitializationServerRpc();
@@ -106,13 +105,15 @@ public class UI_GameActionController : NetworkBehaviour
 
         CardDrawnEventArgs cardDrawnArgs = (CardDrawnEventArgs)args;
 
+        //DrawCardClientRpc(cardDrawnArgs.PlayerID, cardDrawnArgs.CardData);
+
         if (NetworkManager.Singleton.LocalClientId.Equals(cardDrawnArgs.PlayerID))
         {
-            myHand.SpawnCardClientRpc(cardDrawnArgs.CardData, cardDrawnArgs.PlayerID);
+            myHand.SpawnCard(cardDrawnArgs.CardData, cardDrawnArgs.PlayerID);
         }
         else
         {
-            opponentHand.SpawnCardClientRpc(cardDrawnArgs.CardData, cardDrawnArgs.PlayerID);
+            opponentHand.SpawnCard(cardDrawnArgs.CardData, cardDrawnArgs.PlayerID);
         }
     }
 
@@ -121,11 +122,11 @@ public class UI_GameActionController : NetworkBehaviour
     {
         if (NetworkManager.Singleton.LocalClientId.Equals(clientId))
         {
-            myHand.SpawnCardClientRpc(cardData, clientId);
+            myHand.SpawnCard(cardData, clientId);
         } 
         else 
         {
-            opponentHand.SpawnCardClientRpc(cardData, clientId);
+            opponentHand.SpawnCard(cardData, clientId);
         }
     }
 

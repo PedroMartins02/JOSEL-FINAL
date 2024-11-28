@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using Game.Data;
 using GameCore.Events;
-using GameModel;
 using UnityEngine;
 
 namespace Game.Logic.Actions.UI
@@ -20,7 +19,6 @@ namespace Game.Logic.Actions.UI
 
         public IEnumerator Execute()
         {
-            Debug.Log("Drawing Card UI Action!");
             EventManager.TriggerEvent(GameEventsEnum.CardDrawn, new CardDrawnEventArgs { CardData = cardData, PlayerID = playerId });
 
             // Do Generic stuff if necessary here (or before the if statement)

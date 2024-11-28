@@ -144,8 +144,7 @@ public abstract class HorizontalCardHolder : NetworkBehaviour
         UpdateIndexes();
     }
 
-    [Rpc(SendTo.ClientsAndHost)]
-    public void SpawnCardClientRpc(CardDataSnapshot cardData, ulong playerId)
+    public void SpawnCard(CardDataSnapshot cardData, ulong playerId)
     {
         GameObject cardSlot = Instantiate(slotPrefab, transform);
 

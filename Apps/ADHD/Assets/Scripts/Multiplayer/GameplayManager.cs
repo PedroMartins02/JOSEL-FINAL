@@ -58,8 +58,6 @@ public class GameplayManager : NetworkBehaviour
     
     private void GameplayManager_GameStateChange(GameState previousValue, GameState newValue)
     {
-        Debug.Log("WRRAAAAA 2");
-
         OnCurrentGameStateChanged?.Invoke(this, new GameStateEventArgs { gameState = newValue });
     }
 
@@ -85,12 +83,13 @@ public class GameplayManager : NetworkBehaviour
 
         foreach (ulong clientId in NetworkManager.Singleton.ConnectedClientsIds)
         {
+            Debug.Log("Registering Player: " + clientId);
+
             MP_PlayerData playerData = MultiplayerManager.Instance.GetPlayerDataFromClientId(clientId);
 
             PlayerManager.Instance.CreatePlayer(clientId, playerData);
         }
 
-        Debug.Log("WRRAAAAA 1");
         CurrentGameState.Value = GameState.Playing;
 
         StartGameClientRpc(GameRulesManager.Instance.GetIntRuleValue(RuleTarget.StartingHandSize));
@@ -101,7 +100,7 @@ public class GameplayManager : NetworkBehaviour
     {
         StartGame();
 
-        ActionRequestHandler.Instance.HandleDrawCardRequestServerRpc(cardsToDraw);
+        ActionRequestHandler.Instance.HandleDrawCardRequestServerRpc(cardsToDraw, NetworkManager.Singleton.LocalClientId);
     }
 
     private void StartGame()

@@ -29,7 +29,6 @@ namespace Game.Logic.Actions.UI
 
         public void EnqueueAction(IUIAction action)
         {
-            Debug.Log("Queuing UI Action!");
             uiActionQueue.Enqueue(action);
 
             if (!isProcessing)

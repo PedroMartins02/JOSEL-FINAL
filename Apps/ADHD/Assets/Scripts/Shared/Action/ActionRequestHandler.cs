@@ -37,12 +37,12 @@ namespace Game.Logic.Actions
         }
 
         [Rpc(SendTo.Server)]
-        public void HandleDrawCardRequestServerRpc(int numberOfCardsToDraw, RpcParams rpcParams = default)
+        public void HandleDrawCardRequestServerRpc(int numberOfCardsToDraw, ulong clientID, RpcParams rpcParams = default)
         {
             ActionData actionData = new ActionData
             {
                 ActionType = ActionType.DrawCard,
-                PlayerId = rpcParams.Receive.SenderClientId,
+                PlayerId = clientID,
                 NumberOfCardsDrawn = numberOfCardsToDraw
             };
 

@@ -14,8 +14,9 @@ namespace Game.Data
         public readonly MythCard MythCard;
         public readonly Deck Deck;
 
-        public PlayerGameData(string name, int health, int blessings, MythCard mythCard, Deck deck)
+        public PlayerGameData(ulong clientId, string name, int health, int blessings, MythCard mythCard, Deck deck)
         {
+            ClientId = clientId;
             Name = name;
             Health = health;
             Blessings = blessings;

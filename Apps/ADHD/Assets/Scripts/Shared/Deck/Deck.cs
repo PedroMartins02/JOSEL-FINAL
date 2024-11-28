@@ -57,7 +57,7 @@ namespace GameModel
 
             cardList = cardList.OrderBy(c => random.Next()).ToList();
 
-            cards = new Stack<ICard>(cardList);
+            this.cards = new Stack<ICard>(cardList);
         }
 
         public ICard DrawCard()
