@@ -325,6 +325,7 @@ public class DeckEditorManager : MonoBehaviour
 
     private void AddToEditingArea(CardSO cardSO)
     {
+        /*
         errorText.text = "";
         
         if (ListOfSelectedCards.Count == 20)
@@ -349,6 +350,7 @@ public class DeckEditorManager : MonoBehaviour
                 return;
             }
         }
+        */
 
 
         
