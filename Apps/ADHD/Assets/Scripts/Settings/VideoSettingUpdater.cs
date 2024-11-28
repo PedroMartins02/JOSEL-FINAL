@@ -21,37 +21,24 @@ public class VideoSettingUpdater : MonoBehaviour
 
   void Start()
   {
-	SetBaseVideoSettings();
+	  SetBaseVideoSettings();
   }
   
-  public void SaveAndApplyVideoSettings()
+  public void SaveVideoSettings()
   {
-	SettingsManager.Instance.resolutionIndex = resolutionIndex;
-	SettingsManager.Instance.isFullScreen = isFullscreen;
-	SettingsManager.Instance.SaveSettings();
-	SettingsManager.Instance.ApplySettings();
+    SettingsManager.Instance.resolutionIndex = resolutionIndex;
+    SettingsManager.Instance.isFullScreen = isFullscreen;
+    SettingsManager.Instance.SaveSettings();
+    SettingsManager.Instance.ApplySettings();
   }
   
   public void SetBaseVideoSettings()
   {
-	resolutionIndex = SettingsManager.Instance.GetCurrentResolutionIndex();
-	isFullscreen = SettingsManager.Instance.isFullScreen;
-	resolutionText.text = Screen.resolutions[resolutionIndex].width + "x" + Screen.resolutions[resolutionIndex].height;
-	displayText.text = SettingsManager.Instance.isFullScreen ? "FullScreen" : "Windowed";
+    resolutionText.text = Screen.currentResolution.ToString();
+    displayText.text = SettingsManager.Instance.isFullScreen ? "FullScreen" : "Windowed";
+    resolutionIndex = SettingsManager.Instance.resolutionIndex;
+    isFullscreen = SettingsManager.Instance.isFullScreen;
 
-	//Debug.Log("Current Res (by index stored): " + Screen.resolutions[resolutionIndex].ToString());
-  }
-
-  public void ChangeResolution(int resolutionIndex)
-  {
-	this.resolutionIndex = resolutionIndex;
-	resolutionText.text = Screen.resolutions[resolutionIndex].width + "x" + Screen.resolutions[resolutionIndex].height;
-  }
-
-  public void ChangeDisplay(bool fullscreen)
-  {
-	Debug.Log("Fullscreen? " + isFullscreen);
-	isFullscreen = fullscreen;
-	displayText.text = isFullscreen? "FullScreen" : "Windowed";
+      Debug.Log("Current Res (by index stored): " + Screen.resolutions[resolutionIndex].ToString());
   }
 }
