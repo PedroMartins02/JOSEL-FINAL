@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using System.Linq;
-using GameModel;
 using Game.Data;
 using Game.Logic;
 using Unity.Netcode;
@@ -145,7 +144,7 @@ public abstract class HorizontalCardHolder : NetworkBehaviour
         UpdateIndexes();
     }
 
-    [ClientRpc]
+    [Rpc(SendTo.ClientsAndHost)]
     public void SpawnCardClientRpc(CardDataSnapshot cardData, ulong playerId)
     {
         GameObject cardSlot = Instantiate(slotPrefab, transform);
@@ -158,7 +157,7 @@ public abstract class HorizontalCardHolder : NetworkBehaviour
         card.EndDragEvent.AddListener(EndDrag);
 
         card.name = "unknown";
-        card.isMine = playerId == NetworkManager.Singleton.LocalClientId;
+        card.isMine = NetworkManager.Singleton.LocalClientId.Equals(playerId);
         card.isInHand = true;
         card.gameObject.tag = isMine ? "MyCard" : "OpponentCard";
 
