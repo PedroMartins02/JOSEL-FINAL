@@ -21,24 +21,24 @@ public class VideoSettingUpdater : MonoBehaviour
 
   void Start()
   {
-	SetBaseVideoSettings();
+	  SetBaseVideoSettings();
   }
   
   public void SaveVideoSettings()
   {
-	SettingsManager.Instance.resolutionIndex = resolutionIndex;
-	SettingsManager.Instance.isFullScreen = isFullscreen;
-	SettingsManager.Instance.SaveSettings();
-	SettingsManager.Instance.ApplySettings();
+    SettingsManager.Instance.resolutionIndex = resolutionIndex;
+    SettingsManager.Instance.isFullScreen = isFullscreen;
+    SettingsManager.Instance.SaveSettings();
+    SettingsManager.Instance.ApplySettings();
   }
   
   public void SetBaseVideoSettings()
   {
-	resolutionText.text = Screen.currentResolution.ToString();
-	displayText.text = SettingsManager.Instance.isFullScreen ? "FullScreen" : "Windowed";
-	resolutionIndex = SettingsManager.Instance.resolutionIndex;
-	isFullscreen = SettingsManager.Instance.isFullScreen;
+    resolutionText.text = Screen.currentResolution.ToString();
+    displayText.text = SettingsManager.Instance.isFullScreen ? "FullScreen" : "Windowed";
+    resolutionIndex = SettingsManager.Instance.resolutionIndex;
+    isFullscreen = SettingsManager.Instance.isFullScreen;
 
-	Debug.Log("Current Res (by index stored): " + Screen.resolutions[resolutionIndex].ToString());
+      Debug.Log("Current Res (by index stored): " + Screen.resolutions[resolutionIndex].ToString());
   }
 }
