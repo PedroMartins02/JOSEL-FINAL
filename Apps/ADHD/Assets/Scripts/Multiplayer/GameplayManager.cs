@@ -96,7 +96,7 @@ public class GameplayManager : NetworkBehaviour
         StartGameClientRpc(GameRulesManager.Instance.GetIntRuleValue(RuleTarget.StartingHandSize));
     }
 
-    [ClientRpc]
+    [Rpc(SendTo.ClientsAndHost)]
     private void StartGameClientRpc(int cardsToDraw)
     {
         StartGame();
@@ -117,7 +117,7 @@ public class GameplayManager : NetworkBehaviour
         }
     }
 
-    [ClientRpc]
+    [Rpc(SendTo.ClientsAndHost)]
     private void NotifyActionExecutedClientRpc(ActionData actionData)
     {
         IUIAction uiAction = UIActionFactory.CreateUIAction(actionData);

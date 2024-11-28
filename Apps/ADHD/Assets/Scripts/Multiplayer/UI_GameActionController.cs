@@ -49,41 +49,39 @@ public class UI_GameActionController : NetworkBehaviour
         }
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    public void GameInitializationServerRpc(ServerRpcParams rpcParams = default)
+    [Rpc(SendTo.Server)]
+    public void GameInitializationServerRpc(RpcParams rpcParams = default)
     {
         foreach(ulong clientId in NetworkManager.Singleton.ConnectedClientsIds)
         {
-            UpdateHealthbarClientRpc(clientId);
-
             GameModel.Player player = PlayerManager.Instance.GetPlayerByClientId(clientId);
+
+            if (player == null)
+                continue;
+
+            UpdateHealthbarClientRpc(clientId, player.CurrentHealth, player.playerData.Health);
+
             UpdateMythClientRpc(clientId, player.playerData.MythCard.Data.Id);
-
-            Debug.Log("Here");
         }
     }
 
-    [ClientRpc]
-    public void UpdateHealthbarClientRpc(ulong clientId)
+    [Rpc(SendTo.ClientsAndHost)]
+    public void UpdateHealthbarClientRpc(ulong clientId, int playerCurrentHealth, int playerMaxHealth)
     {
-        GameModel.Player player = PlayerManager.Instance.GetPlayerByClientId(clientId);
-
-        if (player != null)
+        if (NetworkManager.Singleton.LocalClientId.Equals(clientId))
         {
-            if (NetworkManager.Singleton.LocalClientId.Equals(clientId))
-            {
-                healthImage.fillAmount = player.CurrentHealth / player.playerData.Health;
-                healthText.text = player.playerData.Health.ToString();
-            }
-            else
-            {
-                oppHealthImage.fillAmount = player.CurrentHealth / player.playerData.Health;
-                oppHealthText.text = player.playerData.Health.ToString();
-            }
+            healthImage.fillAmount = playerCurrentHealth / playerMaxHealth;
+            healthText.text = playerMaxHealth.ToString();
         }
+        else
+        {
+            oppHealthImage.fillAmount = playerCurrentHealth / playerMaxHealth;
+            oppHealthText.text = playerMaxHealth.ToString();
+        }
+        
     }
 
-    [ClientRpc]
+    [Rpc(SendTo.ClientsAndHost)]
     public void UpdateMythClientRpc(ulong clientId, FixedString64Bytes mythSOId)
     {
         CardSO mythSO = CardDatabase.Singleton.GetCardSoOfId(mythSOId.ToString());
@@ -108,8 +106,6 @@ public class UI_GameActionController : NetworkBehaviour
 
         CardDrawnEventArgs cardDrawnArgs = (CardDrawnEventArgs)args;
 
-        Debug.Log(NetworkManager.Singleton.LocalClientId + " = " + cardDrawnArgs.PlayerID);
-
         if (NetworkManager.Singleton.LocalClientId.Equals(cardDrawnArgs.PlayerID))
         {
             myHand.SpawnCardClientRpc(cardDrawnArgs.CardData, cardDrawnArgs.PlayerID);
@@ -120,7 +116,7 @@ public class UI_GameActionController : NetworkBehaviour
         }
     }
 
-    [ClientRpc]
+    [Rpc(SendTo.ClientsAndHost)]
     public void DrawCardClientRpc(ulong clientId, CardDataSnapshot cardData)
     {
         if (NetworkManager.Singleton.LocalClientId.Equals(clientId))
