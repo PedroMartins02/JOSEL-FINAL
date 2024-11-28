@@ -8,7 +8,6 @@ public class ResolutionListManager : MonoBehaviour
 {
   [Header("Managers")]
   public VideoSettingUpdater videoSettings;
-  public ButtonUI buttonManager;
 
   [Header("List Generation")]
   public GameObject resolutionItemPrefab;
