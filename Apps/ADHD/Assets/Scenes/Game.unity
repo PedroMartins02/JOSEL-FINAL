@@ -1937,9 +1937,11 @@ MonoBehaviour:
   myHand: {fileID: 262770986}
   healthText: {fileID: 662616243021915570}
   healthImage: {fileID: 85882391}
+  mythVisual: {fileID: 4903193537202633425}
   opponentHand: {fileID: 1962970745}
   oppHealthText: {fileID: 1074532997152612113}
   oppHealthImage: {fileID: 563517228}
+  oppMythVisual: {fileID: 4886462135602380914}
 --- !u!1 &1962970740
 GameObject:
   m_ObjectHideFlags: 0

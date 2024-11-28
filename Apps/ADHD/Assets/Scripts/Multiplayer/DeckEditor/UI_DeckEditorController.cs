@@ -96,6 +96,6 @@ public class UI_DeckEditorController : MonoBehaviour
     public void ContinueOnClick()
     {
         PlayerPrefs.SetInt("ChosenFaction", chosenFaction);
-        SceneLoader.Load(SceneLoader.Scene.DeckBuilder);
+        SceneLoader.ExitNetworkLoad(SceneLoader.Scene.DeckBuilder);
     }
 }
