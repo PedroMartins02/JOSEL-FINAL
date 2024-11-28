@@ -608,6 +608,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ffb250e0ad13424e8ce3305c8110758, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isMine: 1
+  selectedCard: {fileID: 0}
+  hoveredCard: {fileID: 0}
+  slotPrefab: {fileID: 2338656347130158173, guid: f8d39bd442bd35741a14d2a56409c24b,
+    type: 3}
+  cardsToSpawn: 7
+  cards: []
+  curve: {fileID: 0}
+  tweenCardReturn: 1
 --- !u!1 &302822111
 GameObject:
   m_ObjectHideFlags: 0
@@ -889,6 +898,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6c68269de1ebb94498fb472f78698fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isMine: 1
+  selectedCard: {fileID: 0}
+  hoveredCard: {fileID: 0}
+  slotPrefab: {fileID: 2338656347130158173, guid: f8d39bd442bd35741a14d2a56409c24b,
+    type: 3}
+  cardsToSpawn: 7
+  cards: []
+  curve: {fileID: 0}
+  tweenCardReturn: 1
 --- !u!222 &519869950
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1387,6 +1405,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6c68269de1ebb94498fb472f78698fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isMine: 1
+  selectedCard: {fileID: 0}
+  hoveredCard: {fileID: 0}
+  slotPrefab: {fileID: 2338656347130158173, guid: f8d39bd442bd35741a14d2a56409c24b,
+    type: 3}
+  cardsToSpawn: 7
+  cards: []
+  curve: {fileID: 0}
+  tweenCardReturn: 1
 --- !u!114 &916103270
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2695,6 +2722,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a5c574afd2daf64688566d6727bb04b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  myHand: {fileID: 262770986}
+  healthText: {fileID: 662616243021915570}
+  healthImage: {fileID: 85882391}
+  mythVisual: {fileID: 4903193537202633425}
+  opponentHand: {fileID: 1962970745}
+  oppHealthText: {fileID: 1111431641}
+  oppHealthImage: {fileID: 781928780}
+  oppMythVisual: {fileID: 4886462135602380914}
 --- !u!1 &1962970740
 GameObject:
   m_ObjectHideFlags: 0
@@ -2810,6 +2845,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ffb250e0ad13424e8ce3305c8110758, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isMine: 1
+  selectedCard: {fileID: 0}
+  hoveredCard: {fileID: 0}
+  slotPrefab: {fileID: 2338656347130158173, guid: f8d39bd442bd35741a14d2a56409c24b,
+    type: 3}
+  cardsToSpawn: 7
+  cards: []
+  curve: {fileID: 0}
+  tweenCardReturn: 1
 --- !u!1 &2070673563
 GameObject:
   m_ObjectHideFlags: 0
@@ -3823,6 +3867,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f73ae59bbeb4874abda20c63ba009ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mythImage: {fileID: 0}
+  healthText: {fileID: 0}
+  blessingsText: {fileID: 0}
 --- !u!114 &7016582281368007706
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3909,6 +3956,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f73ae59bbeb4874abda20c63ba009ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mythImage: {fileID: 0}
+  healthText: {fileID: 0}
+  blessingsText: {fileID: 0}
 --- !u!114 &7387169544494862011
 MonoBehaviour:
   m_ObjectHideFlags: 0
