@@ -160,6 +160,7 @@ public class AccountManager : MonoBehaviour
 
         DeckData newDeckData = new DeckData(newDeck, cardBackID);
         playerData.DeckCollection.Add(newDeckData);
+        SaveData();
     }
 
     public void EditExistingDeck(int id, DeckSO deckToEdit, int cardBackId)

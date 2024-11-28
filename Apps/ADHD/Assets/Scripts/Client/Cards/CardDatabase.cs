@@ -85,6 +85,26 @@ public class CardDatabase : MonoBehaviour
         return eligibleCards[random.Next(eligibleCards.Count)];
     }
 
+    public CardSO GetRandomCard(Factions civilization)
+    {
+        System.Random random = new System.Random();
+        var eligibleCards = CardDictionary.Values
+        .Where(card => card.Faction == civilization && card.GetType() != typeof(MythCardSO))
+        .ToList();
+
+        return eligibleCards[random.Next(eligibleCards.Count)];
+    }
+
+    public List<CardSO> GetAllMyths(Factions civilization)
+    {
+        System.Random random = new System.Random();
+        var eligibleCards = CardDictionary.Values
+        .Where(card => card.Faction == civilization && card.GetType() == typeof(MythCardSO))
+        .ToList();
+
+        return eligibleCards;
+    }
+
     //this is horrible, but for the scope of the project, i dont care too much : )
     public List<CardSO> GetPackContents(Factions? civilization)
     {

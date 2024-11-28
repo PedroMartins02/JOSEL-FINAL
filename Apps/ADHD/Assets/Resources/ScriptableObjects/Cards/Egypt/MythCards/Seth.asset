@@ -16,7 +16,7 @@ MonoBehaviour:
   Name: Seth
   ShortText: God of Chaos
   Description: 
-  Art: {fileID: 0}
+  Art: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
   Faction: 3
   Element: 5
   Blessings: 0

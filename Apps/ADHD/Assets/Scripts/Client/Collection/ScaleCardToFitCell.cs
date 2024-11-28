@@ -34,8 +34,8 @@ public class ScaleCardToFitCell : MonoBehaviour
         RectTransform child = (RectTransform)CardToScale.transform;
         Vector2 childOriginalSize = child.rect.size;
 
-        float scaleX = parentSize.x / childOriginalSize.x;
         float scaleY = parentSize.y / childOriginalSize.y;
+        float scaleX = scaleY;
 
         child.localScale = new Vector3(scaleX, scaleY, 1f);
         child.anchoredPosition = Vector2.zero;
