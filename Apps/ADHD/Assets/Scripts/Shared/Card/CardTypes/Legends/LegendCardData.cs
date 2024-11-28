@@ -16,4 +16,9 @@ public class LegendCardData : UnitCardData
     {
         Effects = effects;
     }
+
+    public LegendCardData(LegendCardData cardData, int gameID) : base(cardData, gameID)
+    {
+        Effects = cardData.Effects;
+    }
 }

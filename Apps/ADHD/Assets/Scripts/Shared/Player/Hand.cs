@@ -11,7 +11,7 @@ namespace GameModel
         private List<ICard> cards;
         public int MaxHandSize { get; private set; }
 
-        public Hand(int maxHandSize) 
+        public Hand(int maxHandSize = 10) 
         {
             cards = new List<ICard>();
 

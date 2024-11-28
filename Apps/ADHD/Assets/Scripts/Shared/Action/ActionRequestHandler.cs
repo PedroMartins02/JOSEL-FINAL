@@ -22,28 +22,28 @@ namespace Game.Logic.Actions
             }
         }
 
-        [ServerRpc]
-        public void HandlePlayCardRequestServerRpc(ulong networkObjectCardId, ServerRpcParams rpcParams = default)
+        [ServerRpc(RequireOwnership = false)]
+        public void HandlePlayCardRequestServerRpc(int cardGameID, ServerRpcParams rpcParams = default)
         {
             ActionData actionData = new ActionData
             {
                 ActionType = ActionType.PlayCard,
                 PlayerId = rpcParams.Receive.SenderClientId,
-                NetworkObjectCardId = networkObjectCardId
+                CardGameID = cardGameID
             };
 
             IAction action = ActionFactory.CreateAction(actionData);
             ActionQueueManager.Instance.AddAction(action);
         }
 
-        [ServerRpc]
-        public void HandleDrawCardRequestServerRpc(int numberOfCardsDrawn, ServerRpcParams rpcParams = default)
+        [ServerRpc(RequireOwnership = false)]
+        public void HandleDrawCardRequestServerRpc(int numberOfCardsToDraw, ServerRpcParams rpcParams = default)
         {
             ActionData actionData = new ActionData
             {
                 ActionType = ActionType.DrawCard,
                 PlayerId = rpcParams.Receive.SenderClientId,
-                NumberOfCardsDrawn = numberOfCardsDrawn
+                NumberOfCardsDrawn = numberOfCardsToDraw
             };
 
             IAction action = ActionFactory.CreateAction(actionData);

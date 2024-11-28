@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Game.Data;
+using GameCore.Events;
 using GameModel;
 using UnityEngine;
 
@@ -7,29 +9,19 @@ namespace Game.Logic.Actions.UI
 {
     public class UIDrawCardAction : IUIAction
     {
-        private string cardID;
+        private CardDataSnapshot cardData;
         private ulong playerId;
 
-        public UIDrawCardAction(string cardID, ulong playerId)
+        public UIDrawCardAction(CardDataSnapshot cardData, ulong playerId)
         {
-            this.cardID = cardID;
+            this.cardData = cardData;
             this.playerId = playerId;
         }
 
         public IEnumerator Execute()
         {
-            bool isMyAction = MultiplayerManager.Instance.IsPlayerInstanceHost(playerId);
-
-            if (isMyAction)
-            {
-                CardSO cardSO = CardDatabase.Singleton.GetCardSoOfId(cardID);
-
-                // Update UI taking into account I played the card
-            }
-            else
-            {
-                // Update UI taking into account I didn't play the card
-            }
+            Debug.Log("Drawing Card UI Action!");
+            EventManager.TriggerEvent(GameEventsEnum.CardDrawn, new CardDrawnEventArgs { CardData = cardData, PlayerID = playerId });
 
             // Do Generic stuff if necessary here (or before the if statement)
 

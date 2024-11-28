@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Game.Logic;
+using Game.Logic.Actions;
 using Game.Logic.Actions.UI;
 using GameModel;
 using Unity.Netcode;
@@ -92,13 +93,15 @@ public class GameplayManager : NetworkBehaviour
         Debug.Log("WRRAAAAA 1");
         CurrentGameState.Value = GameState.Playing;
 
-        StartGameClientRpc();
+        StartGameClientRpc(GameRulesManager.Instance.GetIntRuleValue(RuleTarget.StartingHandSize));
     }
 
     [ClientRpc]
-    private void StartGameClientRpc()
+    private void StartGameClientRpc(int cardsToDraw)
     {
         StartGame();
+
+        ActionRequestHandler.Instance.HandleDrawCardRequestServerRpc(cardsToDraw);
     }
 
     private void StartGame()

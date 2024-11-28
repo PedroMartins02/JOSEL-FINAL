@@ -23,6 +23,8 @@ namespace GameModel
             this.CurrentBlessings = playerData.Blessings;
             this.Deck = playerData.Deck;
             this.MythCard = playerData.MythCard;
+
+            this.Hand = new Hand();
         }
 
         public void PlayCard(ICard card)

@@ -1,4 +1,5 @@
 using System;
+using Game.Logic;
 using GameModel;
 
 namespace Game.Data
@@ -9,6 +10,7 @@ namespace Game.Data
         public readonly int Health;
         public readonly int Attack;
 
+
         public UnitCardData(string id, string name, 
             string shortText, string description, 
             int blessings, int health, int attack,
@@ -16,6 +18,12 @@ namespace Game.Data
         {
             Health = health;
             Attack = attack;
+        }
+
+        public UnitCardData(UnitCardData unitCardData, int gameID) : base(unitCardData, gameID)
+        {
+            Health = unitCardData.Health;
+            Attack = unitCardData.Attack;
         }
     }
 }

@@ -40,7 +40,7 @@ namespace Game.Logic.Actions
                         {
                             ActionType = ActionType.DrawCard,
                             PlayerId = player.playerData.ClientId,
-                            CardId = drawnCard.Data.Id,
+                            CardData = drawnCard.GetDataSnapshot(),
                         };
 
                         GameplayManager.Instance.BroadcastActionExecuted(actionData); // Notify Clients
