@@ -22,6 +22,12 @@ MonoBehaviour:
       ItemCardSO: {fileID: 11400000, guid: b038288fef566ab42b953355839f3988, type: 2}
     - Id: c9e8-100202
       ItemCardSO: {fileID: 11400000, guid: b6d5345e932edb54cbd056ffdc21dc77, type: 2}
+    - Id: d0ff-10476
+      ItemCardSO: {fileID: 11400000, guid: 98e14ec1d65bf0947b12607ef25be00f, type: 2}
+    - Id: 9516-33854
+      ItemCardSO: {fileID: 11400000, guid: 4d1813316f5093e4c81fe60c9c25cd7a, type: 2}
+    - Id: f9e3-33308
+      ItemCardSO: {fileID: 11400000, guid: c1705469e55b0f94fb1fedbf15fc0ef3, type: 2}
     - Id: 368f-1134146
       ItemCardSO: {fileID: 11400000, guid: d44ced5ef358ff24d801cda3293b9d91, type: 2}
     - Id: 8876-105950
@@ -34,6 +40,8 @@ MonoBehaviour:
       ItemCardSO: {fileID: 11400000, guid: f83dd8995a7f80c469d664a534b71aa6, type: 2}
     - Id: 42ce-99434
       ItemCardSO: {fileID: 11400000, guid: cde8b7e8aeed75a4fa32b9929eecd097, type: 2}
+    - Id: 4bb8-9858
+      ItemCardSO: {fileID: 11400000, guid: dfbb6bbd5d4373142af59390d97e1b74, type: 2}
     - Id: 6d9a-99844
       ItemCardSO: {fileID: 11400000, guid: 760aaf89801f46b44bbffc6fdb44c4af, type: 2}
     - Id: e5d941168
