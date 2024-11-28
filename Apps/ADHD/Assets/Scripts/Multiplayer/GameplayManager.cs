@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Game.Logic;
+using Game.Logic.Actions.UI;
 using GameModel;
 using Unity.Netcode;
 using UnityEngine.SceneManagement;
@@ -103,7 +104,9 @@ public class GameplayManager : NetworkBehaviour
     [ClientRpc]
     private void NotifyActionExecutedClientRpc(ActionData actionData)
     {
-        // TODO: Create the corresponding UI Action 
+        IUIAction uiAction = UIActionFactory.CreateUIAction(actionData);
+
+        UIActionQueueManager.Instance.EnqueueAction(uiAction);
     }
 
     private void GameOver()

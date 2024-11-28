@@ -25,7 +25,7 @@ namespace Game.Logic.Actions
 
         public void AddPriorityAction(IAction action)
         {
-            actionQueue.Enqueue(action);
+            priorityActionQueue.Enqueue(action);
             ProcessActions();
         }
 

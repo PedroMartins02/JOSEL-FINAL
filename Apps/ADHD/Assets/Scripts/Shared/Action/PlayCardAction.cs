@@ -33,7 +33,7 @@ namespace Game.Logic.Actions
             {
                 ActionType = ActionType.PlayCard,
                 PlayerId = player.playerData.ClientId,
-                CardId = card.NetworkId,
+                NetworkObjectCardId = card.NetworkId,
             };
 
             GameplayManager.Instance.BroadcastActionExecuted(actionData);
