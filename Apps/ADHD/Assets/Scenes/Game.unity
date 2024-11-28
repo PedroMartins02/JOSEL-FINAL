@@ -613,7 +613,7 @@ MonoBehaviour:
   hoveredCard: {fileID: 0}
   slotPrefab: {fileID: 2338656347130158173, guid: f8d39bd442bd35741a14d2a56409c24b,
     type: 3}
-  cardsToSpawn: 7
+  cardsToSpawn: 0
   cards: []
   curve: {fileID: 11400000, guid: d4dd399fb2dab44429d866dc2259bb4b, type: 2}
   tweenCardReturn: 1
@@ -903,7 +903,7 @@ MonoBehaviour:
   hoveredCard: {fileID: 0}
   slotPrefab: {fileID: 2338656347130158173, guid: f8d39bd442bd35741a14d2a56409c24b,
     type: 3}
-  cardsToSpawn: 7
+  cardsToSpawn: 0
   cards: []
   curve: {fileID: 11400000, guid: 3293f7899aff6774e81bd2ebfc205e2f, type: 2}
   tweenCardReturn: 1
@@ -1405,12 +1405,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6c68269de1ebb94498fb472f78698fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isMine: 1
+  isMine: 0
   selectedCard: {fileID: 0}
   hoveredCard: {fileID: 0}
   slotPrefab: {fileID: 2338656347130158173, guid: f8d39bd442bd35741a14d2a56409c24b,
     type: 3}
-  cardsToSpawn: 7
+  cardsToSpawn: 0
   cards: []
   curve: {fileID: 11400000, guid: 3293f7899aff6774e81bd2ebfc205e2f, type: 2}
   tweenCardReturn: 1
@@ -2845,12 +2845,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ffb250e0ad13424e8ce3305c8110758, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isMine: 1
+  isMine: 0
   selectedCard: {fileID: 0}
   hoveredCard: {fileID: 0}
   slotPrefab: {fileID: 2338656347130158173, guid: f8d39bd442bd35741a14d2a56409c24b,
     type: 3}
-  cardsToSpawn: 7
+  cardsToSpawn: 0
   cards: []
   curve: {fileID: 11400000, guid: a039347f6791cbc42bbaa6e22750406f, type: 2}
   tweenCardReturn: 1
