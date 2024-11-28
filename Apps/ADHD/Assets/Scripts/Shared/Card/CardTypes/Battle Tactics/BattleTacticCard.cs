@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using Game.Data;
+using Game.Logic;
+using Game.Utils.Logic;
 
 namespace GameModel
 {
@@ -9,6 +11,16 @@ namespace GameModel
         {
             this.CurrentEffects = cardData.Effects;
             this.CurrentModifiers = new List<Modifier>();
+
+            StateMachine = new StateMachine<CardStateType, CardActions>();
+
+            StateMachine.AddState(new InDeckState(this));
+            StateMachine.AddState(new InHandState(this));
+            StateMachine.AddState(new InPlayState(this));
+            StateMachine.AddState(new DiscardedState(this));
+            StateMachine.AddState(new ExhaustedState(this));
+
+            StateMachine.SetState(CardStateType.InDeck);
         }
 
         public override CardDataSnapshot GetDataSnapshot()
