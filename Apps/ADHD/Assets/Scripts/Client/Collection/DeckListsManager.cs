@@ -97,7 +97,7 @@ public class DeckListsManager : MonoBehaviour
         }
 
         PlayerPrefs.SetInt("isNewDeck", 0);
-        PlayerPrefs.SetInt("SlotIndex", slotIndex);
+        PlayerPrefs.SetInt("SlotIndex", deckLists.Count);
         PlayerPrefs.Save();
         SceneLoader.Load(SceneLoader.Scene.DeckEditor);
     }

@@ -47,7 +47,6 @@ public class LobbyManager : NetworkBehaviour
 
     // Events for after joining lobby
     public event EventHandler<LobbyEventArgs> OnJoinedLobby;
-    public event EventHandler<LobbyEventArgs> OnQuickMatchJoinedLobby;
     public event EventHandler<LobbyEventArgs> OnJoinedLobbyUpdate;
 
     public class LobbyEventArgs : EventArgs
@@ -156,11 +155,10 @@ public class LobbyManager : NetworkBehaviour
     {
         try
         {
-            QueryLobbiesOptions queryLobbiesOptions = new QueryLobbiesOptions
-            {
-                // We'll list only lobbies with available slots (more than 0 slots)
-                // Count = 6,
-                Filters = new List<QueryFilter> {
+
+            // We'll list only lobbies with available slots (more than 0 slots)
+            // Count = 6,
+            List<QueryFilter> filters = new List<QueryFilter> {
                   new QueryFilter(
                       field: QueryFilter.FieldOptions.AvailableSlots,
                       value: "0",
@@ -170,8 +168,30 @@ public class LobbyManager : NetworkBehaviour
                       field: QueryFilter.FieldOptions.S1,
                       value: type.ToString(),
                       op: QueryFilter.OpOptions.EQ)
-                }
             };
+
+            // Filter MMR in QuickMAtch
+            if (LobbyType.QuickMatch.Equals(type)) 
+            {
+                // Lower bound
+                int myMMR = AccountManager.Singleton.GetPlayerData().MMR;
+                filters.Add(new QueryFilter(
+                field: QueryFilter.FieldOptions.N1,
+                value: (myMMR - 150).ToString(),
+                op: QueryFilter.OpOptions.GT));
+
+                // Upper bound
+                filters.Add(new QueryFilter(
+                    field: QueryFilter.FieldOptions.N1,
+                    value: (myMMR + 150).ToString(),
+                    op: QueryFilter.OpOptions.LT));
+            }
+
+            QueryLobbiesOptions queryLobbiesOptions = new QueryLobbiesOptions
+            {
+                Filters = filters
+            };
+
             QueryResponse queryResponse = await LobbyService.Instance.QueryLobbiesAsync(queryLobbiesOptions);
 
             OnLobbyListChanged?.Invoke(this, new OnLobbyListChangedEventArgs
@@ -276,11 +296,14 @@ public class LobbyManager : NetworkBehaviour
                         visibility: DataObject.VisibilityOptions.Public, 
                         value: lobbyType.ToString(),
                         index: DataObject.IndexOptions.S1) 
+                    },
+                    { "MMR", new DataObject(
+                        visibility: DataObject.VisibilityOptions.Public,
+                        value: AccountManager.Singleton.GetPlayerData().MMR.ToString(),
+                        index: DataObject.IndexOptions.N1)
                     }
                 }
             });
-
-            OnJoinedLobby?.Invoke(this, new LobbyEventArgs { lobby = joinedLobby });
 
             // Relay for p2p multiplayer
             string relayJoinCode = await RelayAllocation();
@@ -300,7 +323,14 @@ public class LobbyManager : NetworkBehaviour
 
             // Start Hosting and go to LobbyScene, where the main lobby will be
             MultiplayerManager.Instance.StartHost();
-            SceneLoader.LoadNetwork(SceneLoader.Scene.Lobby);
+
+            OnJoinedLobby?.Invoke(this, new LobbyEventArgs { lobby = joinedLobby });
+
+            //Only change scenes if its a custom match
+            if (LobbyType.CustomMatch.Equals(lobbyType))
+            {
+                SceneLoader.LoadNetwork(SceneLoader.Scene.Lobby);
+            }
         }
         catch (LobbyServiceException e)
         {
@@ -316,8 +346,18 @@ public class LobbyManager : NetworkBehaviour
     public async void QuickMatchLobby()
     {
         OnQuickMatchStarted?.Invoke(this, EventArgs.Empty);
+        
         try
         {
+            // Set the deck for the quick match
+            PlayerData playerData = AccountManager.Singleton.GetPlayerData();
+            List<DeckData> deckLists = playerData.DeckCollection;
+
+            int deckId = playerData.SelectedDeckId > deckLists.Count ? 0 : playerData.SelectedDeckId;
+
+            DeckData deck = deckLists[deckId];
+            MultiplayerManager.Instance.SetPlayerDeck(deck);
+
             // Firstly, we try to join an available Quick Match lobby
             List<Lobby> lobbyList = await ListLobbiesOfType(LobbyType.QuickMatch);
 
@@ -334,7 +374,7 @@ public class LobbyManager : NetworkBehaviour
             {
                 CreateLobby(
                     "QuickMatchLobby",
-                    true,
+                    false,
                     LobbyManager.LobbyType.QuickMatch,
                     GameModel.GameRule.GetDefaultRules()
                 );
@@ -373,6 +413,20 @@ public class LobbyManager : NetworkBehaviour
             OnJoinFailed?.Invoke(this, EventArgs.Empty);
         }
     }
+
+
+    public void JoinQuickMatchGame()
+    {
+        JoinQuickMatchGameServerRpc();
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void JoinQuickMatchGameServerRpc(ServerRpcParams rpcParams = default)
+    {
+        LobbyManager.Instance.DeleteLobby();
+        SceneLoader.LoadNetwork(SceneLoader.Scene.Game);
+    }
+
 
     public Lobby GetLobby()
     {
@@ -487,17 +541,12 @@ public class LobbyManager : NetworkBehaviour
 
     public override void OnDestroy()
     {
-        if(joinedLobby != null)
-            LeaveLobby();
-
         // Always invoke the base 
         base.OnDestroy();
     }
 
     void OnApplicationQuit()
     {
-        if (joinedLobby != null)
-            LeaveLobby();
         Debug.Log("Application ending after " + Time.time + " seconds");
     }
 }

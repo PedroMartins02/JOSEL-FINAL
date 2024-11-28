@@ -18,7 +18,7 @@ namespace GameCore
 
         public void EnterState()
         {
-            Debug.Log($"{_currentPlayer.Name} is now in the Play Phase!");
+            Debug.Log($"{_currentPlayer.playerData.Name} is now in the Play Phase!");
 
             // TODO: Implement card playing logic
         }

@@ -988,7 +988,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &601162336
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2020,6 +2020,7 @@ MonoBehaviour:
   deckPrefab: {fileID: 6168526836885621314, guid: 38e7c213f69388f47bfe29e3fc41a93c,
     type: 3}
   deckContainer: {fileID: 1504972779}
+  deckSelectedShader: {fileID: 4800000, guid: 99029bfabbc90dc4da4875cc6e74ddb6, type: 3}
 --- !u!1 &1130693635
 GameObject:
   m_ObjectHideFlags: 0

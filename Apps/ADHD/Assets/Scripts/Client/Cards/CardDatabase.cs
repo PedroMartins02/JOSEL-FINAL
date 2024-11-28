@@ -65,7 +65,7 @@ public class CardDatabase : MonoBehaviour
             return null;
 
         if (cardConstructors.TryGetValue(cardSO.GetType(), out CardConstructor constructor))
-            return constructor(cardSO); 
+            return constructor(cardSO);
 
         return null;
     }
@@ -83,6 +83,26 @@ public class CardDatabase : MonoBehaviour
         .ToList();
 
         return eligibleCards[random.Next(eligibleCards.Count)];
+    }
+
+    public CardSO GetRandomCard(Factions civilization)
+    {
+        System.Random random = new System.Random();
+        var eligibleCards = CardDictionary.Values
+        .Where(card => card.Faction == civilization && card.GetType() != typeof(MythCardSO))
+        .ToList();
+
+        return eligibleCards[random.Next(eligibleCards.Count)];
+    }
+
+    public List<CardSO> GetAllMyths(Factions civilization)
+    {
+        System.Random random = new System.Random();
+        var eligibleCards = CardDictionary.Values
+        .Where(card => card.Faction == civilization && card.GetType() == typeof(MythCardSO))
+        .ToList();
+
+        return eligibleCards;
     }
 
     //this is horrible, but for the scope of the project, i dont care too much : )
@@ -109,4 +129,12 @@ public class CardDatabase : MonoBehaviour
         return packContents;
     }
 
+    public List<CardSO> GetAllMyths()
+    {
+        var eligibleCards = CardDictionary.Values
+        .Where(card => card.GetType() == typeof(MythCardSO))
+        .ToList();
+
+        return eligibleCards;
+    }
 }

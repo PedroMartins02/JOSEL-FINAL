@@ -11,12 +11,14 @@ public static class RankManager
     private static float fullWinRateWeight = 0.2f;
     private static int baseMMRReward = 30;
 
-    public static void AwardMMR(PlayerData opponent, bool didWin)
+    public static int AwardMMR(PlayerData opponent, bool didWin)
     {
         PlayerData playerData = AccountManager.Singleton.GetPlayerData();
+        int mmrDifference = CalculateMMRDifference(playerData.MMR, playerData.MatchHistory, opponent.MMR, didWin);
         playerData.MatchHistory.Add(didWin);
-        playerData.MMR += CalculateMMRDifference(playerData.MMR, playerData.MatchHistory, opponent.MMR, didWin);
+        playerData.MMR += mmrDifference;
         AccountManager.Singleton.SetPlayerData(playerData, true);
+        return mmrDifference;
     }
 
     private static int CalculateMMRDifference(int playerMMR, List<bool> matchHistory, int opponentMMR, bool didWin)

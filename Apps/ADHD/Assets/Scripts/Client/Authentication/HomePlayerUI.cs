@@ -6,6 +6,7 @@ using UnityEngine;
 public class HomePlayerUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI Name;
+    [SerializeField] private TextMeshProUGUI Tokens;
 
     void Start()
     {
@@ -21,6 +22,8 @@ public class HomePlayerUI : MonoBehaviour
 
         Name.text = playerData.Name;
         Name.enabled = true;
+        Tokens.text = playerData.Tokens.ToString();
+        Tokens.enabled = true;
         return true;
     }
 }

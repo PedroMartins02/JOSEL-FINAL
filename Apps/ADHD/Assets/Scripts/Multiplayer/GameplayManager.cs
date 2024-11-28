@@ -1,55 +1,110 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
+using Game.Logic;
+using GameModel;
 using Unity.Netcode;
-using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 public class GameplayManager : NetworkBehaviour
 {
     public static GameplayManager Instance { get; private set; }
 
-    // Events
-    public event EventHandler OnGameFinishedLoading;
+    // Game State
+    public enum GameState
+    {
+        WaitingForPlayers, // Waiting for all players to load
+        Playing,
+        GameOver
+    }
 
-    // Variables
-    private NetworkVariable<float> gameTimer;
+    public NetworkVariable<GameState> CurrentGameState = new NetworkVariable<GameState>(GameState.WaitingForPlayers);
 
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
+        if (LobbyManager.Instance != null)
+        {
+            Destroy(LobbyManager.Instance.gameObject);
+        }
+    }
 
     private void Start()
     {
 
     }
 
+    private void Update()
+    { 
+        //Debug.Log(PlayerManager.Instance.PlayerCount);
+    }
+
     public override void OnNetworkSpawn()
     {
         if (IsServer)
         {
-            // Assign to event for when a player disconnects
-            NetworkManager.Singleton.OnClientDisconnectCallback += NetworkManager_OnClientDisconnectCallback;
-            // Event for when the game scene is loaded
-            NetworkManager.Singleton.SceneManager.OnLoadEventCompleted += SceneManager_OnLoadEventCompleted;
+            NetworkManager.Singleton.SceneManager.OnLoadEventCompleted += SetupGame;
+        }
+
+    }
+
+    private void SetupGame(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
+    {
+        if (clientsTimedOut.Count > 0)
+            GameOver();
+
+        List<GameRule> rules = MultiplayerManager.Instance.GetLobbyGameRules();
+        GameRulesManager.Instance.IntializeGameRules(rules);
+
+        foreach (ulong clientId in NetworkManager.Singleton.ConnectedClientsIds)
+        {
+            MP_PlayerData playerData = MultiplayerManager.Instance.GetPlayerDataFromClientId(clientId);
+
+            PlayerManager.Instance.CreatePlayer(clientId, playerData);
         }
     }
 
-    private void NetworkManager_OnClientDisconnectCallback(ulong obj)
+    public void StartGame()
     {
-        throw new NotImplementedException();
-    }
+        if (IsServer)
+        {
+            CurrentGameState.Value = GameState.Playing;
 
-    private void SceneManager_OnLoadEventCompleted(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
-    {
-        // Setup the data for the game managers, in this case the game rules
-        SetInitialSettingsClientRpc();
 
-        // We need to set player data to the UI with events
-        throw new NotImplementedException();
+
+            StartGameClientRpc();
+        }
     }
 
     [ClientRpc]
-    private void SetInitialSettingsClientRpc()
+    private void StartGameClientRpc()
     {
-        
+
+    }
+
+    public void BroadcastActionExecuted(ActionData actionData)
+    {
+        if (IsServer)
+        {
+            NotifyActionExecutedClientRpc(actionData);
+        }
+    }
+
+    [ClientRpc]
+    private void NotifyActionExecutedClientRpc(ActionData actionData)
+    {
+        // TODO: Create the corresponding UI Action 
+    }
+
+    private void GameOver()
+    {
+
     }
 }

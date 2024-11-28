@@ -21,7 +21,7 @@ public class RankUI : MonoBehaviour
         SetRank();
     }
 
-    private bool SetRank()
+    public bool SetRank()
     {
         var playerData = AccountManager.Singleton.GetPlayerData();
         if (playerData == null)
