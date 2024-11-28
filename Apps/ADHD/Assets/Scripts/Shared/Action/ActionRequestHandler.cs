@@ -23,13 +23,13 @@ namespace Game.Logic.Actions
         }
 
         [ServerRpc]
-        public void HandlePlayCardRequestServerRpc(ulong clientId, ulong cardId, ServerRpcParams rpcParams = default)
+        public void HandlePlayCardRequestServerRpc(ulong networkObjectCardId, ServerRpcParams rpcParams = default)
         {
             ActionData actionData = new ActionData
             {
                 ActionType = ActionType.PlayCard,
-                PlayerId = clientId,
-                NetworkObjectCardId = cardId
+                PlayerId = rpcParams.Receive.SenderClientId,
+                NetworkObjectCardId = networkObjectCardId
             };
 
             IAction action = ActionFactory.CreateAction(actionData);
@@ -37,12 +37,12 @@ namespace Game.Logic.Actions
         }
 
         [ServerRpc]
-        public void HandleDrawCardRequestServerRpc(ulong clientId, int numberOfCardsDrawn, ServerRpcParams rpcParams = default)
+        public void HandleDrawCardRequestServerRpc(int numberOfCardsDrawn, ServerRpcParams rpcParams = default)
         {
             ActionData actionData = new ActionData
             {
                 ActionType = ActionType.DrawCard,
-                PlayerId = clientId,
+                PlayerId = rpcParams.Receive.SenderClientId,
                 NumberOfCardsDrawn = numberOfCardsDrawn
             };
 

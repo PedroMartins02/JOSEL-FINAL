@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Game.Logic.Actions.UI
 {
-    public class UIActionQueueManager : NetworkBehaviour
+    public class UIActionQueueManager : MonoBehaviour
     {
         private Queue<IUIAction> uiActionQueue = new Queue<IUIAction>();
         private Queue<IUIAction> uiPriorityActionQueue = new Queue<IUIAction>();
