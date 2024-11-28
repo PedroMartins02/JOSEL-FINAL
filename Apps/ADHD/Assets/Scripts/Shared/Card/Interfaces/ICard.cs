@@ -11,6 +11,8 @@ namespace Game.Logic
     {
         public CardData Data { get; }
 
+        public ulong NetworkId { get; }
+
         public int CurrentBlessingsCost { get; }
         public List<Effect> CurrentEffects { get; }
         public List<Modifier> CurrentModifiers { get; }

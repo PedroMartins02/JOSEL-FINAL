@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Unity.Collections;
 using Unity.Netcode;
 using Unity.Services.Authentication;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -311,6 +312,10 @@ public class MultiplayerManager : NetworkBehaviour
         if (deckData != null)
         {
             this.selectedDeckData = deckData;
+
+            string serializedDeck = DeckData.SerializeDeckData(this.selectedDeckData);
+            SetPlayerDeckServerRpc(serializedDeck);
+
             Debug.Log("Changed deck to: " + deckData.ToString());
         }
     }
@@ -318,6 +323,17 @@ public class MultiplayerManager : NetworkBehaviour
     public DeckData GetPlayerDeck()
     {
         return this.selectedDeckData;
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void SetPlayerDeckServerRpc(string serializedDeck, ServerRpcParams serverRpcParams = default)
+    {
+        int playerDataIndex = GetPlayerDataIndexFromClientId(serverRpcParams.Receive.SenderClientId);
+        MP_PlayerData playerData = playerDataNetworkList[playerDataIndex];
+
+        playerData.playerDeck = serializedDeck;
+
+        playerDataNetworkList[playerDataIndex] = playerData;
     }
 
 

@@ -10,6 +10,8 @@ namespace GameModel
     {
         public CardData Data { get; private set; }
 
+        public ulong NetworkId { get; protected set; }
+
         public int CurrentBlessingsCost { get; protected set; }
         public List<Effect> CurrentEffects { get; protected set; }
         public List<Modifier> CurrentModifiers { get; protected set; }

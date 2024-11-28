@@ -34,6 +34,11 @@ namespace GameModel
             cards.Remove(card);
         }
 
+        public bool Contains(ICard card)
+        {
+            return cards.Contains(card);
+        }
+
         public IReadOnlyList<ICard> GetCards() => cards.AsReadOnly();
     }
 }
