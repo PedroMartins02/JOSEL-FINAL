@@ -78,6 +78,7 @@ public class UI_GameActionController : NetworkBehaviour
     public void UpdateMythClientRpc(ulong clientId)
     {
         GameModel.Player player = PlayerManager.Instance.GetPlayerByClientId(clientId);
+
         CardSO mythSO = CardDatabase.Singleton.GetCardSoOfId(player.MythCard.Data.Id);
 
         if (player != null && mythSO != null)
