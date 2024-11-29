@@ -17,17 +17,17 @@ public class AudioManager : MonoBehaviour
 
   public void ChangeMasterVolume()
   {
-	masterVol = (int) volumeSliders[0].value;
+	masterVol = (int)volumeSliders[0].value;
   }
 
   public void ChangeMusicVolume()
   {
-	musicVol = (int) volumeSliders[1].value;
+	musicVol = (int)volumeSliders[1].value;
   }
 
   public void ChangeSFXVolume()
   {
-	sfxVol = (int) volumeSliders[2].value;
+	sfxVol = (int)volumeSliders[2].value;
   }
 
   public void SetBaseAudioSettings()
@@ -48,7 +48,5 @@ public class AudioManager : MonoBehaviour
 	SettingsManager.Instance.sfxVolumeIndex = sfxVol;
 	SettingsManager.Instance.SaveSettings();
 	SettingsManager.Instance.ApplySettings();
-
-	// TODO: modify the volume values
   }
 }

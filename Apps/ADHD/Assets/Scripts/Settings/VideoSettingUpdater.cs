@@ -26,22 +26,22 @@ public class VideoSettingUpdater : MonoBehaviour
 	resolutions = Screen.resolutions;
 	SetBaseVideoSettings();
   }
-  
+
   public void SaveAndApplyVideoSettings()
   {
-    SettingsManager.Instance.resolutionIndex = resolutionIndex;
-    SettingsManager.Instance.isFullScreen = isFullscreen;
-    SettingsManager.Instance.SaveSettings();
-    SettingsManager.Instance.ApplySettings();
+	SettingsManager.Instance.resolutionIndex = resolutionIndex;
+	SettingsManager.Instance.isFullScreen = isFullscreen;
+	SettingsManager.Instance.SaveSettings();
+	SettingsManager.Instance.ApplySettings();
   }
-  
+
   public void SetBaseVideoSettings()
   {
 	resolutionIndex = SettingsManager.Instance.resolutionIndex;
 	isFullscreen = SettingsManager.Instance.isFullScreen;
 
 	resolutionText.text = $"{resolutions[resolutionIndex].width}x{resolutions[resolutionIndex].height}";
-	displayText.text = isFullscreen ? "Fullscreen" : "Windowed";
+	displayText.text = isFullscreen ? "FULLSCREEN" : "WINDOWED";
   }
 
   public void ChangeResolution(int resolutionIndex)
@@ -53,6 +53,6 @@ public class VideoSettingUpdater : MonoBehaviour
   public void ChangeDisplay(bool fullscreen)
   {
 	isFullscreen = fullscreen;
-	displayText.text = isFullscreen ? "Fullscreen" : "Windowed";
+	displayText.text = isFullscreen ? "FULLSCREEN" : "WINDOWED";
   }
 }
