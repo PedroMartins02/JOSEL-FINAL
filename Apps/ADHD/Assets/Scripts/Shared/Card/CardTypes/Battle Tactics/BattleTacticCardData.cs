@@ -19,5 +19,10 @@ namespace Game.Data
         {
             this.Effects = effects;
         }
+
+        public BattleTacticCardData(BattleTacticCardData cardData, int gameID) : base(cardData, gameID)
+        {
+            this.Effects = cardData.Effects;
+        }
     }
 }

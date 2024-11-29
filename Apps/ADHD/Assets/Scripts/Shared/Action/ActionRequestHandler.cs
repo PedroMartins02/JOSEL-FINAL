@@ -22,19 +22,32 @@ namespace Game.Logic.Actions
             }
         }
 
-        [ServerRpc]
-        public void HandlePlayCardRequestServerRpc(ulong clientId, ulong cardId, ServerRpcParams rpcParams = default)
+        [Rpc(SendTo.Server)]
+        public void HandlePlayCardRequestServerRpc(int cardGameID, RpcParams rpcParams = default)
         {
-            
+            ActionData actionData = new ActionData
+            {
+                ActionType = ActionType.PlayCard,
+                PlayerId = rpcParams.Receive.SenderClientId,
+                CardGameID = cardGameID
+            };
 
-
+            IAction action = ActionFactory.CreateAction(actionData);
+            ActionQueueManager.Instance.AddAction(action);
         }
 
-        private bool IsValidPlayCardRequest(Player player, ICard card)
+        [Rpc(SendTo.Server)]
+        public void HandleDrawCardRequestServerRpc(int numberOfCardsToDraw, ulong clientID, RpcParams rpcParams = default)
         {
-            return player != null
-                && card != null
-                && player.Hand.Contains(card); // TODO: Check if player turn
+            ActionData actionData = new ActionData
+            {
+                ActionType = ActionType.DrawCard,
+                PlayerId = clientID,
+                NumberOfCardsDrawn = numberOfCardsToDraw
+            };
+
+            IAction action = ActionFactory.CreateAction(actionData);
+            ActionQueueManager.Instance.AddAction(action);
         }
     }
 }

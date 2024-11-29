@@ -70,7 +70,7 @@ public class ResolutionListManager : MonoBehaviour
 	  return;
 
 	btn.Select();
-	videoSettings.ChangeResolution(resolutionIndex);
+	//videoSettings.ChangeResolution(resolutionIndex);
 	Debug.Log(resolutions[resolutionIndex].ToString() + " selected (index: " + resolutionIndex + ")");
   }
 }

@@ -1,8 +1,14 @@
+using System;
 using System.Collections.Generic;
 using Game.Logic;
+using Game.Logic.Actions;
+using Game.Logic.Actions.UI;
 using GameModel;
 using Unity.Netcode;
+using Unity.Services.Lobbies.Models;
+using UnityEngine;
 using UnityEngine.SceneManagement;
+using static LobbyManager;
 
 public class GameplayManager : NetworkBehaviour
 {
@@ -17,6 +23,14 @@ public class GameplayManager : NetworkBehaviour
     }
 
     public NetworkVariable<GameState> CurrentGameState = new NetworkVariable<GameState>(GameState.WaitingForPlayers);
+
+    // Events
+    public event EventHandler<GameStateEventArgs> OnCurrentGameStateChanged;
+
+    public class GameStateEventArgs : EventArgs
+    {
+        public GameState gameState;
+    }
 
 
     private void Awake()
@@ -41,18 +55,22 @@ public class GameplayManager : NetworkBehaviour
 
     }
 
-    private void Update()
-    { 
-        //Debug.Log(PlayerManager.Instance.PlayerCount);
+    
+    private void GameplayManager_GameStateChange(GameState previousValue, GameState newValue)
+    {
+        OnCurrentGameStateChanged?.Invoke(this, new GameStateEventArgs { gameState = newValue });
     }
 
     public override void OnNetworkSpawn()
     {
+        CurrentGameState.OnValueChanged += GameplayManager_GameStateChange;
+
         if (IsServer)
         {
             NetworkManager.Singleton.SceneManager.OnLoadEventCompleted += SetupGame;
         }
 
+        base.OnNetworkSpawn();
     }
 
     private void SetupGame(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
@@ -65,28 +83,29 @@ public class GameplayManager : NetworkBehaviour
 
         foreach (ulong clientId in NetworkManager.Singleton.ConnectedClientsIds)
         {
+            Debug.Log("Registering Player: " + clientId);
+
             MP_PlayerData playerData = MultiplayerManager.Instance.GetPlayerDataFromClientId(clientId);
 
             PlayerManager.Instance.CreatePlayer(clientId, playerData);
         }
+
+        CurrentGameState.Value = GameState.Playing;
+
+        StartGameClientRpc(GameRulesManager.Instance.GetIntRuleValue(RuleTarget.StartingHandSize));
     }
 
-    public void StartGame()
+    [Rpc(SendTo.ClientsAndHost)]
+    private void StartGameClientRpc(int cardsToDraw)
     {
-        if (IsServer)
-        {
-            CurrentGameState.Value = GameState.Playing;
+        StartGame();
 
-
-
-            StartGameClientRpc();
-        }
+        ActionRequestHandler.Instance.HandleDrawCardRequestServerRpc(cardsToDraw, NetworkManager.Singleton.LocalClientId);
     }
 
-    [ClientRpc]
-    private void StartGameClientRpc()
+    private void StartGame()
     {
-
+        
     }
 
     public void BroadcastActionExecuted(ActionData actionData)
@@ -97,10 +116,17 @@ public class GameplayManager : NetworkBehaviour
         }
     }
 
-    [ClientRpc]
+    [Rpc(SendTo.ClientsAndHost)]
     private void NotifyActionExecutedClientRpc(ActionData actionData)
     {
-        // TODO: Create the corresponding UI Action 
+        IUIAction uiAction = UIActionFactory.CreateUIAction(actionData);
+
+        UIActionQueueManager.Instance.EnqueueAction(uiAction);
+    }
+
+    public GameState GetCurrentGameState()
+    {
+        return this.CurrentGameState.Value;
     }
 
     private void GameOver()

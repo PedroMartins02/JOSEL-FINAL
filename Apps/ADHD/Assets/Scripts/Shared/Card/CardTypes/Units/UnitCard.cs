@@ -28,6 +28,33 @@ namespace GameModel
             StateMachine.SetState(CardStateType.InDeck);
         }
 
+        protected override CardData CardDataWithID(CardData cardData, int gameID)
+        {
+            if (cardData.GetType() != typeof(UnitCardData))
+                return null;
+
+            return new UnitCardData((UnitCardData)cardData, gameID);
+        }
+
+        public override CardDataSnapshot GetDataSnapshot()
+        {
+            UnitCardData data = (UnitCardData)Data;
+
+            return new CardDataSnapshot
+            {
+                Id = data.Id,
+                GameID = data.GameID,
+                CardType = CardType.Unit,
+                StartingBlessings = data.Blessings,
+                CurrentBlessings = CurrentBlessingsCost,
+                StartingHealth = data.Health,
+                CurrentHealth = CurrentHealth,
+                StartingAttack = data.Attack,
+                CurrentAttack = CurrentAttack,
+                CurrentState = StateMachine.CurrentState.StateType,
+            };
+        }
+
         public void Update()
         {
             StateMachine.Update();

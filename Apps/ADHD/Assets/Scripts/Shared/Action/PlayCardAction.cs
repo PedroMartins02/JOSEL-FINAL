@@ -1,8 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using GameModel;
-using UnityEngine;
 
 namespace Game.Logic.Actions
 {
@@ -33,7 +29,7 @@ namespace Game.Logic.Actions
             {
                 ActionType = ActionType.PlayCard,
                 PlayerId = player.playerData.ClientId,
-                CardId = card.NetworkId,
+                CardGameID = card.Data.GameID,
             };
 
             GameplayManager.Instance.BroadcastActionExecuted(actionData);

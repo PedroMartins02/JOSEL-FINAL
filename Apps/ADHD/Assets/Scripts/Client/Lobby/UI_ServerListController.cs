@@ -12,6 +12,7 @@ public class UI_ServerListController : MonoBehaviour
 {
     [SerializeField] private Transform lobbyTemplate;
     [SerializeField] private Transform lobbyContainer;
+    [SerializeField] private GameObject loading;
 
     private void Awake()
     {
@@ -50,8 +51,13 @@ public class UI_ServerListController : MonoBehaviour
             lobbyTransform.gameObject.SetActive(true);
 
             UI_Room roomUI = lobbyTransform.GetComponent<UI_Room>();
-            roomUI.SetLobbyData(lobby);
+            roomUI.SetLobbyData(lobby, StartLoading);
         }
+    }
+
+    private void StartLoading()
+    {
+        loading.SetActive(true);
     }
 
     private void OnDestroy()

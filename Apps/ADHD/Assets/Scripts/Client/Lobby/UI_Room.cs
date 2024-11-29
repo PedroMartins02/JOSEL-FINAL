@@ -11,9 +11,11 @@ public class UI_Room : MonoBehaviour
     [SerializeField] private TextMeshProUGUI lobbyNameText;
 
     private Lobby lobby;
+    private System.Action startLoading;
 
-    public void SetLobbyData(Lobby lobby)
+    public void SetLobbyData(Lobby lobby, System.Action startLoading)
     {
+        this.startLoading = startLoading;
         this.lobby = lobby;
         lobbyNameText.text = lobby.Name;
     }
@@ -23,7 +25,8 @@ public class UI_Room : MonoBehaviour
         if (lobby == null)
         {
             return;
-        } 
+        }
+        startLoading();
         LobbyManager.Instance.JoinLobbyById(lobby.Id);
     }
 }

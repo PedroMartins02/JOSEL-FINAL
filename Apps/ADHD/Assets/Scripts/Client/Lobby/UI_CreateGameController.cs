@@ -13,6 +13,7 @@ public class UI_CreateGameController : MonoBehaviour
     [SerializeField] private TMP_InputField nameText;
     [SerializeField] private Transform ruleSingleTemplate;
     [SerializeField] private Transform container;
+    [SerializeField] private GameObject loading;
 
     private string lobbyName;
     private bool isPrivate = false;
@@ -31,6 +32,8 @@ public class UI_CreateGameController : MonoBehaviour
 
     public void CreateGame()
     {
+        loading.SetActive(true);
+
         lobbyName = nameText.text.IsEmpty() ? "Custom Game" : nameText.text;
 
         List<GameModel.GameRule> gameRules = new List<GameModel.GameRule>();

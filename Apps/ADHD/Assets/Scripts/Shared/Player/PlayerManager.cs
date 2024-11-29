@@ -37,6 +37,7 @@ namespace Game.Logic
 
             PlayerGameData playerGameData 
                 = new PlayerGameData(
+                    clientId,
                     playerData.playerUsername.ToString(), 
                     GameRulesManager.Instance.GetIntRuleValue(RuleTarget.StartingHealth),
                     GameRulesManager.Instance.GetIntRuleValue(RuleTarget.StartingBlessings),
