@@ -41,7 +41,7 @@ public class VideoSettingUpdater : MonoBehaviour
 	isFullscreen = SettingsManager.Instance.isFullScreen;
 
 	resolutionText.text = $"{resolutions[resolutionIndex].width}x{resolutions[resolutionIndex].height}";
-	displayText.text = isFullscreen ? "Fullscreen" : "Windowed";
+	displayText.text = isFullscreen ? "FULLSCREEN" : "WINDOWED";
   }
 
   public void ChangeResolution(int resolutionIndex)
@@ -53,6 +53,6 @@ public class VideoSettingUpdater : MonoBehaviour
   public void ChangeDisplay(bool fullscreen)
   {
 	isFullscreen = fullscreen;
-	displayText.text = isFullscreen ? "Fullscreen" : "Windowed";
+	displayText.text = isFullscreen ? "FULLSCREEN" : "WINDOWED";
   }
 }

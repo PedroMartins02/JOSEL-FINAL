@@ -16,7 +16,5 @@ public class SettingPanelManager : MonoBehaviour
 	{
 	  videoButton.interactable = false;
 	}
-
-	Debug.Log("platform: " + Application.platform.ToString());
   }
 }
