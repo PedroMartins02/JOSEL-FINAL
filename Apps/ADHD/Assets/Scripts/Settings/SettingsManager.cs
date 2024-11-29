@@ -56,15 +56,13 @@ public class SettingsManager : MonoBehaviour
 	Screen.fullScreen = isFullScreen;
 	Resolution[] resolutions = Screen.resolutions;
 
-	if (resolutionIndex >= 0 && resolutionIndex < resolutions.Length)
+	if (resolutionIndex < 0 || resolutionIndex >= resolutions.Length)
 	{
-	  Screen.SetResolution(resolutions[resolutionIndex].width, resolutions[resolutionIndex].height, isFullScreen);
-	}
-	else
-	{
-	  Debug.Log("Invalid resolution index found: " + resolutionIndex);
+	  // if index invalid, get the best resolution possible
+	  resolutionIndex = resolutions.Length - 1;
 	}
 
+	Screen.SetResolution(resolutions[resolutionIndex].width, resolutions[resolutionIndex].height, isFullScreen);
 	audioMixerManager.UpdateVolumeLevels();
   }
 
