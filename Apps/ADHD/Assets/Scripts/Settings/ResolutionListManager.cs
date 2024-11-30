@@ -12,7 +12,6 @@ public class ResolutionListManager : MonoBehaviour
   [Header("List Generation")]
   public GameObject resolutionItemPrefab;
   public Transform listContainer;
-  public int itemSpacing;
 
   private Resolution[] resolutions;
 
@@ -24,17 +23,9 @@ public class ResolutionListManager : MonoBehaviour
 
   private void PopulateResolutionList()
   {
-	int currentSpacing = 0;
 	foreach (Resolution res in resolutions)
 	{
 	  GameObject resolutionItem = Instantiate(resolutionItemPrefab, listContainer);
-
-	  RectTransform rectTransform = resolutionItem.GetComponent<RectTransform>();
-	  if (rectTransform != null)
-	  {
-		rectTransform.anchoredPosition = new Vector2(0, currentSpacing);
-		currentSpacing -= itemSpacing; // Move down by prefab height + spacing
-	  }
 
 	  Image image = resolutionItem.GetComponentInChildren<Image>();
 	  if (image != null)
@@ -70,7 +61,7 @@ public class ResolutionListManager : MonoBehaviour
 	  return;
 
 	btn.Select();
-	//videoSettings.ChangeResolution(resolutionIndex);
+	videoSettings.ChangeResolution(resolutionIndex);
 	Debug.Log(resolutions[resolutionIndex].ToString() + " selected (index: " + resolutionIndex + ")");
   }
 }
