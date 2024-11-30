@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Game.Data;
 using UnityEngine;
 
 
@@ -28,5 +29,11 @@ namespace GameCore.Events
         // Myth Events
         MythDamaged,
         MythHealed,
+    }
+
+    public struct CardDrawnEventArgs
+    {
+        public CardDataSnapshot CardData;
+        public ulong PlayerID;
     }
 }

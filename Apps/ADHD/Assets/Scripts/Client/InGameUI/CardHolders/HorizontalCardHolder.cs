@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using System.Linq;
-using GameModel;
 using Game.Data;
 using Game.Logic;
+using Unity.Netcode;
 
-public abstract class HorizontalCardHolder : MonoBehaviour
+public abstract class HorizontalCardHolder : NetworkBehaviour
 {
     [SerializeField] protected bool isMine = true;
 
@@ -29,36 +29,6 @@ public abstract class HorizontalCardHolder : MonoBehaviour
 
     protected virtual void Start()
     {
-        for (int i = 0; i < cardsToSpawn; i++)
-        {
-            Instantiate(slotPrefab, transform);
-        }
-
-        rect = GetComponent<RectTransform>();
-        cards = GetComponentsInChildren<GameCard>().ToList();
-        int cardCount = 0;
-
-        foreach (GameCard card in cards)
-        {
-            card.PointerEnterEvent.AddListener(CardPointerEnter);
-            card.PointerExitEvent.AddListener(CardPointerExit);
-            card.BeginDragEvent.AddListener(BeginDrag);
-            card.EndDragEvent.AddListener(EndDrag);
-            card.name = cardCount.ToString();
-            card.isMine = isMine;
-            card.isInHand = GetType() == typeof(HandCardHolder);
-            card.gameObject.tag = isMine ? "MyCard" : "OpponentCard";
-            cardCount++;
-        }
-
-        StartCoroutine(Frame());
-
-        IEnumerator Frame()
-        {
-            yield return new WaitForSecondsRealtime(.1f);
-            UpdateIndexes();
-        }
-
 
     }
 
@@ -174,7 +144,7 @@ public abstract class HorizontalCardHolder : MonoBehaviour
         UpdateIndexes();
     }
 
-    public void SpawnCard(CardSO? cardSO)
+    public void SpawnCard(CardDataSnapshot cardData, ulong playerId)
     {
         GameObject cardSlot = Instantiate(slotPrefab, transform);
 
@@ -186,7 +156,7 @@ public abstract class HorizontalCardHolder : MonoBehaviour
         card.EndDragEvent.AddListener(EndDrag);
 
         card.name = "unknown";
-        card.isMine = isMine;
+        card.isMine = NetworkManager.Singleton.LocalClientId.Equals(playerId);
         card.isInHand = true;
         card.gameObject.tag = isMine ? "MyCard" : "OpponentCard";
 
@@ -199,10 +169,10 @@ public abstract class HorizontalCardHolder : MonoBehaviour
             cards.Add(card);
             UpdateIndexes();
 
-            if (cardSO != null)
+            if (card.isMine || cardData.CurrentState == CardStateType.InPlay)
             {
-                card.name = cardSO.Id;
-                card.SetCardData(cardSO);
+                card.name = cardData.Id;
+                card.SetCardData(cardData);
             }
         }
     }
@@ -213,40 +183,6 @@ public abstract class HorizontalCardHolder : MonoBehaviour
         {
             cards[i].cardVisual.UpdateIndex(i);
             cards[i].cardVisual.curve = curve;
-        }
-    }
-
-    public void SpawnCard(ICard cardToSpawn, bool spawnCard)
-    {
-        if (spawnCard != isMine)
-            return;
-
-        GameObject cardSlot = Instantiate(slotPrefab, transform);
-
-        GameCard card = cardSlot.GetComponentInChildren<GameCard>();
-
-        card.PointerEnterEvent.AddListener(CardPointerEnter);
-        card.PointerExitEvent.AddListener(CardPointerExit);
-        card.BeginDragEvent.AddListener(BeginDrag);
-        card.EndDragEvent.AddListener(EndDrag);
-
-        card.name = cardToSpawn.Data.Id;
-        card.isMine = isMine;
-        card.isInHand = true;
-        card.gameObject.tag = isMine ? "MyCard" : "OpponentCard";
-
-        StartCoroutine(Frame());
-
-        IEnumerator Frame()
-        {
-            yield return new WaitForSecondsRealtime(.1f);
-            if (card.cardVisual != null)
-                card.cardVisual.UpdateIndex(transform.childCount);
-
-            cards.Add(card);
-            card.cardVisual.UpdateIndex(transform.childCount);
-
-            card.SetCardData(cardToSpawn);
         }
     }
 }

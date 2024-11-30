@@ -9,7 +9,7 @@ public class ButtonUI : MonoBehaviour
     [SerializeField] private Sprite offSprite;
     [SerializeField] private bool isOn;
 
-    private bool isStartup = true;
+    [SerializeField] private bool isStartup = true;
 
     private Image buttonImage;
 

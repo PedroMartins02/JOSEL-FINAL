@@ -30,22 +30,25 @@ public class DeckEditorManager : MonoBehaviour
     [SerializeField] private GameObject QuantityPrefab;
     [SerializeField] private HighlightedDeckIdSO HighlightedDeckData;
     [SerializeField] private TMP_InputField deckNameInput;
+    [SerializeField] private TextMeshProUGUI errorText;
+    [SerializeField] private GameObject errorPopUp;
 
     private Factions faction;
     private DeckData playerCurrentDeck;
     private string deckName;
     private int slotIndex;
+    private int deckCardBackID = 0; //Variable to store chosen deck back customization.
 
     private List<CardSO> ListOfSelectedCards = new List<CardSO>();
     private CardSO selectedMyth = null;
-    
-    
 
     private Dictionary<Factions, bool> factionsFilter = new Dictionary<Factions, bool>();
     private Dictionary<int, bool> blessingsFilter = new Dictionary<int, bool>();
     private Dictionary<Type, bool> typeFilter = new Dictionary<Type, bool>();
     
     private Dictionary<int, Type> cardTypeMapping = new Dictionary<int, Type>();
+
+    private List<GameObject> instancedCards = new List<GameObject>();
 
     private void Awake()
     {
@@ -73,7 +76,7 @@ public class DeckEditorManager : MonoBehaviour
                 {
                     CardSO firstCard = CardDatabase.Singleton.GetCardSoOfId(deck.CardList[1]);
                     this.faction = firstCard.Faction;
-
+                    deckCardBackID = deck.CardBackId;
                     this.playerCurrentDeck = deck;
                     OnDeckLoad(deck);
                 }
@@ -101,7 +104,7 @@ public class DeckEditorManager : MonoBehaviour
     {
         // Get the player data for the cards
         PlayerData playerData = AccountManager.Singleton.GetPlayerData();
-        
+
         // Clear the content for the cards and myths from the collection
         foreach (Transform child in cardCollectionContainer)
         {
@@ -135,14 +138,8 @@ public class DeckEditorManager : MonoBehaviour
         {
             CardSO card = CardDatabase.Singleton.GetCardSoOfId(kvp.Key);
 
-            // Filter the card: if its not from the chosen faction, skip it
-            if (!FilterCard(card))
-            {
-                continue;
-            }
-
             // If its a myth card from the faction, add it to the myth section and set it's data
-            if (card.GetType() == typeof(MythCardSO))
+            if (card.GetType() == typeof(MythCardSO) && card.Faction == faction)
             {
                 Transform mythCardInstance = Instantiate(mythTemplate, mythContainer);
                 mythCardInstance.gameObject.SetActive(true);
@@ -160,6 +157,12 @@ public class DeckEditorManager : MonoBehaviour
                     mythCardButton.onClick.AddListener(() => SelectMyth(mythCardInstance.gameObject, card));
                 }
                 mythCardsCount++;
+                continue;
+            }
+
+            // Filter the card: if its not from the chosen faction, skip it
+            if (!FilterCard(card))
+            {
                 continue;
             }
 
@@ -184,28 +187,13 @@ public class DeckEditorManager : MonoBehaviour
         }
         Debug.Log("myths: " + mythCardsCount);
         Debug.Log("cards: " + colecCardsCount);
-        
-        // Lastly, we need to resize the containers for the scroll to work (rafa bad kittie)
-        // Set the size for the myth scroll (goofy ahh math version)
-        RectTransform mythContRect = mythContainer.GetComponent<RectTransform>();
-        RectTransform mythTemplateRect = mythTemplate.GetComponent<RectTransform>();
-        float mythTotalHeight = mythTemplateRect.rect.height * mythCardsCount + 60 * (mythCardsCount - 1);
-        mythContRect.sizeDelta = new Vector2(mythContRect.sizeDelta.x, mythTotalHeight);
-        // Set the size for the card collection scroll
-        RectTransform colecContRect = cardCollectionContainer.GetComponent<RectTransform>();
-        RectTransform colecTempRect = cardCollectionTemplate.GetComponent<RectTransform>();
-        int aproxRows = DivideRoundingUp(colecCardsCount, 3);
-        float colecTotalHeight = colecTempRect.rect.height * aproxRows + 40 * (aproxRows - 1);
-        colecContRect.sizeDelta = new Vector2(colecContRect.sizeDelta.x, colecTotalHeight);
     }
 
     private int DivideRoundingUp(int x, int y)
     {
-        int remainder;
-        int quotient = Math.DivRem(x, y, out remainder);
+        int quotient = Math.DivRem(x, y, out int remainder);
         return remainder == 0 ? quotient : quotient + 1;
     }
-
 
     private void InitializeCardTypeMapping()
     {
@@ -247,6 +235,9 @@ public class DeckEditorManager : MonoBehaviour
         if (blessingsFilter.TryGetValue(card.Blessings, out bool blessingsAllowed) && !blessingsAllowed)
             return false;
 
+        if (typeFilter.TryGetValue(card.GetType(), out bool typeAllowed) && !typeAllowed)
+            return false;
+
         return true;
     }
 
@@ -283,22 +274,78 @@ public class DeckEditorManager : MonoBehaviour
             AddToEditingArea(card);
         }
     }
+
+    private bool CardTypeCounter(Type type, int limit)
+    {
+        int strikeCounter = 0;
+        foreach (CardSO card in ListOfSelectedCards)
+        {
+            if (card.GetType() == type)
+            {
+                strikeCounter++;
+            }
+
+            if (strikeCounter >= limit) return true;
+        }
+
+        return false;
+    }
     
+    private bool CardRepeatCounter(string cardId, int limit)
+    {
+        int strikeCounter = 0;
+        foreach (CardSO card in ListOfSelectedCards)
+        {
+            if (cardId == card.Id)
+            {
+                strikeCounter++;
+            }
+
+            if (strikeCounter >= limit) return true;
+        }
+
+        return false;
+    }
+
+    IEnumerator ShowErrorPopUp(string errorMessage, float seconds)
+    {
+        errorText.text = errorMessage;
+        errorPopUp.SetActive(true);
+        Debug.Log(errorMessage);
+        yield return new WaitForSecondsRealtime(seconds);
+        errorPopUp.SetActive(false);
+    }
 
     private void AddToEditingArea(CardSO cardSO)
     {
+        if (ListOfSelectedCards.Count == 20)
+        {
+            StartCoroutine(ShowErrorPopUp("You already have 20 maximum cards in your deck!", 1.5f));
+            return;
+        }
+        if (cardSO.GetType() == typeof(UnitCardSO) || cardSO.GetType() == typeof(BattleTacticCardSO))
+        {
+            if (CardRepeatCounter(cardSO.Id, 3))
+            {
+                StartCoroutine(ShowErrorPopUp("You cannot have more than 3 of the same card!", 1.5f));
+                return;
+            }
+        }
+        if (cardSO.GetType() == typeof(LegendCardSO))
+        {
+            if (CardTypeCounter(cardSO.GetType(), 3))
+            {
+                StartCoroutine(ShowErrorPopUp("You cannot have more than 3 of legend cards!", 1.5f));
+                return;
+            }
+        }
+        
         Transform cardInstance = Instantiate(selectedCardsTemplate, selectedCardsContainer);
         cardInstance.gameObject.SetActive(true);
         ListOfSelectedCards.Add(cardSO);
         UpdateCardsList(ListOfSelectedCards.Select(e => e.Id.ToString()).ToList());
         DeckCardUI deckCardUI = cardInstance.GetComponent<DeckCardUI>();
         deckCardUI.SetCardData(cardSO);
-
-        // Set the size for the selected cards scroll
-        RectTransform editContRect = selectedCardsContainer.GetComponent<RectTransform>();
-        RectTransform editTempRect = selectedCardsTemplate.GetComponent<RectTransform>();
-        float totalHeight = editTempRect.rect.height * ListOfSelectedCards.Count + 10 * (ListOfSelectedCards.Count - 1);
-        editContRect.sizeDelta = new Vector2(editContRect.sizeDelta.x, totalHeight);
     }
 
     public void RemoveFromEditingArea(CardSO cardToRemove)
@@ -319,7 +366,7 @@ public class DeckEditorManager : MonoBehaviour
     public void SaveDeck()
     {
         this.deckName = deckNameInput.text.IsEmpty() ? "New Deck" : deckNameInput.text;
-        AccountManager.Singleton.AddDeckToPlayer(this.slotIndex, new DeckSO(deckName,selectedMyth,ListOfSelectedCards,this.faction));
+        AccountManager.Singleton.AddDeckToPlayer(this.slotIndex, this.deckCardBackID, new DeckSO(deckName,selectedMyth,ListOfSelectedCards,this.faction));
         BackButton();
     }
 

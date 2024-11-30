@@ -18,12 +18,20 @@ namespace GameModel
 
         public Card(CardData cardData)
         {
-            this.Data = cardData;
-
             this.CurrentEffects = new List<Effect>();
             this.CurrentModifiers = new List<Modifier>();
             this.CurrentBlessingsCost = cardData.Blessings;
+
+            int gameID = CardManager.Instance.RegisterCard(this);
+
+            this.Data = CardDataWithID(cardData, gameID);
+
+            CardManager.Instance.UpdateCard(this);
         }
+
+        protected abstract CardData CardDataWithID(CardData cardData, int gameID);
+
+        public abstract CardDataSnapshot GetDataSnapshot();
 
         public void HandleAction(CardActions cardActions)
         {
@@ -49,6 +57,7 @@ namespace GameModel
         {
 
         }
+
 
         #region Modifiers
         public void IncreaseBlessingCost(int amount)

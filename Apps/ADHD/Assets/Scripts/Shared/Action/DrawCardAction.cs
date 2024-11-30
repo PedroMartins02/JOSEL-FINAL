@@ -8,19 +8,13 @@ namespace Game.Logic.Actions
 {
     public class DrawCardAction : IAction
     {
-        private Deck deck;
-        private Hand hand;
+        private Player player;
         private int numberOfCards;
 
-        private bool isMine;
-
-        public DrawCardAction(Deck deck, Hand hand, bool isMine, int numberOfCards = 1)
+        public DrawCardAction(Player player, int numberOfCards = 1)
         {
-            this.deck = deck;
-            this.hand = hand;
+            this.player = player;
             this.numberOfCards = numberOfCards;
-
-            this.isMine = isMine;
         }
 
         public bool IsLegal()
@@ -28,22 +22,30 @@ namespace Game.Logic.Actions
             return true; // TODO: Adicionar condição para verificar se é o turno do jogador ou não
         }
 
-        public IEnumerator Execute()
+        public void Execute()
         {
             for (int i = 0; i < numberOfCards; i++)
             {
-                ICard drawnCard = deck.DrawCard();
+                ICard drawnCard = player.Deck.DrawCard();
 
                 if (drawnCard != null)
                 {
                     drawnCard.StateMachine.SetState(CardStateType.InHand);
 
-                    bool addedToHand = hand.AddCard(drawnCard);
+                    bool addedToHand = player.Hand.AddCard(drawnCard);
 
                     if (addedToHand)
                     {
-                        CardAddedToHandEventArgs args = new(drawnCard, isMine);
-                        EventManager.TriggerEvent(GameEventsEnum.CardAddedToHand, args);
+                        ActionData actionData = new ActionData
+                        {
+                            ActionType = ActionType.DrawCard,
+                            PlayerId = player.playerData.ClientId,
+                            CardData = drawnCard.GetDataSnapshot(),
+                        };
+
+                        GameplayManager.Instance.BroadcastActionExecuted(actionData); // Notify Clients
+
+                        EventManager.TriggerEvent(GameEventsEnum.CardAddedToHand, actionData); // Notify the rest of the server/backend
                     }
                     else
                     {
@@ -51,20 +53,6 @@ namespace Game.Logic.Actions
                     }
                 }
             }
-
-            yield return null;
-        }
-    }
-
-    public readonly struct CardAddedToHandEventArgs
-    {
-        public readonly ICard Card;
-        public readonly bool IsMine;
-
-        public CardAddedToHandEventArgs(ICard card, bool isMine)
-        {
-            this.Card = card;
-            this.IsMine = isMine;
         }
     }
 }

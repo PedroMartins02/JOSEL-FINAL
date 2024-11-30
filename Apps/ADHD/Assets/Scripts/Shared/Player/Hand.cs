@@ -11,7 +11,7 @@ namespace GameModel
         private List<ICard> cards;
         public int MaxHandSize { get; private set; }
 
-        public Hand(int maxHandSize) 
+        public Hand(int maxHandSize = 10) 
         {
             cards = new List<ICard>();
 
@@ -32,6 +32,11 @@ namespace GameModel
         public void RemoveCard(ICard card)
         {
             cards.Remove(card);
+        }
+
+        public bool Contains(ICard card)
+        {
+            return cards.Contains(card);
         }
 
         public IReadOnlyList<ICard> GetCards() => cards.AsReadOnly();

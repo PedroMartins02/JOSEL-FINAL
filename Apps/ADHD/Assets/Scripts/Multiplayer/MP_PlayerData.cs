@@ -10,7 +10,7 @@ public struct MP_PlayerData : IEquatable<MP_PlayerData>, INetworkSerializable
     public ulong clientId;
     public FixedString64Bytes playerUsername;
     public FixedString64Bytes playerId;
-    public FixedString64Bytes playerDeck;
+    public FixedString512Bytes playerDeck;
 
     public bool Equals(MP_PlayerData other)
     {

@@ -13,38 +13,39 @@ namespace GameModel
     public class Deck
     {
         public string Name { get; private set; }
-        public Card Myth { get; private set; }
         public Factions Faction { get; private set; }
 
         private Stack<ICard> cards;
 
-        public Deck(DeckSO deckSO)
+        public Deck(string name, List<string> cardIdList)
         {
-            this.Name = deckSO.Name;
-            //this.Myth = new MythCard(deckSO.Myth);
-            this.Faction = deckSO.Faction;
+            this.Name = name;
 
             this.cards = new();
 
-            InitializeCards(deckSO.Cards);
+            InitializeCards(cardIdList);
             Shuffle();
+
+            this.Faction = cards.Peek().Data.Faction;
         }
 
-        private void InitializeCards(List<CardSO> cardSOList)
+        private void InitializeCards(List<string> cardIdList)
         {
-            foreach (CardSO cardSO in cardSOList)
+            foreach (string cardID in cardIdList)
             {
-                if (cardSO.GetType() == typeof(UnitCardSO))
+                ICard card = CardDatabase.Singleton.GetCardOfId(cardID);
+
+                if (card.GetType() == typeof(UnitCard))
                 {
-                    cards.Push(new UnitCard((UnitCardData)cardSO.CardData));
+                    cards.Push(new UnitCard((UnitCardData)card.Data));
                 }
-                else if (cardSO.GetType() == typeof(LegendCardSO))
+                else if (card.GetType() == typeof(LegendCard))
                 {
-                    cards.Push(new LegendCard((LegendCardData)cardSO.CardData));
+                    cards.Push(new LegendCard((LegendCardData)card.Data));
                 }
-                else if (cardSO.GetType() == typeof(BattleTacticCardSO))
+                else if (card.GetType() == typeof(BattleTacticCard))
                 {
-                    cards.Push(new BattleTacticCard((BattleTacticCardData)cardSO.CardData));
+                    cards.Push(new BattleTacticCard((BattleTacticCardData)card.Data));
                 }
             }
         }
@@ -56,7 +57,7 @@ namespace GameModel
 
             cardList = cardList.OrderBy(c => random.Next()).ToList();
 
-            cards = new Stack<ICard>(cardList);
+            this.cards = new Stack<ICard>(cardList);
         }
 
         public ICard DrawCard()

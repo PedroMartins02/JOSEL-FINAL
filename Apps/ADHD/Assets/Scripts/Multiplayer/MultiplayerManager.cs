@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Unity.Collections;
 using Unity.Netcode;
 using Unity.Services.Authentication;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -60,7 +61,7 @@ public class MultiplayerManager : NetworkBehaviour
     {
         // The event for the host when he needs to approve a connection
         NetworkManager.Singleton.ConnectionApprovalCallback += NetworkManager_ConnectionApprovalCallback;
-        // Host populates the NetworkList with the connected player data when he connects
+        // Populates the NetworkList with it self's data
         NetworkManager.Singleton.OnClientConnectedCallback += NetworkManager_OnClientConnectedCallback;
         // If player disconnects, clear his data from the NetworkList
         NetworkManager.Singleton.OnClientDisconnectCallback += NetworkManager_Server_OnClientDisconnectCallback;
@@ -103,8 +104,8 @@ public class MultiplayerManager : NetworkBehaviour
     private void NetworkManager_ConnectionApprovalCallback(NetworkManager.ConnectionApprovalRequest connectionApprovalRequest, NetworkManager.ConnectionApprovalResponse connectionApprovalResponse)
     {
         // Prevent Players from joining if we are not in the LobbyScene
-
-        if (SceneManager.GetActiveScene().name != SceneLoader.Scene.Lobby.ToString())
+        if (SceneManager.GetActiveScene().name != SceneLoader.Scene.Lobby.ToString()
+            || SceneManager.GetActiveScene().name != SceneLoader.Scene.NavigationScene.ToString())
         {
             connectionApprovalResponse.Approved = false;
             connectionApprovalResponse.Reason = "Game has already started";
@@ -311,6 +312,10 @@ public class MultiplayerManager : NetworkBehaviour
         if (deckData != null)
         {
             this.selectedDeckData = deckData;
+
+            string serializedDeck = DeckData.SerializeDeckData(this.selectedDeckData);
+            SetPlayerDeckServerRpc(serializedDeck);
+
             Debug.Log("Changed deck to: " + deckData.ToString());
         }
     }
@@ -318,6 +323,17 @@ public class MultiplayerManager : NetworkBehaviour
     public DeckData GetPlayerDeck()
     {
         return this.selectedDeckData;
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void SetPlayerDeckServerRpc(string serializedDeck, ServerRpcParams serverRpcParams = default)
+    {
+        int playerDataIndex = GetPlayerDataIndexFromClientId(serverRpcParams.Receive.SenderClientId);
+        MP_PlayerData playerData = playerDataNetworkList[playerDataIndex];
+
+        playerData.playerDeck = serializedDeck;
+
+        playerDataNetworkList[playerDataIndex] = playerData;
     }
 
 

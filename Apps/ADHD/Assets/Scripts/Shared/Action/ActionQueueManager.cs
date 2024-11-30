@@ -1,31 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using GameCore.Events;
-using UnityEngine;
 
 namespace Game.Logic.Actions
 {
-    public class ActionQueueManager : MonoBehaviour
+    public class ActionQueueManager
     {
-        public static ActionQueueManager Instance { get; private set; }
+        public static ActionQueueManager Instance { get; private set; } = new ActionQueueManager();
 
         private Queue<IAction> actionQueue;
         private Queue<IAction> priorityActionQueue;
 
-        private static bool isProcessing = false;
-
-        private void Awake()
+        private ActionQueueManager() 
         {
-            if (Instance == null)
-            {
-                Instance = this;
-            }
-            else
-            {
-                Destroy(gameObject);
-            }
-
             actionQueue = new();
             priorityActionQueue = new();
         }
@@ -33,28 +20,17 @@ namespace Game.Logic.Actions
         public void AddAction(IAction action)
         {
             actionQueue.Enqueue(action);
-
-            if (!isProcessing)
-            {
-                Debug.Log("Processing Actions");
-                StartCoroutine(ProcessActions());
-            }
+            ProcessActions();
         }
 
         public void AddPriorityAction(IAction action)
         {
-            actionQueue.Enqueue(action);
-
-            if (!isProcessing)
-            {
-                StartCoroutine(ProcessActions());
-            }
+            priorityActionQueue.Enqueue(action);
+            ProcessActions();
         }
 
-        public IEnumerator ProcessActions()
+        public void ProcessActions()
         {
-            isProcessing = true;
-
             while (priorityActionQueue.Count > 0 || actionQueue.Count > 0)
             {
                 IAction nextAction = null;
@@ -70,19 +46,15 @@ namespace Game.Logic.Actions
 
                 if (nextAction != null && nextAction.IsLegal())
                 {
-                    yield return StartCoroutine(nextAction.Execute());
+                    nextAction.Execute();
 
                     EventManager.TriggerEvent(GameEventsEnum.ActionExecuted, nextAction);
                 }
                 else
                 {
-                    Debug.Log("Action was Illegal");
-                    // Illegal Action
-                    yield return null;
+                    // Handle Illegal actions here
                 }
             }
-
-            isProcessing = false;
         }
 
         public void ClearQueue()

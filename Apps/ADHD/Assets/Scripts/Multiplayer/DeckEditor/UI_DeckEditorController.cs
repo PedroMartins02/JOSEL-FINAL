@@ -2,73 +2,100 @@ using GameModel;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class UI_DeckEditorController : MonoBehaviour
 {
-    [Header("Civilization Buttons")]
-    [SerializeField] private Transform civButtonContainer;
-    [SerializeField] private Transform civButtonTemplate;
+    [Header("Prefabs")]
+    [SerializeField] private GameObject cardPrefab;
+    [SerializeField] private GameObject mythPrefab;
 
+    [Header("Civ Information")]
+    [SerializeField] private Transform civCardsContainer;
+    [SerializeField] private Transform civMythsContainer;
+    [SerializeField] private TextMeshProUGUI civFactsText;
 
-    private void Awake()
-    {
-        // Hide the deck Template
-        civButtonTemplate.gameObject.SetActive(false);
-    }
+    [Header("Buttons")]
+    [SerializeField] private ButtonUI greekButton;
+    [SerializeField] private ButtonUI egyptButton;
+
+    private int chosenFaction = 0;
 
     private void Start()
     {
-        ClearCivButtonList();
-        InstantiateCivButtons();
+        ClearContainer(civCardsContainer);
+        ClearContainer(civMythsContainer);
+        SetCivilization(0);
     }
 
-    private void ClearCivButtonList()
+    public void SetCivilization(int index)
     {
-        if (civButtonContainer != null)
-            foreach (Transform child in civButtonContainer)
-            {
-                if (child == civButtonTemplate) continue;
-                Destroy(child.gameObject);
-            }
-    }
-
-    private void InstantiateCivButtons()
-    {
-        int childCount = 0;
-        bool firstChild = true;
-        foreach (Factions faction in Enum.GetValues(typeof(Factions)))
+        chosenFaction = index;
+        if (index == 0)
         {
-            Transform civTransform = Instantiate(civButtonTemplate, civButtonContainer);
-
-            civTransform.gameObject.GetComponent<UI_CivButtonController>().SetCivData(faction);
-            civTransform.gameObject.SetActive(true);
-
-            childCount++;
-
-            // Set the default civ
-            if (firstChild)
-            {
-                civTransform.gameObject.GetComponent<UI_CivButtonController>().CivButtonOnClick();
-                firstChild = false;
-            }
+            greekButton.SetOn();
+            egyptButton.SetOff();
+            SetCards(Factions.Greek);
+            SetMyths(Factions.Greek);
+            SetInfo(Factions.Greek);
+        } else
+        {
+            greekButton.SetOff();
+            egyptButton.SetOn();
+            SetCards(Factions.Egypt);
+            SetMyths(Factions.Egypt);
+            SetInfo(Factions.Egypt);
         }
+    }
 
-        // Set the size for the mister civilizations scroll (goofy ahh)
-        RectTransform contentRect = civButtonContainer.GetComponent<RectTransform>();
-        float totalWidth = 250 * childCount + 25 * (childCount - 1);
-        contentRect.sizeDelta = new Vector2(totalWidth, contentRect.sizeDelta.y);
+    private void SetCards(Factions civilization)
+    {
+        ClearContainer(civCardsContainer);
+        for (int i = 0; i < 3; i++)
+        {
+            CardSO card = CardDatabase.Singleton.GetRandomCard(civilization);
+            var cardInstance = Instantiate(cardPrefab, civCardsContainer);
+            var cardUI = cardInstance.GetComponent<CardUI>();
+            cardUI.SetCardData(card);
+        }
+    }
+
+    private void SetMyths(Factions civilization)
+    {
+        ClearContainer(civMythsContainer);
+        var allMyths = CardDatabase.Singleton.GetAllMyths(civilization);
+        foreach (MythCardSO myth in allMyths)
+        {
+            var mythInsance = Instantiate(mythPrefab, civMythsContainer);
+            var mythUI = mythInsance.GetComponent<MythUI>();
+            mythUI.SetMythData(myth);
+        }
+    }
+
+    private void SetInfo(Factions civilization)
+    {
+        civFactsText.text = civilization == Factions.Greek ? "GREEK INFO" : "EGYPT INFO";
+    }
+
+    private void ClearContainer(Transform container)
+    {
+        if (container == null) return;
+
+        foreach (Transform child in container)
+        {
+            Destroy(child.gameObject);
+        }
     }
 
     public void ReturnButtonOnClick()
     {
-        SceneLoader.ExitNetworkLoad(SceneLoader.Scene.NavigationScene);
+        SceneLoader.Load(SceneLoader.Scene.NavigationScene);
     }
 
     public void ContinueOnClick()
     {
-        // Verify if there is a chosen civilization
-
-        SceneLoader.Load(SceneLoader.Scene.DeckBuilder);
+        PlayerPrefs.SetInt("ChosenFaction", chosenFaction);
+        SceneLoader.ExitNetworkLoad(SceneLoader.Scene.DeckBuilder);
     }
 }

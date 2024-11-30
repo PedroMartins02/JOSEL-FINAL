@@ -11,8 +11,9 @@ using Game.Data;
 using Unity.VisualScripting;
 using Game.Logic.Actions;
 using Game.Logic;
+using Unity.Netcode;
 
-public class GameCard : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
+public class GameCard : NetworkBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
 {
     private RectTransform cardTransform;
     [NonSerialized] public Canvas canvas;
@@ -55,6 +56,8 @@ public class GameCard : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDrag
 
     public GameCardStateMachine stateMachine;
 
+    NetworkVariable<CardDataSnapshot> cardDataSnapshot = new NetworkVariable<CardDataSnapshot>();
+
     [HideInInspector] public Card cardData;
 
     void Start()
@@ -82,43 +85,34 @@ public class GameCard : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDrag
     public void OnPointerEnter(PointerEventData eventData) => stateMachine.HandlePointerEnter(eventData);
     public void OnPointerExit(PointerEventData eventData) => stateMachine.HandlePointerExit(eventData);
 
-    public void SetCardData(CardSO cardSO)
+    public override void OnNetworkSpawn()
     {
-        cardData = CreateCardInstance(cardSO);
-        cardVisual.SetCardData(cardSO);
-    }
-
-    public void SetCardData(ICard card)
-    {
-        cardData = card as Card;
-
-        CardSO cardSO = CardDatabase.Singleton.GetCardSoOfId(card.Data.Id);
-        cardVisual.SetCardData(cardSO);
-    }
-
-    public void UpdateCardData(Card card)
-    {
-        cardData = card;
-        cardVisual.UpdateCardData(card);
-    }
-
-    //this should be moved somewhere else, accessible for other classes, since it´s useful in multiple cases
-    private Card CreateCardInstance(CardSO cardSO)
-    {
-        Type cardSOType = cardSO.GetType();
-        if (cardSOType == typeof(UnitCardSO))
+        if (IsServer)
         {
-            return new UnitCard((UnitCardData)cardSO.CardData);
+
         }
-        else if (cardSOType == typeof(BattleTacticCardSO))
+        else
         {
-            return new BattleTacticCard((BattleTacticCardData)cardSO.CardData);
-        } 
-        else if (cardSOType == typeof (LegendCardSO))
-        {
-            return new LegendCard((LegendCardData)cardSO.CardData);
+            cardDataSnapshot.OnValueChanged += UpdateCardData;
         }
-        return null;
+    }
+
+    public void SetCardData(CardDataSnapshot cardData)
+    {
+        cardVisual.SetCardData(cardData);
+    }
+
+    [ServerRpc]
+    public void UpdateCardDataServerRpc()
+    {
+        CardDataSnapshot updatedData = CardManager.Instance.GetCardSnapshot(cardDataSnapshot.Value.GameID);
+
+        cardDataSnapshot.Value = updatedData;
+    }
+
+    public void UpdateCardData(CardDataSnapshot previousData, CardDataSnapshot newData)
+    {
+        cardVisual.UpdateCardData(newData);
     }
 
     public void ClampPosition()
@@ -378,8 +372,10 @@ public class GameCard : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDrag
 
     private void PlayCardOnBoard(GameObject playerBoardArea)
     {
+        /*
         PlayCardAction action = new(cardData);
         ActionQueueManager.Instance.AddAction(action);
+        */
 
         HorizontalCardHolder horizontalCardHolder = GetComponentInParent<HorizontalCardHolder>();
         horizontalCardHolder.RemoveCard(this);

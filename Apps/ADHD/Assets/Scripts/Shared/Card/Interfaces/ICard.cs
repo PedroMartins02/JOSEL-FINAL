@@ -10,7 +10,6 @@ namespace Game.Logic
     public interface ICard
     {
         public CardData Data { get; }
-
         public int CurrentBlessingsCost { get; }
         public List<Effect> CurrentEffects { get; }
         public List<Modifier> CurrentModifiers { get; }
@@ -22,6 +21,8 @@ namespace Game.Logic
         public void IncreaseBlessingCost(int amount);
         public void DecreaseBlessingCost(int amount);
 
+
+        public CardDataSnapshot GetDataSnapshot();
 
         public bool IsTargatable { get; }
         public bool CanAttack { get; }

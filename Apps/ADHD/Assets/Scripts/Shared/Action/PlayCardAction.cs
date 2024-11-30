@@ -1,30 +1,38 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using GameModel;
-using UnityEngine;
 
 namespace Game.Logic.Actions
 {
     public class PlayCardAction : IAction
     {
+        private Player player;
         private ICard card;
 
-        public PlayCardAction(ICard card)
+        public PlayCardAction(Player player, ICard card)
         {
+            this.player = player;
             this.card = card;
         }
 
         public bool IsLegal()
         {
-            return true;
+            return BoardManager.Instance.CanPlayAnotherCard(player.playerData.ClientId)
+                && player.HasCard(card);
         }
 
-        public IEnumerator Execute()
+        public void Execute()
         {
-            card.StateMachine.SetState(CardStateType.InPlay);
+            player.PlayCard(card);
 
-            yield return null;
+            BoardManager.Instance.AddCardToBoard(player.playerData.ClientId, card);
+
+            ActionData actionData = new ActionData
+            {
+                ActionType = ActionType.PlayCard,
+                PlayerId = player.playerData.ClientId,
+                CardGameID = card.Data.GameID,
+            };
+
+            GameplayManager.Instance.BroadcastActionExecuted(actionData);
         }
     }
 }
