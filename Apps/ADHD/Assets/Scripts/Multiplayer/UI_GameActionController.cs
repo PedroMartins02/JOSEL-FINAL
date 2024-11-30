@@ -1,5 +1,6 @@
 using Game.Data;
 using Game.Logic;
+using Game.Multiplayer;
 using GameCore.Events;
 using GameModel;
 using TMPro;
@@ -40,6 +41,7 @@ public class UI_GameActionController : NetworkBehaviour
         base.OnNetworkSpawn();
 
         EventManager.Subscribe(GameEventsEnum.CardDrawn, OnCardDrawnEvent);
+        EventManager.Subscribe(GameEventsEnum.CardPlayed, OnCardPlayedEvent);
     }
 
     private void GameplayManager_OnStateChange(object sender, GameplayManager.GameStateEventArgs e)
@@ -115,6 +117,8 @@ public class UI_GameActionController : NetworkBehaviour
         {
             opponentHand.SpawnCard(cardDrawnArgs.CardData, cardDrawnArgs.PlayerID);
         }
+
+        ClientCardManager.Instance.RegisterCardSnapshotRpc(cardDrawnArgs.CardData);
     }
 
     public void OnCardPlayedEvent(object args)
@@ -143,7 +147,7 @@ public class UI_GameActionController : NetworkBehaviour
 
         if (IsServer && playedCard != null)
         {
-            playedCard.UpdateCardDataServerRpc();
+            ClientCardManager.Instance.UpdateCardSnapshotRpc(cardPlayedArgs.CardGameID);
         }
     }
 }
