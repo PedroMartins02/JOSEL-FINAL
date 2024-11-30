@@ -83,8 +83,6 @@ public class GameplayManager : NetworkBehaviour
 
         foreach (ulong clientId in NetworkManager.Singleton.ConnectedClientsIds)
         {
-            Debug.Log("Registering Player: " + clientId);
-
             MP_PlayerData playerData = MultiplayerManager.Instance.GetPlayerDataFromClientId(clientId);
 
             PlayerManager.Instance.CreatePlayer(clientId, playerData);
@@ -108,12 +106,10 @@ public class GameplayManager : NetworkBehaviour
         
     }
 
-    public void BroadcastActionExecuted(ActionData actionData)
+    [Rpc(SendTo.Server)]
+    public void BroadcastActionExecutedRpc(ActionData actionData)
     {
-        if (IsServer)
-        {
-            NotifyActionExecutedClientRpc(actionData);
-        }
+        NotifyActionExecutedClientRpc(actionData);
     }
 
     [Rpc(SendTo.ClientsAndHost)]

@@ -27,18 +27,38 @@ namespace GameModel
             this.Hand = new Hand();
         }
 
+        public void PlayCard(int cardGameID)
+        {
+            if (!HasCard(cardGameID)) return;
+
+            ICard card = Hand.GetCard(cardGameID);
+
+            HandlePlayCard(card);
+        }
+
         public void PlayCard(ICard card)
         {
             if (!HasCard(card)) return;
 
-            Hand.RemoveCard(card);
+            HandlePlayCard(card);
+        }
 
+        private void HandlePlayCard(ICard card)
+        {
+            Hand.RemoveCard(card);
             card.StateMachine.SetState(CardStateType.InPlay);
+
+            CardManager.Instance.UpdateCard(card);
         }
 
         public bool HasCard(ICard card)
         {
             return Hand.Contains(card);
+        }
+
+        public bool HasCard(int cardGameID)
+        {
+            return Hand.Contains(cardGameID);
         }
     }
 }

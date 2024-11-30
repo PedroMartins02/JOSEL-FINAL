@@ -13,8 +13,7 @@ namespace Game.Logic.Actions.UI
                 case ActionType.DrawCard:
                     return new UIDrawCardAction(actionData.CardData, actionData.PlayerId);
                 case ActionType.PlayCard:
-
-                    break;
+                    return new UIPlayCardAction(actionData.CardGameID, actionData.PlayerId);
                 case ActionType.Heal:
 
                     break;

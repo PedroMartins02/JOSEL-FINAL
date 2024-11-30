@@ -44,6 +44,15 @@ namespace Game.Logic
             return cardList == null || cardList.Count < numberOfAllowedCards;
         }
 
+        public void AddCardToBoard(ulong playerId, int cardGameID)
+        {
+            if (!CanPlayAnotherCard(playerId)) return; // TODO: Should throw an error
+
+            ICard card = CardManager.Instance.GetCardByGameId(cardGameID);
+
+            AddCardToBoard(playerId, card);
+        }
+
         public void AddCardToBoard(ulong playerId, ICard card)
         {
             if (!CanPlayAnotherCard(playerId)) return; // TODO: Should throw an error
@@ -53,7 +62,7 @@ namespace Game.Logic
             cardList ??= new();
             cardList.Add(card);
 
-            playerCards.Add(playerId, cardList);
+            playerCards[playerId] = cardList;
         }
     }
 }

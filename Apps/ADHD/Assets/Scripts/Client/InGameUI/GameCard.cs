@@ -56,7 +56,8 @@ public class GameCard : NetworkBehaviour, IDragHandler, IBeginDragHandler, IEndD
 
     public GameCardStateMachine stateMachine;
 
-    NetworkVariable<CardDataSnapshot> cardDataSnapshot = new NetworkVariable<CardDataSnapshot>();
+    public NetworkVariable<CardDataSnapshot> CardDataSnapshot = new NetworkVariable<CardDataSnapshot>();
+    public int GameID;
 
     [HideInInspector] public Card cardData;
 
@@ -93,7 +94,7 @@ public class GameCard : NetworkBehaviour, IDragHandler, IBeginDragHandler, IEndD
         }
         else
         {
-            cardDataSnapshot.OnValueChanged += UpdateCardData;
+            CardDataSnapshot.OnValueChanged += UpdateCardData;
         }
     }
 
@@ -102,12 +103,12 @@ public class GameCard : NetworkBehaviour, IDragHandler, IBeginDragHandler, IEndD
         cardVisual.SetCardData(cardData);
     }
 
-    [ServerRpc]
+    [Rpc(SendTo.Server)]
     public void UpdateCardDataServerRpc()
     {
-        CardDataSnapshot updatedData = CardManager.Instance.GetCardSnapshot(cardDataSnapshot.Value.GameID);
+        CardDataSnapshot updatedData = CardManager.Instance.GetCardSnapshot(CardDataSnapshot.Value.GameID);
 
-        cardDataSnapshot.Value = updatedData;
+        CardDataSnapshot.Value = updatedData;
     }
 
     public void UpdateCardData(CardDataSnapshot previousData, CardDataSnapshot newData)
@@ -370,13 +371,8 @@ public class GameCard : NetworkBehaviour, IDragHandler, IBeginDragHandler, IEndD
         }
     }
 
-    private void PlayCardOnBoard(GameObject playerBoardArea)
+    public void PlayCardOnBoard(GameObject playerBoardArea)
     {
-        /*
-        PlayCardAction action = new(cardData);
-        ActionQueueManager.Instance.AddAction(action);
-        */
-
         HorizontalCardHolder horizontalCardHolder = GetComponentInParent<HorizontalCardHolder>();
         horizontalCardHolder.RemoveCard(this);
         horizontalCardHolder.UpdateIndexes();
@@ -392,23 +388,21 @@ public class GameCard : NetworkBehaviour, IDragHandler, IBeginDragHandler, IEndD
 
     private void PlayCard(GameObject playerBoardArea)
     {
-        if (cardData.GetType() == typeof(BattleTacticCard))
+        switch (CardDataSnapshot.Value.CardType) 
         {
-            //TRY PLAY BATTLE TACTIC
-            // if can't play card, don't run the code below
-            PlayCardEffect(true);
-        } 
-        else if (cardData.GetType() == typeof(UnitCard))
-        {
-            // TRY PLAY CARD 
-            // if can't play card, don't run the code below
-            PlayCardOnBoard(playerBoardArea);
-        } else if (cardData.GetType() == typeof(LegendCard))
-        {
-            // TRY PLAY CARD 
-            // if can't play card, don't run the code below
-            PlayCardOnBoard(playerBoardArea);
-            PlayCardEffect(false);
+            case CardType.BattleTactic:
+                //TRY PLAY BATTLE TACTIC
+                // if can't play card, don't run the code below
+                return;
+                PlayCardEffect(true);
+                break;
+            case CardType.Unit:
+                ActionRequestHandler.Instance.HandlePlayCardRequestServerRpc(GameID);
+                break;
+            case CardType.Legend:
+                PlayCardOnBoard(playerBoardArea);
+                //PlayCardEffect(false);
+                return;
         }
     }
 

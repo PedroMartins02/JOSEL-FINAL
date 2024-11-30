@@ -36,4 +36,10 @@ namespace GameCore.Events
         public CardDataSnapshot CardData;
         public ulong PlayerID;
     }
+
+    public struct CardPlayedEventArgs
+    {
+        public int CardGameID;
+        public ulong PlayerID;
+    }
 }
