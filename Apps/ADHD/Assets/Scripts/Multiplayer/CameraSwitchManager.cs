@@ -1,12 +1,20 @@
+using Oculus.Interaction;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.XR;
 
 public class CameraSwitchManager : MonoBehaviour
 {
+    [Header("PC related")]
     [SerializeField] private Camera pcCamera;
-    [SerializeField] private GameObject vrRig;
     [SerializeField] private Canvas canvas;
+
+    [Header("Quest related")]
+    [SerializeField] private GameObject vrRig;
+    [SerializeField] private GameObject ISDK_PokeInteraction;
+    [SerializeField] private GameObject RootProjectContent;
+    [SerializeField] private PointableCanvasModule canvasModule;
+
 
     private void Awake()
     {
@@ -16,7 +24,7 @@ public class CameraSwitchManager : MonoBehaviour
 
     private void Start()
     {
-        UpdateCameraAndCanvas();
+        //UpdateCameraAndCanvas();
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -42,36 +50,59 @@ public class CameraSwitchManager : MonoBehaviour
         // Switch settings
         if (XRSettings.isDeviceActive)
         {
-            SwitchToVR();
+            DoSwitchToVR(true);
         }
         else
         {
-            SwitchToPC();
+            DoSwitchToVR(false);
         }
     }
 
-    private void SwitchToVR()
+    private void DoSwitchToVR(bool isVR)
     {
         // Enable the vr rig c:
-        if (vrRig != null) vrRig.gameObject.SetActive(true);
-        if (pcCamera != null) pcCamera.gameObject.SetActive(true);
+        if (vrRig != null) 
+            vrRig.gameObject.SetActive(isVR);
+        if (ISDK_PokeInteraction != null)
+            ISDK_PokeInteraction.gameObject.SetActive(isVR);
+        if (canvasModule != null)
+            canvasModule.enabled = isVR;
 
-        if (canvas != null)
+        if (RootProjectContent != null)
         {
-            canvas.renderMode = RenderMode.WorldSpace;
-            //canvas.transform.localScale = new Vector3(0.001f, 0.001f, 0.001f);
+            foreach (Component component in RootProjectContent.GetComponents<Component>())
+            {
+                // Check if the component is not Transform and not CameraSwitchManager
+                if (!(component is Transform) && !(component is CameraSwitchManager))
+                {
+                    if (component is Behaviour behaviour)
+                    {
+                        behaviour.enabled = isVR;
+                    }
+                    else if (component is Renderer renderer)
+                    {
+                        renderer.enabled = isVR;
+                    }
+                    else if (component is Collider collider)
+                    {
+                        collider.enabled = isVR;
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"Unable to check component: {component.GetType().Name}");
+                    }
+                }
+            }
         }
-    }
 
-    private void SwitchToPC()
-    {
-        // Disable the vr rig :c
-        if (vrRig != null) vrRig.gameObject.SetActive(false);
-        if (pcCamera != null) pcCamera.gameObject.SetActive(true);
+        if (pcCamera != null) 
+            pcCamera.enabled = !isVR;
 
         if (canvas != null)
         {
-            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            if(isVR)
+                canvas.renderMode = RenderMode.WorldSpace;
+                //canvas.transform.localScale = new Vector3(0.001f, 0.001f, 0.001f);
         }
     }
 
