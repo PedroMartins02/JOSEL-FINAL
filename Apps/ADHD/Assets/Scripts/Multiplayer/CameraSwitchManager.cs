@@ -10,7 +10,7 @@ public class CameraSwitchManager : MonoBehaviour
     [SerializeField] private Canvas canvas;
 
     [Header("Quest related")]
-    [SerializeField] private GameObject vrRig;
+    [SerializeField] private GameObject questRig;
     [SerializeField] private GameObject ISDK_PokeInteraction;
     [SerializeField] private GameObject RootProjectContent;
     [SerializeField] private PointableCanvasModule canvasModule;
@@ -61,8 +61,8 @@ public class CameraSwitchManager : MonoBehaviour
     private void DoSwitchToVR(bool isVR)
     {
         // Enable the vr rig c:
-        if (vrRig != null) 
-            vrRig.gameObject.SetActive(isVR);
+        if (questRig != null)
+            questRig.gameObject.SetActive(isVR);
         if (ISDK_PokeInteraction != null)
             ISDK_PokeInteraction.gameObject.SetActive(isVR);
         if (canvasModule != null)
@@ -100,9 +100,12 @@ public class CameraSwitchManager : MonoBehaviour
 
         if (canvas != null)
         {
-            if(isVR)
+            if (isVR)
+            {
                 canvas.renderMode = RenderMode.WorldSpace;
-                //canvas.transform.localScale = new Vector3(0.001f, 0.001f, 0.001f);
+                canvas.transform.localScale = new Vector3(0.002f, 0.002f, 0.002f);
+                canvas.transform.localPosition = new Vector3(0f, 1.5f, 1.5f);
+            }
         }
     }
 
