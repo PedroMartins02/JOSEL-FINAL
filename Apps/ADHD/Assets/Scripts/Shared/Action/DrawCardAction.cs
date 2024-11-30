@@ -43,7 +43,7 @@ namespace Game.Logic.Actions
                             CardData = drawnCard.GetDataSnapshot(),
                         };
 
-                        GameplayManager.Instance.BroadcastActionExecuted(actionData); // Notify Clients
+                        GameplayManager.Instance.BroadcastActionExecutedRpc(actionData); // Notify Clients
 
                         EventManager.TriggerEvent(GameEventsEnum.CardAddedToHand, actionData); // Notify the rest of the server/backend
                     }

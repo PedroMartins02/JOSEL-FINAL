@@ -12,12 +12,14 @@ public class UI_GameActionController : NetworkBehaviour
 {
     [Header("This Player UI")]
     [SerializeField] private HandCardHolder myHand;
+    [SerializeField] private BoardCardHolder myBoard;
     [SerializeField] private TextMeshProUGUI healthText;
     [SerializeField] private Image healthImage;
     [SerializeField] private Image mythVisual;
 
     [Header("Opponent UI")]
     [SerializeField] private HandCardHolder opponentHand;
+    [SerializeField] private BoardCardHolder opponentBoard;
     [SerializeField] private TextMeshProUGUI oppHealthText;
     [SerializeField] private Image oppHealthImage;
     [SerializeField] private Image oppMythVisual;
@@ -105,8 +107,6 @@ public class UI_GameActionController : NetworkBehaviour
 
         CardDrawnEventArgs cardDrawnArgs = (CardDrawnEventArgs)args;
 
-        //DrawCardClientRpc(cardDrawnArgs.PlayerID, cardDrawnArgs.CardData);
-
         if (NetworkManager.Singleton.LocalClientId.Equals(cardDrawnArgs.PlayerID))
         {
             myHand.SpawnCard(cardDrawnArgs.CardData, cardDrawnArgs.PlayerID);
@@ -117,17 +117,33 @@ public class UI_GameActionController : NetworkBehaviour
         }
     }
 
-    [Rpc(SendTo.ClientsAndHost)]
-    public void DrawCardClientRpc(ulong clientId, CardDataSnapshot cardData)
+    public void OnCardPlayedEvent(object args)
     {
-        if (NetworkManager.Singleton.LocalClientId.Equals(clientId))
+        if (args.GetType() != typeof(CardPlayedEventArgs))
+            return;
+
+        CardPlayedEventArgs cardPlayedArgs = (CardPlayedEventArgs)args;
+
+        GameCard playedCard;
+
+        if (NetworkManager.Singleton.LocalClientId.Equals(cardPlayedArgs.PlayerID))
         {
-            myHand.SpawnCard(cardData, clientId);
-        } 
-        else 
+            playedCard = myHand.cards.Find(card => card.GameID == cardPlayedArgs.CardGameID);
+
+            if (playedCard != null)
+                playedCard.PlayCardOnBoard(myBoard.gameObject);
+        }
+        else
         {
-            opponentHand.SpawnCard(cardData, clientId);
+            playedCard = opponentHand.cards.Find(card => card.GameID == cardPlayedArgs.CardGameID);
+
+            if (playedCard != null)
+                playedCard.PlayCardOnBoard(opponentBoard.gameObject);
+        }
+
+        if (IsServer && playedCard != null)
+        {
+            playedCard.UpdateCardDataServerRpc();
         }
     }
-
 }
