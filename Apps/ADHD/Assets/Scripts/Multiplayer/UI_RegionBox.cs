@@ -100,7 +100,7 @@ public class UI_RegionBox : MonoBehaviour
 
     private IEnumerator GetRegionImage()
     {
-        string searchQuery = UnityWebRequest.EscapeURL(region + "region");
+        string searchQuery = UnityWebRequest.EscapeURL(region);
         string pixabayUrl = $"https://pixabay.com/api/?key={PixabayApiKey}&q={searchQuery}&image_type=photo&orientation=horizontal";
 
         using (UnityWebRequest request = UnityWebRequest.Get(pixabayUrl))
