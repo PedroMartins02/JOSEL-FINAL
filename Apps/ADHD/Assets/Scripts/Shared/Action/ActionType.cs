@@ -12,6 +12,7 @@ namespace Game.Logic.Actions
         DrawCard,
         Effect,
         EndTurn,
+        PlayerInfoChange,
 
     }
 }

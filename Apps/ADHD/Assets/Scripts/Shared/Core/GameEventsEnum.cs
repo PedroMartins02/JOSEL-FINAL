@@ -12,6 +12,7 @@ namespace GameCore.Events
         GameStarted,
         GameOver,
         ActionExecuted,
+        PlayerInfoChanged,
         // Turn Events
         TurnStarted,
         TurnEnded,
