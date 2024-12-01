@@ -61,6 +61,7 @@ public class CollectionManager : MonoBehaviour
                 return int.MaxValue;
             })
             .ThenBy(card => card.Blessings)
+            .ThenBy(card => card.Name)
             .ToList();
 
         Dictionary<CardSO, int> cardCount = filteredCardCollection

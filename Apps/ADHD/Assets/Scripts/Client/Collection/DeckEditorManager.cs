@@ -24,7 +24,7 @@ public class DeckEditorManager : MonoBehaviour
 
     [Header("Selected Card Section")]
     [SerializeField] private Transform selectedCardsContainer;
-    [SerializeField] private Transform selectedCardsTemplate;
+    [SerializeField] private GameObject selectedCardsTemplate;
 
     [Header("Other")]
     [SerializeField] private GameObject QuantityPrefab;
@@ -135,7 +135,8 @@ public class DeckEditorManager : MonoBehaviour
                 if (card is BattleTacticCardSO) return 3;
                 return int.MaxValue; 
             })
-            .ThenBy(card => card.Blessings) 
+            .ThenBy(card => card.Blessings)
+            .ThenBy(card => card.Name)
             .ToList();
 
         Dictionary<CardSO, int> cardCount = filteredCardCollection
@@ -350,7 +351,7 @@ public class DeckEditorManager : MonoBehaviour
             }
         }
         
-        Transform cardInstance = Instantiate(selectedCardsTemplate, selectedCardsContainer);
+        GameObject cardInstance = Instantiate(selectedCardsTemplate, selectedCardsContainer);
         cardInstance.gameObject.SetActive(true);
         ListOfSelectedCards.Add(cardSO);
         UpdateCardsList(ListOfSelectedCards.Select(e => e.Id.ToString()).ToList());
