@@ -2,6 +2,7 @@ using Newtonsoft.Json.Linq;
 using System.Collections;
 using System.Security.Cryptography;
 using TMPro;
+using Unity.Properties;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
@@ -59,6 +60,9 @@ public class UI_RegionBox : MonoBehaviour
             if (!string.IsNullOrEmpty(region))
             {
                 StartCoroutine(FetchWeatherData(region));
+            } else
+            {
+                HideSelf();
             }
         }
     }
@@ -119,12 +123,14 @@ public class UI_RegionBox : MonoBehaviour
             elementImage.enabled = true;
             lightDarkImage.enabled = true;
 
+            StopLoading();
         }
         catch
         {
             Debug.LogWarning("Failed to parse weather or time data.");
+
+            HideSelf();
         }
-        StopLoading();
     }
 
     private string ExtractRegionFromJson(string json)
@@ -169,6 +175,12 @@ public class UI_RegionBox : MonoBehaviour
         }
 
         return null;
+    }
+
+    private void HideSelf()
+    {
+        StopLoading();
+        gameObject.SetActive(false);
     }
 
     private void StartLoading()
