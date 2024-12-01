@@ -24,7 +24,7 @@ public class DeckEditorManager : MonoBehaviour
 
     [Header("Selected Card Section")]
     [SerializeField] private Transform selectedCardsContainer;
-    [SerializeField] private Transform selectedCardsTemplate;
+    [SerializeField] private GameObject selectedCardsTemplate;
 
     [Header("Other")]
     [SerializeField] private GameObject QuantityPrefab;
@@ -350,7 +350,7 @@ public class DeckEditorManager : MonoBehaviour
             }
         }
         
-        Transform cardInstance = Instantiate(selectedCardsTemplate, selectedCardsContainer);
+        GameObject cardInstance = Instantiate(selectedCardsTemplate, selectedCardsContainer);
         cardInstance.gameObject.SetActive(true);
         ListOfSelectedCards.Add(cardSO);
         UpdateCardsList(ListOfSelectedCards.Select(e => e.Id.ToString()).ToList());
