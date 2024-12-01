@@ -84,6 +84,7 @@ public class GameplayManager : NetworkBehaviour
             MP_PlayerData playerData = MultiplayerManager.Instance.GetPlayerDataFromClientId(clientId);
 
             PlayerManager.Instance.CreatePlayer(clientId, playerData);
+            TurnManager.Instance.RegisterPlayerRpc(clientId);
         }
 
         CurrentGameState.Value = GameState.Playing;
@@ -94,14 +95,8 @@ public class GameplayManager : NetworkBehaviour
     [Rpc(SendTo.ClientsAndHost)]
     private void StartGameClientRpc(int cardsToDraw)
     {
-        StartGame();
-
         ActionRequestHandler.Instance.HandleDrawCardRequestServerRpc(cardsToDraw, NetworkManager.Singleton.LocalClientId);
-    }
-
-    private void StartGame()
-    {
-        
+        TurnManager.Instance.NextTurn(); // Start turn doesn't work for some reason, it messes with the "End Turn" button 
     }
 
     [Rpc(SendTo.Server)]

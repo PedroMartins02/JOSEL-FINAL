@@ -33,8 +33,6 @@ namespace GameModel
             if (cardData.GetType() != typeof(UnitCardData))
                 return null;
 
-            Debug.Log("Updated the GameID of the card");
-
             return new UnitCardData((UnitCardData)cardData, gameID);
         }
 
