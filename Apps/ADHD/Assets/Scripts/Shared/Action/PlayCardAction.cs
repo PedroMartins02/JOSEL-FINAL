@@ -17,8 +17,11 @@ namespace Game.Logic.Actions
 
         public bool IsLegal()
         {
+            CardDataSnapshot snapshot = CardManager.Instance.GetCardSnapshot(cardGameID);
+
             return BoardManager.Instance.CanPlayAnotherCard(player.playerData.ClientId)
-                && player.HasCard(cardGameID);
+                && player.HasCard(cardGameID)
+                && player.CurrentBlessings >= snapshot.CurrentBlessings;
         }
 
         public void Execute()
@@ -37,6 +40,7 @@ namespace Game.Logic.Actions
             };
 
             GameplayManager.Instance.BroadcastActionExecutedRpc(actionData);
+            GameplayManager.Instance.BroadcasUpdatePlayerInfoRpc();
         }
     }
 }

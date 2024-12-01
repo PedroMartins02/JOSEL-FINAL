@@ -11,6 +11,7 @@ namespace GameModel
         public readonly PlayerGameData playerData;
         public int CurrentHealth;
         public int CurrentBlessings;
+        public int CurrentMaxBlessings;
         public readonly MythCard MythCard;
         public readonly Hand Hand;
         public readonly Deck Deck;
@@ -21,6 +22,7 @@ namespace GameModel
 
             this.CurrentHealth = playerData.Health;
             this.CurrentBlessings = playerData.Blessings;
+            this.CurrentMaxBlessings = playerData.Blessings;
             this.Deck = playerData.Deck;
             this.MythCard = playerData.MythCard;
 
@@ -32,6 +34,10 @@ namespace GameModel
             if (!HasCard(cardGameID)) return;
 
             ICard card = Hand.GetCard(cardGameID);
+
+            if (card.CurrentBlessingsCost > CurrentBlessings) return;
+
+            UseBlessings(card.CurrentBlessingsCost);
 
             HandlePlayCard(card);
         }
@@ -59,6 +65,29 @@ namespace GameModel
         public bool HasCard(int cardGameID)
         {
             return Hand.Contains(cardGameID);
+        }
+
+        public void UseBlessings(int amount)
+        {
+            CurrentBlessings -= amount;
+
+            if (CurrentBlessings < 0)
+                CurrentBlessings = 0;
+        }
+
+        public void RestockBlessings()
+        {
+            CurrentBlessings = CurrentMaxBlessings;
+        }
+
+        public void GiveBlessings(int amount)
+        {
+            CurrentBlessings += amount;
+        }
+
+        public void RaiseMaxBlessings(int amount = 1)
+        {
+            CurrentMaxBlessings += amount;
         }
     }
 }

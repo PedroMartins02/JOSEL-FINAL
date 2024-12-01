@@ -14,14 +14,16 @@ public class UI_GameActionController : NetworkBehaviour
     [Header("This Player UI")]
     [SerializeField] private HandCardHolder myHand;
     [SerializeField] private BoardCardHolder myBoard;
-    [SerializeField] private TextMeshProUGUI healthText;
+    [SerializeField] private TextMeshProUGUI healthLabel;
+    [SerializeField] private TextMeshProUGUI blessingsLabel;
     [SerializeField] private Image healthImage;
     [SerializeField] private Image mythVisual;
 
     [Header("Opponent UI")]
     [SerializeField] private HandCardHolder opponentHand;
     [SerializeField] private BoardCardHolder opponentBoard;
-    [SerializeField] private TextMeshProUGUI oppHealthText;
+    [SerializeField] private TextMeshProUGUI oppHealthLabel;
+    [SerializeField] private TextMeshProUGUI oppBlessingsLabel;
     [SerializeField] private Image oppHealthImage;
     [SerializeField] private Image oppMythVisual;
 
@@ -40,6 +42,7 @@ public class UI_GameActionController : NetworkBehaviour
 
         base.OnNetworkSpawn();
 
+        EventManager.Subscribe(GameEventsEnum.PlayerInfoChanged, UpdatePlayerInfo);
         EventManager.Subscribe(GameEventsEnum.CardDrawn, OnCardDrawnEvent);
         EventManager.Subscribe(GameEventsEnum.CardPlayed, OnCardPlayedEvent);
     }
@@ -62,30 +65,64 @@ public class UI_GameActionController : NetworkBehaviour
             if (player == null)
                 continue;
 
-            UpdateHealthbarClientRpc(clientId, player.CurrentHealth, player.playerData.Health);
+            UpdatePlayerMythRpc(clientId, player.playerData.MythCard.Data.Id);
+            UpdatePlayerHealthbarRpc(clientId, player.CurrentHealth, player.playerData.Health);
+            UpdatePlayerBlessingsRpc(clientId, player.CurrentBlessings, player.CurrentMaxBlessings);
+        }
+    }
 
-            UpdateMythClientRpc(clientId, player.playerData.MythCard.Data.Id);
+    public void UpdatePlayerInfo(object _)
+    {
+        UpdatePlayerInfoRpc();
+    }
+
+    [Rpc(SendTo.Server)]
+    public void UpdatePlayerInfoRpc(RpcParams rpcParams = default)
+    {
+        foreach (ulong clientId in NetworkManager.Singleton.ConnectedClientsIds)
+        {
+            GameModel.Player player = PlayerManager.Instance.GetPlayerByClientId(clientId);
+
+            if (player == null)
+                continue;
+
+            UpdatePlayerHealthbarRpc(clientId, player.CurrentHealth, player.playerData.Health);
+            UpdatePlayerBlessingsRpc(clientId, player.CurrentBlessings, player.CurrentMaxBlessings);
         }
     }
 
     [Rpc(SendTo.ClientsAndHost)]
-    public void UpdateHealthbarClientRpc(ulong clientId, int playerCurrentHealth, int playerMaxHealth)
+    public void UpdatePlayerHealthbarRpc(ulong clientId, int playerCurrentHealth, int playerMaxHealth)
     {
         if (NetworkManager.Singleton.LocalClientId.Equals(clientId))
         {
             healthImage.fillAmount = playerCurrentHealth / playerMaxHealth;
-            healthText.text = playerMaxHealth.ToString();
+            healthLabel.text = playerMaxHealth.ToString();
         }
         else
         {
             oppHealthImage.fillAmount = playerCurrentHealth / playerMaxHealth;
-            oppHealthText.text = playerMaxHealth.ToString();
+            oppHealthLabel.text = playerMaxHealth.ToString();
         }
-        
     }
 
     [Rpc(SendTo.ClientsAndHost)]
-    public void UpdateMythClientRpc(ulong clientId, FixedString64Bytes mythSOId)
+    public void UpdatePlayerBlessingsRpc(ulong clientId, int CurrentBlessings, int CurrentMaxBlessings)
+    {
+        string blessingsText = $"{CurrentBlessings}/{CurrentMaxBlessings}";
+
+        if (NetworkManager.Singleton.LocalClientId.Equals(clientId))
+        {
+            blessingsLabel.text = blessingsText;
+        }
+        else
+        {
+            oppBlessingsLabel.text = blessingsText;
+        }
+    }
+
+    [Rpc(SendTo.ClientsAndHost)]
+    public void UpdatePlayerMythRpc(ulong clientId, FixedString64Bytes mythSOId)
     {
         CardSO mythSO = CardDatabase.Singleton.GetCardSoOfId(mythSOId.ToString());
 

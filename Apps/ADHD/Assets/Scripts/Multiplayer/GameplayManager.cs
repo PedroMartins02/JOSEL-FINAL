@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using Game.Logic;
 using Game.Logic.Actions;
 using Game.Logic.Actions.UI;
+using GameCore.Events;
 using GameModel;
 using Unity.Netcode;
-using Unity.Services.Lobbies.Models;
-using UnityEngine;
 using UnityEngine.SceneManagement;
-using static LobbyManager;
 
 public class GameplayManager : NetworkBehaviour
 {
@@ -118,6 +116,12 @@ public class GameplayManager : NetworkBehaviour
         IUIAction uiAction = UIActionFactory.CreateUIAction(actionData);
 
         UIActionQueueManager.Instance.EnqueueAction(uiAction);
+    }
+
+    [Rpc(SendTo.Server)]
+    public void BroadcasUpdatePlayerInfoRpc()
+    {
+        EventManager.TriggerEvent(GameEventsEnum.PlayerInfoChanged);
     }
 
     public GameState GetCurrentGameState()

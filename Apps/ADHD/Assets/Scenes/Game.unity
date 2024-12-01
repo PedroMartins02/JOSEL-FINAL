@@ -2790,12 +2790,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   myHand: {fileID: 262770986}
   myBoard: {fileID: 519869949}
-  healthText: {fileID: 662616243021915570}
+  healthLabel: {fileID: 662616243021915570}
+  blessingsLabel: {fileID: 6203241267041238765}
   healthImage: {fileID: 85882391}
   mythVisual: {fileID: 4903193537202633425}
   opponentHand: {fileID: 1962970745}
   opponentBoard: {fileID: 916103269}
-  oppHealthText: {fileID: 1111431641}
+  oppHealthLabel: {fileID: 1111431641}
+  oppBlessingsLabel: {fileID: 5894579658464642126}
   oppHealthImage: {fileID: 781928780}
   oppMythVisual: {fileID: 4886462135602380914}
 --- !u!1 &1962970740
