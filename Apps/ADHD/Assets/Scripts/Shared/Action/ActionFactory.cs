@@ -27,9 +27,10 @@ namespace Game.Logic.Actions
                 case ActionType.Effect:
 
                     break;
-                case ActionType.Attack:
+                case ActionType.AttackCard:
+                    player = PlayerManager.Instance.GetPlayerByClientId(actionData.PlayerId);
 
-                    break;
+                    return new AttackCardAction(player, actionData.CardGameID, actionData.TargetCardGameID);
                 default:
                     return null;
             }

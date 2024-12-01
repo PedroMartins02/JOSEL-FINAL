@@ -30,8 +30,6 @@ namespace Game.Logic.Actions
 
             BoardManager.Instance.AddCardToBoard(player.playerData.ClientId, cardGameID);
 
-            CardDataSnapshot snapshot = CardManager.Instance.GetCardSnapshot(cardGameID);
-
             ActionData actionData = new ActionData
             {
                 ActionType = ActionType.PlayCard,

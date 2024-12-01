@@ -7,6 +7,6 @@ namespace Game.Logic
 {
     public interface ICombatSystem
     {
-        public void AttackCard(ICombatCard attacker, ICombatCard defender);
+        public int AttackCard(ICombatCard attacker, ICombatCard defender);
     }
 }

@@ -113,6 +113,12 @@ public class GameCard : NetworkBehaviour, IDragHandler, IBeginDragHandler, IEndD
     {
         if ((previousData.GameID != GameID) || (newData.GameID != GameID)) return;
 
+        if (newData.CurrentState == CardStateType.Discarded)
+        {
+            DiscardCard();
+            return;
+        }
+
         if (ShouldISeeThisCard(this, newData)) {
             if (ShouldISeeThisCard(this, previousData))
             {
@@ -123,6 +129,14 @@ public class GameCard : NetworkBehaviour, IDragHandler, IBeginDragHandler, IEndD
                 cardVisual.SetCardData(newData);
             }
         }
+    }
+
+    public void DiscardCard()
+    {
+        //Should move card into a discard pile instead of destroying it
+
+        Destroy(transform.parent.gameObject);   // Destroy the card slot
+        Destroy(gameObject);                    // Destroy the card itself
     }
 
     public bool ShouldISeeThisCard(GameCard gameCard, CardDataSnapshot cardData) =>
@@ -426,15 +440,11 @@ public class GameCard : NetworkBehaviour, IDragHandler, IBeginDragHandler, IEndD
 
     private void AttackCard(GameObject targetCard)
     {
-        // TRY ATTACK CARD
-
         targetCard.TryGetComponent(out GameCard target);
 
         try
         {
-            AttackCardAction action = new(cardData, target.cardData);
-
-            ActionQueueManager.Instance.AddAction(action);
+            ActionRequestHandler.Instance.HandleAttackCardRequestServerRpc(GameID, target.GameID, NetworkManager.Singleton.LocalClientId);
         }
         catch (Exception e)
         {

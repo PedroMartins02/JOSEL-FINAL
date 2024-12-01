@@ -20,13 +20,17 @@ namespace Game.Logic
             }
         }
 
-        public void AttackCard(ICombatCard attacker, ICombatCard defender)
+        public int AttackCard(ICombatCard attacker, ICombatCard defender)
         {
-            Debug.Log($"Processing Attack: - Attacker: {attacker.CurrentAttack} Ad - Deffender: {defender.CurrentHealth} Hp");
-            defender.TakeDamage(attacker.CurrentAttack);
-            Debug.Log($"Attack Finished: - Attacker: {attacker.CurrentAttack} Ad - Deffender: {defender.CurrentHealth} Hp");
+            int damage = attacker.CurrentAttack;
+
+            // Handle any other damage modifiers here
+
+            defender.TakeDamage(damage);
 
             EventManager.TriggerEvent(GameEventsEnum.CardAttacked, attacker.Data.Id);
+
+            return damage;
         }
     }
 }

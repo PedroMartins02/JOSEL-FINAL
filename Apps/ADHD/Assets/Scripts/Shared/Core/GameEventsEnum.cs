@@ -43,4 +43,12 @@ namespace GameCore.Events
         public int CardGameID;
         public ulong PlayerID;
     }
+
+    public struct  CardAttackedEventArgs
+    {
+        public ulong PlayerID;
+        public int AttackingCardGameID;
+        public int TargetCardGameID;
+        public int DamageDealt;
+    }
 }

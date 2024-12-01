@@ -20,9 +20,8 @@ namespace Game.Logic.Actions.UI
                 case ActionType.Effect:
                     
                     break;
-                case ActionType.Attack:
-
-                    break;
+                case ActionType.AttackCard:
+                    return new UIAttackCardAction(actionData.CardGameID, actionData.TargetCardGameID, actionData.Damage, actionData.PlayerId);
                 default:
                     return null;
             }

@@ -45,6 +45,7 @@ public class UI_GameActionController : NetworkBehaviour
         EventManager.Subscribe(GameEventsEnum.PlayerInfoChanged, UpdatePlayerInfo);
         EventManager.Subscribe(GameEventsEnum.CardDrawn, OnCardDrawnEvent);
         EventManager.Subscribe(GameEventsEnum.CardPlayed, OnCardPlayedEvent);
+        EventManager.Subscribe(GameEventsEnum.CardAttacked, OnCardAttackedEvent);
     }
 
     private void GameplayManager_OnStateChange(object sender, GameplayManager.GameStateEventArgs e)
@@ -185,6 +186,38 @@ public class UI_GameActionController : NetworkBehaviour
         if (IsServer && playedCard != null)
         {
             ClientCardManager.Instance.UpdateCardSnapshotRpc(cardPlayedArgs.CardGameID);
+        }
+    }
+
+    public void OnCardAttackedEvent(object args)
+    {
+        if (args.GetType() != typeof(CardAttackedEventArgs))
+            return;
+
+        CardAttackedEventArgs cardAttackedArgs = (CardAttackedEventArgs)args;
+
+        GameCard attackingCard;
+        GameCard targetCard;
+
+        if (NetworkManager.Singleton.LocalClientId.Equals(cardAttackedArgs.PlayerID))
+        {
+            attackingCard = myBoard.cards.Find(card => card.GameID == cardAttackedArgs.AttackingCardGameID);
+            targetCard = opponentBoard.cards.Find(card => card.GameID == cardAttackedArgs.TargetCardGameID);
+        }
+        else
+        {
+            attackingCard = opponentBoard.cards.Find(card => card.GameID == cardAttackedArgs.AttackingCardGameID);
+            targetCard = myBoard.cards.Find(card => card.GameID == cardAttackedArgs.TargetCardGameID);
+        }
+
+        if (attackingCard == null || targetCard == null) return;
+
+        // TODO: Do stuff with the cards, animations and such
+
+        if (IsServer)
+        {
+            ClientCardManager.Instance.UpdateCardSnapshotRpc(cardAttackedArgs.AttackingCardGameID);
+            ClientCardManager.Instance.UpdateCardSnapshotRpc(cardAttackedArgs.TargetCardGameID);
         }
     }
 }
