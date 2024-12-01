@@ -25,6 +25,11 @@ public class ResolutionListManager : MonoBehaviour
   {
 	foreach (Resolution res in resolutions)
 	{
+	  // check if resolution is valid
+	  string resolutionStr = $"{res.width}x{res.height}";
+	  if (!SettingsManager.Instance.resolutionSet.Contains(resolutionStr))
+		continue;
+
 	  GameObject resolutionItem = Instantiate(resolutionItemPrefab, listContainer);
 
 	  Image image = resolutionItem.GetComponentInChildren<Image>();
@@ -32,7 +37,7 @@ public class ResolutionListManager : MonoBehaviour
 	  {
 		TextMeshProUGUI resolutionText = resolutionItem.GetComponentInChildren<TextMeshProUGUI>();
 		if (resolutionText != null)
-		  resolutionText.text = $"{res.width}x{res.height}";
+		  resolutionText.text = resolutionStr;
 		else
 		  Debug.Log("Text not found in resolutionItem");
 	  }
