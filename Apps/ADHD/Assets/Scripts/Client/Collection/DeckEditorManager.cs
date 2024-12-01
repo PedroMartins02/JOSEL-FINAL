@@ -16,11 +16,11 @@ public class DeckEditorManager : MonoBehaviour
 
     [Header("Card Collection Section")]
     [SerializeField] private Transform cardCollectionContainer;
-    [SerializeField] private Transform cardCollectionTemplate;
+    [SerializeField] private GameObject cardPrefab;
 
     [Header("Myth Section")]
     [SerializeField] private Transform mythContainer;
-    [SerializeField] private Transform mythTemplate;
+    [SerializeField] private GameObject mythPrefab;
 
     [Header("Selected Card Section")]
     [SerializeField] private Transform selectedCardsContainer;
@@ -31,6 +31,7 @@ public class DeckEditorManager : MonoBehaviour
     [SerializeField] private HighlightedDeckIdSO HighlightedDeckData;
     [SerializeField] private TMP_InputField deckNameInput;
     [SerializeField] private TextMeshProUGUI errorText;
+    [SerializeField] private GameObject errorPopUp;
 
     private Factions faction;
     private DeckData playerCurrentDeck;
@@ -40,8 +41,6 @@ public class DeckEditorManager : MonoBehaviour
 
     private List<CardSO> ListOfSelectedCards = new List<CardSO>();
     private CardSO selectedMyth = null;
-    
-    
 
     private Dictionary<Factions, bool> factionsFilter = new Dictionary<Factions, bool>();
     private Dictionary<int, bool> blessingsFilter = new Dictionary<int, bool>();
@@ -49,16 +48,14 @@ public class DeckEditorManager : MonoBehaviour
     
     private Dictionary<int, Type> cardTypeMapping = new Dictionary<int, Type>();
 
+    private List<GameObject> instancedCards = new List<GameObject>();
+
     private void Awake()
     {
         Instance = this;
 
         InitializeCardTypeMapping();
         InitializeFilters();
-
-        cardCollectionTemplate.gameObject.SetActive(false);
-        mythTemplate.gameObject.SetActive(false);
-        selectedCardsTemplate.gameObject.SetActive(false);
     }
 
     private void Start()
@@ -103,29 +100,45 @@ public class DeckEditorManager : MonoBehaviour
     {
         // Get the player data for the cards
         PlayerData playerData = AccountManager.Singleton.GetPlayerData();
-        
+
         // Clear the content for the cards and myths from the collection
         foreach (Transform child in cardCollectionContainer)
         {
-            if (child == cardCollectionTemplate) continue;
+            if (child == cardPrefab) continue;
             Destroy(child.gameObject);
         }
         
         foreach (Transform child in mythContainer)
         {
-            if (child == mythTemplate) continue;
+            if (child == mythPrefab) continue;
             Destroy(child.gameObject);
         }
 
         // We need to remove certain cards from the list of the player's collection if they are already selected
-        List<string> filteredCardCollection = new List<string>(playerData.CardCollection);
-
+        List<string> cardCollectionIds = new List<string>(playerData.CardCollection);
         foreach (var cardIdToRemove in tempCardList)
         {
-            filteredCardCollection.Remove(cardIdToRemove);
+            cardCollectionIds.Remove(cardIdToRemove);
         }
 
-        Dictionary<string, int> cardCount = filteredCardCollection
+        List<CardSO> filteredCardCollection = new List<CardSO>();
+        foreach (string cardId in cardCollectionIds)
+        {
+            filteredCardCollection.Add(CardDatabase.Singleton.GetCardSoOfId(cardId));
+        }
+
+        filteredCardCollection = filteredCardCollection
+            .OrderBy(card =>
+            {
+                if (card is LegendCardSO) return 1;
+                if (card is UnitCardSO) return 2;
+                if (card is BattleTacticCardSO) return 3;
+                return int.MaxValue; 
+            })
+            .ThenBy(card => card.Blessings) 
+            .ToList();
+
+        Dictionary<CardSO, int> cardCount = filteredCardCollection
             .GroupBy(item => item)
             .ToDictionary(g => g.Key, g => g.Count());
 
@@ -135,18 +148,12 @@ public class DeckEditorManager : MonoBehaviour
 
         foreach (var kvp in cardCount)
         {
-            CardSO card = CardDatabase.Singleton.GetCardSoOfId(kvp.Key);
-
-            // Filter the card: if its not from the chosen faction, skip it
-            if (!FilterCard(card))
-            {
-                continue;
-            }
+            CardSO card = kvp.Key;
 
             // If its a myth card from the faction, add it to the myth section and set it's data
-            if (card.GetType() == typeof(MythCardSO))
+            if (card.GetType() == typeof(MythCardSO) && card.Faction == faction)
             {
-                Transform mythCardInstance = Instantiate(mythTemplate, mythContainer);
+                GameObject mythCardInstance = Instantiate(mythPrefab, mythContainer);
                 mythCardInstance.gameObject.SetActive(true);
                 MythUI mythCardUI = mythCardInstance.GetComponent<MythUI>();
 
@@ -165,8 +172,12 @@ public class DeckEditorManager : MonoBehaviour
                 continue;
             }
 
-            // If reaches here it's because it is a card for the collection
-            var cardInstance = Instantiate(cardCollectionTemplate, cardCollectionContainer);
+            if (!FilterCard(card))
+            {
+                continue;
+            }
+
+            var cardInstance = Instantiate(cardPrefab, cardCollectionContainer);
             cardInstance.gameObject.SetActive(true);
             var cardUI = cardInstance.GetComponent<CardUI>();
             cardUI.SetCardData(card);
@@ -186,33 +197,13 @@ public class DeckEditorManager : MonoBehaviour
         }
         Debug.Log("myths: " + mythCardsCount);
         Debug.Log("cards: " + colecCardsCount);
-        
-        // Lastly, we need to resize the containers for the scroll to work (rafa bad kittie)
-        // Set the size for the myth scroll (goofy ahh math version)
-        RectTransform mythContRect = mythContainer.GetComponent<RectTransform>();
-        RectTransform mythTemplateRect = mythTemplate.GetComponent<RectTransform>();
-        float mythTotalHeight = mythTemplateRect.rect.height * mythCardsCount + 60 * (mythCardsCount - 1);
-        mythContRect.sizeDelta = new Vector2(mythContRect.sizeDelta.x, mythTotalHeight);
-        // Set the size for the card collection scroll
-        RectTransform colecContRect = cardCollectionContainer.GetComponent<RectTransform>();
-        RectTransform colecTempRect = cardCollectionTemplate.GetComponent<RectTransform>();
-        int aproxRows = DivideRoundingUp(colecCardsCount, 3);
-        float colecTotalHeight = colecTempRect.rect.height * aproxRows + 40 * (aproxRows - 1);
-        colecContRect.sizeDelta = new Vector2(colecContRect.sizeDelta.x, colecTotalHeight);
-        // Set the size for the selected cards scroll
-        RectTransform editContRect = selectedCardsContainer.GetComponent<RectTransform>();
-        RectTransform editTempRect = selectedCardsTemplate.GetComponent<RectTransform>();
-        float totalHeight = 115 * ListOfSelectedCards.Count + 30 + 10 * (ListOfSelectedCards.Count - 1);
-        editContRect.sizeDelta = new Vector2(editContRect.sizeDelta.x, totalHeight);
     }
 
     private int DivideRoundingUp(int x, int y)
     {
-        int remainder;
-        int quotient = Math.DivRem(x, y, out remainder);
+        int quotient = Math.DivRem(x, y, out int remainder);
         return remainder == 0 ? quotient : quotient + 1;
     }
-
 
     private void InitializeCardTypeMapping()
     {
@@ -252,6 +243,9 @@ public class DeckEditorManager : MonoBehaviour
             return false;
 
         if (blessingsFilter.TryGetValue(card.Blessings, out bool blessingsAllowed) && !blessingsAllowed)
+            return false;
+
+        if (typeFilter.TryGetValue(card.GetType(), out bool typeAllowed) && !typeAllowed)
             return false;
 
         return true;
@@ -323,21 +317,27 @@ public class DeckEditorManager : MonoBehaviour
         return false;
     }
 
+    IEnumerator ShowErrorPopUp(string errorMessage, float seconds)
+    {
+        errorText.text = errorMessage;
+        errorPopUp.SetActive(true);
+        Debug.Log(errorMessage);
+        yield return new WaitForSecondsRealtime(seconds);
+        errorPopUp.SetActive(false);
+    }
+
     private void AddToEditingArea(CardSO cardSO)
     {
-        errorText.text = "";
-        
         if (ListOfSelectedCards.Count == 20)
         {
-            errorText.text = "You already have the maximum cards in a deck!";
+            StartCoroutine(ShowErrorPopUp("You already have 20 cards in your deck!", 1.5f));
             return;
         }
-        
         if (cardSO.GetType() == typeof(UnitCardSO) || cardSO.GetType() == typeof(BattleTacticCardSO))
         {
             if (CardRepeatCounter(cardSO.Id, 3))
             {
-                errorText.text = "You cannot have more than 3 of the same card!";
+                StartCoroutine(ShowErrorPopUp("You cannot have more than 3 of the same card!", 1.5f));
                 return;
             }
         }
@@ -345,13 +345,10 @@ public class DeckEditorManager : MonoBehaviour
         {
             if (CardTypeCounter(cardSO.GetType(), 3))
             {
-                errorText.text = "You cannot have more than 3 of legend cards!";
+                StartCoroutine(ShowErrorPopUp("You cannot have more than 3 Legendary cards!", 1.5f));
                 return;
             }
         }
-
-
-        
         
         Transform cardInstance = Instantiate(selectedCardsTemplate, selectedCardsContainer);
         cardInstance.gameObject.SetActive(true);

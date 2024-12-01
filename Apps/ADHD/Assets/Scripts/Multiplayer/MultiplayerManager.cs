@@ -60,7 +60,7 @@ public class MultiplayerManager : NetworkBehaviour
     public void StartHost()
     {
         // The event for the host when he needs to approve a connection
-        NetworkManager.Singleton.ConnectionApprovalCallback += NetworkManager_ConnectionApprovalCallback;
+        //NetworkManager.Singleton.ConnectionApprovalCallback += NetworkManager_ConnectionApprovalCallback;
         // Populates the NetworkList with it self's data
         NetworkManager.Singleton.OnClientConnectedCallback += NetworkManager_OnClientConnectedCallback;
         // If player disconnects, clear his data from the NetworkList
@@ -343,7 +343,7 @@ public class MultiplayerManager : NetworkBehaviour
         {
             if (IsServer)
             {
-                NetworkManager.Singleton.ConnectionApprovalCallback -= NetworkManager_ConnectionApprovalCallback;
+                //NetworkManager.Singleton.ConnectionApprovalCallback -= NetworkManager_ConnectionApprovalCallback;
                 NetworkManager.Singleton.OnClientConnectedCallback -= NetworkManager_OnClientConnectedCallback;
                 NetworkManager.Singleton.OnClientDisconnectCallback -= NetworkManager_Server_OnClientDisconnectCallback;
             }

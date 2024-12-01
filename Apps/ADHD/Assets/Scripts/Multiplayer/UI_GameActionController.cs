@@ -1,5 +1,6 @@
 using Game.Data;
 using Game.Logic;
+using Game.Multiplayer;
 using GameCore.Events;
 using GameModel;
 using TMPro;
@@ -12,13 +13,17 @@ public class UI_GameActionController : NetworkBehaviour
 {
     [Header("This Player UI")]
     [SerializeField] private HandCardHolder myHand;
-    [SerializeField] private TextMeshProUGUI healthText;
+    [SerializeField] private BoardCardHolder myBoard;
+    [SerializeField] private TextMeshProUGUI healthLabel;
+    [SerializeField] private TextMeshProUGUI blessingsLabel;
     [SerializeField] private Image healthImage;
     [SerializeField] private Image mythVisual;
 
     [Header("Opponent UI")]
     [SerializeField] private HandCardHolder opponentHand;
-    [SerializeField] private TextMeshProUGUI oppHealthText;
+    [SerializeField] private BoardCardHolder opponentBoard;
+    [SerializeField] private TextMeshProUGUI oppHealthLabel;
+    [SerializeField] private TextMeshProUGUI oppBlessingsLabel;
     [SerializeField] private Image oppHealthImage;
     [SerializeField] private Image oppMythVisual;
 
@@ -37,7 +42,10 @@ public class UI_GameActionController : NetworkBehaviour
 
         base.OnNetworkSpawn();
 
+        EventManager.Subscribe(GameEventsEnum.PlayerInfoChanged, UpdatePlayerInfo);
         EventManager.Subscribe(GameEventsEnum.CardDrawn, OnCardDrawnEvent);
+        EventManager.Subscribe(GameEventsEnum.CardPlayed, OnCardPlayedEvent);
+        EventManager.Subscribe(GameEventsEnum.CardAttacked, OnCardAttackedEvent);
     }
 
     private void GameplayManager_OnStateChange(object sender, GameplayManager.GameStateEventArgs e)
@@ -58,30 +66,64 @@ public class UI_GameActionController : NetworkBehaviour
             if (player == null)
                 continue;
 
-            UpdateHealthbarClientRpc(clientId, player.CurrentHealth, player.playerData.Health);
+            UpdatePlayerMythRpc(clientId, player.playerData.MythCard.Data.Id);
+            UpdatePlayerHealthbarRpc(clientId, player.CurrentHealth, player.playerData.Health);
+            UpdatePlayerBlessingsRpc(clientId, player.CurrentBlessings, player.CurrentMaxBlessings);
+        }
+    }
 
-            UpdateMythClientRpc(clientId, player.playerData.MythCard.Data.Id);
+    public void UpdatePlayerInfo(object _)
+    {
+        UpdatePlayerInfoRpc();
+    }
+
+    [Rpc(SendTo.Server)]
+    public void UpdatePlayerInfoRpc(RpcParams rpcParams = default)
+    {
+        foreach (ulong clientId in NetworkManager.Singleton.ConnectedClientsIds)
+        {
+            GameModel.Player player = PlayerManager.Instance.GetPlayerByClientId(clientId);
+
+            if (player == null)
+                continue;
+
+            UpdatePlayerHealthbarRpc(clientId, player.CurrentHealth, player.playerData.Health);
+            UpdatePlayerBlessingsRpc(clientId, player.CurrentBlessings, player.CurrentMaxBlessings);
         }
     }
 
     [Rpc(SendTo.ClientsAndHost)]
-    public void UpdateHealthbarClientRpc(ulong clientId, int playerCurrentHealth, int playerMaxHealth)
+    public void UpdatePlayerHealthbarRpc(ulong clientId, int playerCurrentHealth, int playerMaxHealth)
     {
         if (NetworkManager.Singleton.LocalClientId.Equals(clientId))
         {
             healthImage.fillAmount = playerCurrentHealth / playerMaxHealth;
-            healthText.text = playerMaxHealth.ToString();
+            healthLabel.text = playerMaxHealth.ToString();
         }
         else
         {
             oppHealthImage.fillAmount = playerCurrentHealth / playerMaxHealth;
-            oppHealthText.text = playerMaxHealth.ToString();
+            oppHealthLabel.text = playerMaxHealth.ToString();
         }
-        
     }
 
     [Rpc(SendTo.ClientsAndHost)]
-    public void UpdateMythClientRpc(ulong clientId, FixedString64Bytes mythSOId)
+    public void UpdatePlayerBlessingsRpc(ulong clientId, int CurrentBlessings, int CurrentMaxBlessings)
+    {
+        string blessingsText = $"{CurrentBlessings}/{CurrentMaxBlessings}";
+
+        if (NetworkManager.Singleton.LocalClientId.Equals(clientId))
+        {
+            blessingsLabel.text = blessingsText;
+        }
+        else
+        {
+            oppBlessingsLabel.text = blessingsText;
+        }
+    }
+
+    [Rpc(SendTo.ClientsAndHost)]
+    public void UpdatePlayerMythRpc(ulong clientId, FixedString64Bytes mythSOId)
     {
         CardSO mythSO = CardDatabase.Singleton.GetCardSoOfId(mythSOId.ToString());
 
@@ -105,8 +147,6 @@ public class UI_GameActionController : NetworkBehaviour
 
         CardDrawnEventArgs cardDrawnArgs = (CardDrawnEventArgs)args;
 
-        //DrawCardClientRpc(cardDrawnArgs.PlayerID, cardDrawnArgs.CardData);
-
         if (NetworkManager.Singleton.LocalClientId.Equals(cardDrawnArgs.PlayerID))
         {
             myHand.SpawnCard(cardDrawnArgs.CardData, cardDrawnArgs.PlayerID);
@@ -115,19 +155,69 @@ public class UI_GameActionController : NetworkBehaviour
         {
             opponentHand.SpawnCard(cardDrawnArgs.CardData, cardDrawnArgs.PlayerID);
         }
+
+        ClientCardManager.Instance.RegisterCardSnapshotRpc(cardDrawnArgs.CardData);
     }
 
-    [Rpc(SendTo.ClientsAndHost)]
-    public void DrawCardClientRpc(ulong clientId, CardDataSnapshot cardData)
+    public void OnCardPlayedEvent(object args)
     {
-        if (NetworkManager.Singleton.LocalClientId.Equals(clientId))
+        if (args.GetType() != typeof(CardPlayedEventArgs))
+            return;
+
+        CardPlayedEventArgs cardPlayedArgs = (CardPlayedEventArgs)args;
+
+        GameCard playedCard;
+
+        if (NetworkManager.Singleton.LocalClientId.Equals(cardPlayedArgs.PlayerID))
         {
-            myHand.SpawnCard(cardData, clientId);
-        } 
-        else 
+            playedCard = myHand.cards.Find(card => card.GameID == cardPlayedArgs.CardGameID);
+
+            if (playedCard != null)
+                playedCard.PlayCardOnBoard(myBoard.gameObject);
+        }
+        else
         {
-            opponentHand.SpawnCard(cardData, clientId);
+            playedCard = opponentHand.cards.Find(card => card.GameID == cardPlayedArgs.CardGameID);
+
+            if (playedCard != null)
+                playedCard.PlayCardOnBoard(opponentBoard.gameObject);
+        }
+
+        if (IsServer && playedCard != null)
+        {
+            ClientCardManager.Instance.UpdateCardSnapshotRpc(cardPlayedArgs.CardGameID);
         }
     }
 
+    public void OnCardAttackedEvent(object args)
+    {
+        if (args.GetType() != typeof(CardAttackedEventArgs))
+            return;
+
+        CardAttackedEventArgs cardAttackedArgs = (CardAttackedEventArgs)args;
+
+        GameCard attackingCard;
+        GameCard targetCard;
+
+        if (NetworkManager.Singleton.LocalClientId.Equals(cardAttackedArgs.PlayerID))
+        {
+            attackingCard = myBoard.cards.Find(card => card.GameID == cardAttackedArgs.AttackingCardGameID);
+            targetCard = opponentBoard.cards.Find(card => card.GameID == cardAttackedArgs.TargetCardGameID);
+        }
+        else
+        {
+            attackingCard = opponentBoard.cards.Find(card => card.GameID == cardAttackedArgs.AttackingCardGameID);
+            targetCard = myBoard.cards.Find(card => card.GameID == cardAttackedArgs.TargetCardGameID);
+        }
+
+        if (attackingCard == null || targetCard == null) return;
+
+        // TODO: Do stuff with the cards, animations and such
+
+        if (IsServer)
+        {
+            ClientCardManager.Instance.UpdateCardSnapshotRpc(cardAttackedArgs.AttackingCardGameID);
+            ClientCardManager.Instance.UpdateCardSnapshotRpc(cardAttackedArgs.TargetCardGameID);
+        }
+    }
 }

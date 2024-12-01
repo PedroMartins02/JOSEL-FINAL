@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using Game.Logic;
 using Game.Logic.Actions;
 using Game.Logic.Actions.UI;
+using GameCore.Events;
 using GameModel;
 using Unity.Netcode;
-using Unity.Services.Lobbies.Models;
-using UnityEngine;
 using UnityEngine.SceneManagement;
-using static LobbyManager;
 
 public class GameplayManager : NetworkBehaviour
 {
@@ -83,11 +81,10 @@ public class GameplayManager : NetworkBehaviour
 
         foreach (ulong clientId in NetworkManager.Singleton.ConnectedClientsIds)
         {
-            Debug.Log("Registering Player: " + clientId);
-
             MP_PlayerData playerData = MultiplayerManager.Instance.GetPlayerDataFromClientId(clientId);
 
             PlayerManager.Instance.CreatePlayer(clientId, playerData);
+            TurnManager.Instance.RegisterPlayerRpc(clientId);
         }
 
         CurrentGameState.Value = GameState.Playing;
@@ -98,22 +95,14 @@ public class GameplayManager : NetworkBehaviour
     [Rpc(SendTo.ClientsAndHost)]
     private void StartGameClientRpc(int cardsToDraw)
     {
-        StartGame();
-
         ActionRequestHandler.Instance.HandleDrawCardRequestServerRpc(cardsToDraw, NetworkManager.Singleton.LocalClientId);
+        TurnManager.Instance.NextTurn(); // Start turn doesn't work for some reason, it messes with the "End Turn" button 
     }
 
-    private void StartGame()
+    [Rpc(SendTo.Server)]
+    public void BroadcastActionExecutedRpc(ActionData actionData)
     {
-        
-    }
-
-    public void BroadcastActionExecuted(ActionData actionData)
-    {
-        if (IsServer)
-        {
-            NotifyActionExecutedClientRpc(actionData);
-        }
+        NotifyActionExecutedClientRpc(actionData);
     }
 
     [Rpc(SendTo.ClientsAndHost)]
@@ -122,6 +111,12 @@ public class GameplayManager : NetworkBehaviour
         IUIAction uiAction = UIActionFactory.CreateUIAction(actionData);
 
         UIActionQueueManager.Instance.EnqueueAction(uiAction);
+    }
+
+    [Rpc(SendTo.Server)]
+    public void BroadcasUpdatePlayerInfoRpc()
+    {
+        EventManager.TriggerEvent(GameEventsEnum.PlayerInfoChanged);
     }
 
     public GameState GetCurrentGameState()

@@ -17,6 +17,7 @@ public class UI_LobbyController : MonoBehaviour
     [Header("Lobby Overall")]
     [SerializeField] private TextMeshProUGUI lobbyNameText;
     [SerializeField] private Button readyButton;
+    [SerializeField] private GameObject tutorialUi;
 
     [Header("Player One")]
     [SerializeField] private TextMeshProUGUI playerOneNameText;

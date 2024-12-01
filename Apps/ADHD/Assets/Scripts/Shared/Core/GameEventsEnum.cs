@@ -12,6 +12,7 @@ namespace GameCore.Events
         GameStarted,
         GameOver,
         ActionExecuted,
+        PlayerInfoChanged,
         // Turn Events
         TurnStarted,
         TurnEnded,
@@ -35,5 +36,19 @@ namespace GameCore.Events
     {
         public CardDataSnapshot CardData;
         public ulong PlayerID;
+    }
+
+    public struct CardPlayedEventArgs
+    {
+        public int CardGameID;
+        public ulong PlayerID;
+    }
+
+    public struct  CardAttackedEventArgs
+    {
+        public ulong PlayerID;
+        public int AttackingCardGameID;
+        public int TargetCardGameID;
+        public int DamageDealt;
     }
 }

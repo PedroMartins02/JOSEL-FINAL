@@ -36,7 +36,7 @@ public struct ActionData : INetworkSerializable
             case ActionType.PlayCard:
                 serializer.SerializeValue(ref CardGameID);
                 break;
-            case ActionType.Attack:
+            case ActionType.AttackCard:
                 serializer.SerializeValue(ref CardGameID); // Attacker
                 serializer.SerializeValue(ref TargetCardGameID); // Defender
                 serializer.SerializeValue(ref Damage);

@@ -46,13 +46,30 @@ public class CollectionManager : MonoBehaviour
             Destroy(child.gameObject);
         }
 
-        Dictionary<string, int> cardCount = playerData.CardCollection
+        List<CardSO> filteredCardCollection = new List<CardSO>();
+        foreach (string cardId in playerData.CardCollection)
+        {
+            filteredCardCollection.Add(CardDatabase.Singleton.GetCardSoOfId(cardId));
+        }
+
+        filteredCardCollection = filteredCardCollection
+            .OrderBy(card =>
+            {
+                if (card is LegendCardSO) return 1;
+                if (card is UnitCardSO) return 2;
+                if (card is BattleTacticCardSO) return 3;
+                return int.MaxValue;
+            })
+            .ThenBy(card => card.Blessings)
+            .ToList();
+
+        Dictionary<CardSO, int> cardCount = filteredCardCollection
             .GroupBy(item => item)
             .ToDictionary(g => g.Key, g => g.Count());
 
         foreach (var kvp in cardCount)
         {
-            CardSO card = CardDatabase.Singleton.GetCardSoOfId(kvp.Key);
+            CardSO card = kvp.Key;
             if (card.GetType() == typeof(MythCardSO))
             {
                 continue;

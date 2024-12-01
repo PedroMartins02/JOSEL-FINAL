@@ -9,24 +9,28 @@ namespace Game.Logic.Actions
     {
         public static IAction CreateAction(ActionData actionData)
         {
+            Player player;
+
             switch (actionData.ActionType)
             {
                 case ActionType.DrawCard:
-                    Player player = PlayerManager.Instance.GetPlayerByClientId(actionData.PlayerId);
+                    player = PlayerManager.Instance.GetPlayerByClientId(actionData.PlayerId);
 
                     return new DrawCardAction(player, actionData.NumberOfCardsDrawn);
                 case ActionType.PlayCard:
+                    player = PlayerManager.Instance.GetPlayerByClientId(actionData.PlayerId);
 
-                    break;
+                    return new PlayCardAction(player, actionData.CardGameID);
                 case ActionType.Heal:
 
                     break;
                 case ActionType.Effect:
 
                     break;
-                case ActionType.Attack:
+                case ActionType.AttackCard:
+                    player = PlayerManager.Instance.GetPlayerByClientId(actionData.PlayerId);
 
-                    break;
+                    return new AttackCardAction(player, actionData.CardGameID, actionData.TargetCardGameID);
                 default:
                     return null;
             }

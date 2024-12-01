@@ -29,7 +29,7 @@ public abstract class HorizontalCardHolder : NetworkBehaviour
 
     protected virtual void Start()
     {
-
+        rect = GetComponent<RectTransform>();
     }
 
     protected virtual void BeginDrag(GameCard card)
@@ -159,6 +159,8 @@ public abstract class HorizontalCardHolder : NetworkBehaviour
         card.isMine = NetworkManager.Singleton.LocalClientId.Equals(playerId);
         card.isInHand = true;
         card.gameObject.tag = isMine ? "MyCard" : "OpponentCard";
+
+        card.GameID = cardData.GameID;
 
         StartCoroutine(Frame());
 

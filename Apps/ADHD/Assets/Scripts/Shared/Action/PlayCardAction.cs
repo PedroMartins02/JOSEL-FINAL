@@ -1,38 +1,44 @@
+using UnityEngine;
 using GameModel;
+using Game.Data;
 
 namespace Game.Logic.Actions
 {
     public class PlayCardAction : IAction
     {
         private Player player;
-        private ICard card;
+        private int cardGameID;
 
-        public PlayCardAction(Player player, ICard card)
+        public PlayCardAction(Player player, int cardGameID)
         {
             this.player = player;
-            this.card = card;
+            this.cardGameID = cardGameID;
         }
 
         public bool IsLegal()
         {
+            CardDataSnapshot snapshot = CardManager.Instance.GetCardSnapshot(cardGameID);
+
             return BoardManager.Instance.CanPlayAnotherCard(player.playerData.ClientId)
-                && player.HasCard(card);
+                && player.HasCard(cardGameID)
+                && player.CurrentBlessings >= snapshot.CurrentBlessings;
         }
 
         public void Execute()
         {
-            player.PlayCard(card);
+            player.PlayCard(cardGameID);
 
-            BoardManager.Instance.AddCardToBoard(player.playerData.ClientId, card);
+            BoardManager.Instance.AddCardToBoard(player.playerData.ClientId, cardGameID);
 
             ActionData actionData = new ActionData
             {
                 ActionType = ActionType.PlayCard,
                 PlayerId = player.playerData.ClientId,
-                CardGameID = card.Data.GameID,
+                CardGameID = cardGameID,
             };
 
-            GameplayManager.Instance.BroadcastActionExecuted(actionData);
+            GameplayManager.Instance.BroadcastActionExecutedRpc(actionData);
+            GameplayManager.Instance.BroadcasUpdatePlayerInfoRpc();
         }
     }
 }
