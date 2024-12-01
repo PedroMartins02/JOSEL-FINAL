@@ -135,7 +135,8 @@ public class DeckEditorManager : MonoBehaviour
                 if (card is BattleTacticCardSO) return 3;
                 return int.MaxValue; 
             })
-            .ThenBy(card => card.Blessings) 
+            .ThenBy(card => card.Blessings)
+            .ThenBy(card => card.Name)
             .ToList();
 
         Dictionary<CardSO, int> cardCount = filteredCardCollection
