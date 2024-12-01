@@ -16,6 +16,8 @@ MonoBehaviour:
     DictItems:
     - Id: 8673-102990
       ItemCardSO: {fileID: 11400000, guid: 973e2b4d59ccc2b46b1f78852a226259, type: 2}
+    - Id: 74f2-50844
+      ItemCardSO: {fileID: 11400000, guid: db7d9a0f984b9e846a7f868930e6afba, type: 2}
     - Id: 225d-103122
       ItemCardSO: {fileID: 11400000, guid: 93b6420f86a3c424cbe9fc29c744c37f, type: 2}
     - Id: 7c93-100510

@@ -16,11 +16,11 @@ public class DeckEditorManager : MonoBehaviour
 
     [Header("Card Collection Section")]
     [SerializeField] private Transform cardCollectionContainer;
-    [SerializeField] private Transform cardCollectionTemplate;
+    [SerializeField] private GameObject cardPrefab;
 
     [Header("Myth Section")]
     [SerializeField] private Transform mythContainer;
-    [SerializeField] private Transform mythTemplate;
+    [SerializeField] private GameObject mythPrefab;
 
     [Header("Selected Card Section")]
     [SerializeField] private Transform selectedCardsContainer;
@@ -56,10 +56,6 @@ public class DeckEditorManager : MonoBehaviour
 
         InitializeCardTypeMapping();
         InitializeFilters();
-
-        cardCollectionTemplate.gameObject.SetActive(false);
-        mythTemplate.gameObject.SetActive(false);
-        selectedCardsTemplate.gameObject.SetActive(false);
     }
 
     private void Start()
@@ -108,25 +104,41 @@ public class DeckEditorManager : MonoBehaviour
         // Clear the content for the cards and myths from the collection
         foreach (Transform child in cardCollectionContainer)
         {
-            if (child == cardCollectionTemplate) continue;
+            if (child == cardPrefab) continue;
             Destroy(child.gameObject);
         }
         
         foreach (Transform child in mythContainer)
         {
-            if (child == mythTemplate) continue;
+            if (child == mythPrefab) continue;
             Destroy(child.gameObject);
         }
 
         // We need to remove certain cards from the list of the player's collection if they are already selected
-        List<string> filteredCardCollection = new List<string>(playerData.CardCollection);
-
+        List<string> cardCollectionIds = new List<string>(playerData.CardCollection);
         foreach (var cardIdToRemove in tempCardList)
         {
-            filteredCardCollection.Remove(cardIdToRemove);
+            cardCollectionIds.Remove(cardIdToRemove);
         }
 
-        Dictionary<string, int> cardCount = filteredCardCollection
+        List<CardSO> filteredCardCollection = new List<CardSO>();
+        foreach (string cardId in cardCollectionIds)
+        {
+            filteredCardCollection.Add(CardDatabase.Singleton.GetCardSoOfId(cardId));
+        }
+
+        filteredCardCollection = filteredCardCollection
+            .OrderBy(card =>
+            {
+                if (card is LegendCardSO) return 1;
+                if (card is UnitCardSO) return 2;
+                if (card is BattleTacticCardSO) return 3;
+                return int.MaxValue; 
+            })
+            .ThenBy(card => card.Blessings) 
+            .ToList();
+
+        Dictionary<CardSO, int> cardCount = filteredCardCollection
             .GroupBy(item => item)
             .ToDictionary(g => g.Key, g => g.Count());
 
@@ -136,12 +148,12 @@ public class DeckEditorManager : MonoBehaviour
 
         foreach (var kvp in cardCount)
         {
-            CardSO card = CardDatabase.Singleton.GetCardSoOfId(kvp.Key);
+            CardSO card = kvp.Key;
 
             // If its a myth card from the faction, add it to the myth section and set it's data
             if (card.GetType() == typeof(MythCardSO) && card.Faction == faction)
             {
-                Transform mythCardInstance = Instantiate(mythTemplate, mythContainer);
+                GameObject mythCardInstance = Instantiate(mythPrefab, mythContainer);
                 mythCardInstance.gameObject.SetActive(true);
                 MythUI mythCardUI = mythCardInstance.GetComponent<MythUI>();
 
@@ -160,14 +172,12 @@ public class DeckEditorManager : MonoBehaviour
                 continue;
             }
 
-            // Filter the card: if its not from the chosen faction, skip it
             if (!FilterCard(card))
             {
                 continue;
             }
 
-            // If reaches here it's because it is a card for the collection
-            var cardInstance = Instantiate(cardCollectionTemplate, cardCollectionContainer);
+            var cardInstance = Instantiate(cardPrefab, cardCollectionContainer);
             cardInstance.gameObject.SetActive(true);
             var cardUI = cardInstance.GetComponent<CardUI>();
             cardUI.SetCardData(card);
@@ -320,7 +330,7 @@ public class DeckEditorManager : MonoBehaviour
     {
         if (ListOfSelectedCards.Count == 20)
         {
-            StartCoroutine(ShowErrorPopUp("You already have 20 maximum cards in your deck!", 1.5f));
+            StartCoroutine(ShowErrorPopUp("You already have 20 cards in your deck!", 1.5f));
             return;
         }
         if (cardSO.GetType() == typeof(UnitCardSO) || cardSO.GetType() == typeof(BattleTacticCardSO))
@@ -335,7 +345,7 @@ public class DeckEditorManager : MonoBehaviour
         {
             if (CardTypeCounter(cardSO.GetType(), 3))
             {
-                StartCoroutine(ShowErrorPopUp("You cannot have more than 3 of legend cards!", 1.5f));
+                StartCoroutine(ShowErrorPopUp("You cannot have more than 3 Legendary cards!", 1.5f));
                 return;
             }
         }

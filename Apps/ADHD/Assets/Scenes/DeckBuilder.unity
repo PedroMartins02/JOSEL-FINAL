@@ -341,7 +341,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1708030080}
         m_TargetAssemblyTypeName: DeckEditorManager, Assembly-CSharp
         m_MethodName: BackButton
         m_Mode: 1
@@ -1938,7 +1938,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1708030080}
         m_TargetAssemblyTypeName: DeckEditorManager, Assembly-CSharp
         m_MethodName: SaveDeck
         m_Mode: 1
@@ -6723,10 +6723,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cardCollectionContainer: {fileID: 53983373}
-  cardCollectionTemplate: {fileID: 8455922867704919146, guid: 2318f09ea2dcbee4db9127028a22be72,
+  cardPrefab: {fileID: 6066824139122942845, guid: 2318f09ea2dcbee4db9127028a22be72,
     type: 3}
   mythContainer: {fileID: 732119835}
-  mythTemplate: {fileID: 354457997}
+  mythPrefab: {fileID: 8728193652042757217, guid: 4bb88ad0b3b0ae94580278657aff21b5,
+    type: 3}
   selectedCardsContainer: {fileID: 197111352}
   selectedCardsTemplate: {fileID: 1183644814}
   QuantityPrefab: {fileID: 8255241883133531654, guid: 40ed13c961630ce4db7d7d17e8451a29,
