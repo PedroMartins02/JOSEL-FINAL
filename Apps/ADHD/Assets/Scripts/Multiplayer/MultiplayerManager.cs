@@ -91,13 +91,20 @@ public class MultiplayerManager : NetworkBehaviour
             clientId = clientId,
         });
 
-        var playerData = AccountManager.Singleton.GetPlayerData();
+        PlayerData playerData = AccountManager.Singleton.GetPlayerData();
         if (playerData == null)
         {
             return;
         }
 
-        SetPlayerNameServerRpc(playerData.Name); ;
+        List<DeckData> deckLists = playerData.DeckCollection;
+        int deckId = playerData.SelectedDeckId;
+        DeckData deck = deckLists[deckId];
+        SetPlayerDeck(deck);
+        
+        SetPlayerWeatherServerRpc(AccountManager.Singleton.WeatherElement);
+        SetPlayerTimeServerRpc(AccountManager.Singleton.TimeElement);
+        SetPlayerNameServerRpc(playerData.Name);
         SetPlayerIdServerRpc(AuthenticationService.Instance.PlayerId);
     }
 
@@ -148,6 +155,13 @@ public class MultiplayerManager : NetworkBehaviour
             return;
         }
 
+        List<DeckData> deckLists = playerData.DeckCollection;
+        int deckId = playerData.SelectedDeckId;
+        DeckData deck = deckLists[deckId];
+        SetPlayerDeck(deck);
+
+        SetPlayerWeatherServerRpc(AccountManager.Singleton.WeatherElement);
+        SetPlayerTimeServerRpc(AccountManager.Singleton.TimeElement);
         SetPlayerNameServerRpc(playerData.Name);
         SetPlayerIdServerRpc(AuthenticationService.Instance.PlayerId);
 
@@ -155,14 +169,14 @@ public class MultiplayerManager : NetworkBehaviour
         RequestRulesServerRpc();
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    public void RequestRulesServerRpc(ServerRpcParams rpcParams = default)
+    [Rpc(SendTo.Server)]
+    public void RequestRulesServerRpc(RpcParams rpcParams = default)
     {
         string serializedRules = GameModel.GameRule.SerializeGameRules(this.lobbyGameRules);
         SendRulesClientRpc(serializedRules, rpcParams.Receive.SenderClientId);
     }
 
-    [ClientRpc]
+    [Rpc(SendTo.ClientsAndHost)]
     private void SendRulesClientRpc(string serializedRules, ulong clientId)
     {
         if (NetworkManager.Singleton.LocalClientId == clientId)
@@ -171,10 +185,34 @@ public class MultiplayerManager : NetworkBehaviour
         }
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    private void SetPlayerNameServerRpc(string playerUsername, ServerRpcParams serverRpcParams = default)
+    [Rpc(SendTo.Server)]
+    private void SetPlayerWeatherServerRpc(GameModel.Elements playerWeather, RpcParams rpcParams = default)
     {
-        int playerDataIndex = GetPlayerDataIndexFromClientId(serverRpcParams.Receive.SenderClientId);
+        int playerDataIndex = GetPlayerDataIndexFromClientId(rpcParams.Receive.SenderClientId);
+        MP_PlayerData playerData = playerDataNetworkList[playerDataIndex];
+
+        playerData.playerWeather = playerWeather;
+
+        playerDataNetworkList[playerDataIndex] = playerData;
+    }
+
+
+    [Rpc(SendTo.Server)]
+    private void SetPlayerTimeServerRpc(GameModel.Elements playerTime, RpcParams rpcParams = default)
+    {
+        int playerDataIndex = GetPlayerDataIndexFromClientId(rpcParams.Receive.SenderClientId);
+        MP_PlayerData playerData = playerDataNetworkList[playerDataIndex];
+
+        playerData.playerTime = playerTime;
+
+        playerDataNetworkList[playerDataIndex] = playerData;
+    }
+
+
+    [Rpc(SendTo.Server)]
+    private void SetPlayerNameServerRpc(string playerUsername, RpcParams rpcParams = default)
+    {
+        int playerDataIndex = GetPlayerDataIndexFromClientId(rpcParams.Receive.SenderClientId);
         MP_PlayerData playerData = playerDataNetworkList[playerDataIndex];
 
         playerData.playerUsername = playerUsername;
@@ -182,10 +220,10 @@ public class MultiplayerManager : NetworkBehaviour
         playerDataNetworkList[playerDataIndex] = playerData;
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    private void SetPlayerIdServerRpc(string playerId, ServerRpcParams serverRpcParams = default)
+    [Rpc(SendTo.Server)]
+    private void SetPlayerIdServerRpc(string playerId, RpcParams rpcParams = default)
     {
-        int playerDataIndex = GetPlayerDataIndexFromClientId(serverRpcParams.Receive.SenderClientId);
+        int playerDataIndex = GetPlayerDataIndexFromClientId(rpcParams.Receive.SenderClientId);
 
         MP_PlayerData playerData = playerDataNetworkList[playerDataIndex];
 
@@ -325,10 +363,10 @@ public class MultiplayerManager : NetworkBehaviour
         return this.selectedDeckData;
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    private void SetPlayerDeckServerRpc(string serializedDeck, ServerRpcParams serverRpcParams = default)
+    [Rpc(SendTo.Server)]
+    private void SetPlayerDeckServerRpc(string serializedDeck, RpcParams rpcParams = default)
     {
-        int playerDataIndex = GetPlayerDataIndexFromClientId(serverRpcParams.Receive.SenderClientId);
+        int playerDataIndex = GetPlayerDataIndexFromClientId(rpcParams.Receive.SenderClientId);
         MP_PlayerData playerData = playerDataNetworkList[playerDataIndex];
 
         playerData.playerDeck = serializedDeck;
