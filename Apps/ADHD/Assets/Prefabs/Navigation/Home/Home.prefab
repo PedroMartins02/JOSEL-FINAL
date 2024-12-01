@@ -794,6 +794,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6694474690441943560, guid: 902172115dbc5a94bad0bd73522ed087,
+        type: 3}
+      propertyPath: loadingScreen
+      value: 
+      objectReference: {fileID: 3323656766331973850}
     - target: {fileID: 8195069047985449412, guid: 902172115dbc5a94bad0bd73522ed087,
         type: 3}
       propertyPath: m_Name
@@ -1057,6 +1062,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f022e420822472b4f906e8b9e9955246, type: 3}
+--- !u!1 &3323656766331973850 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5015002671690157797, guid: f022e420822472b4f906e8b9e9955246,
+    type: 3}
+  m_PrefabInstance: {fileID: 7762198477931576895}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &6430110176759332489 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3640185310843584694, guid: f022e420822472b4f906e8b9e9955246,

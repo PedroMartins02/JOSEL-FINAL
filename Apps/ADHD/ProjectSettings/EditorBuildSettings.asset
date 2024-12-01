@@ -33,9 +33,6 @@ EditorBuildSettings:
     path: Assets/Scenes/Game.unity
     guid: cedfa9234ffff1a4fbe66aedbda174b4
   - enabled: 1
-    path: Assets/Scenes/GameAR.unity
-    guid: 41acb13558d170e4b8da2ae873ce8920
-  - enabled: 1
     path: Assets/Scenes/MatchResultScene.unity
     guid: 9898b3883b8f8224eaa2f0502a43d130
   m_configObjects:

@@ -170,7 +170,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 90, y: 90}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2216074478730799292
 CanvasRenderer:
@@ -245,7 +245,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -90, y: -89.99999}
+  m_SizeDelta: {x: -60, y: -60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1451796575916173217
 CanvasRenderer:
@@ -275,7 +275,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: This element is currently boosted in your location.
+  m_text: These elements are currently being boosted in your location.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9cd3e967304424b44982cc176c09cedd, type: 2}
   m_sharedMaterial: {fileID: 6560630065458972052, guid: 9cd3e967304424b44982cc176c09cedd,
@@ -303,8 +303,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 40
-  m_fontSizeBase: 40
+  m_fontSize: 35
+  m_fontSizeBase: 35
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -591,7 +591,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 90, y: 90}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4152137019087720025
 CanvasRenderer:
@@ -1200,7 +1200,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6d2e67c15e25384d87d206f61d1a5cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  elementImage: {fileID: 0}
+  elementImage: {fileID: 2523750370340154284}
+  lightDarkImage: {fileID: 2640528447672380332}
+  fireSprite: {fileID: 21300000, guid: fb96f82cc5e8b974fb54c34a05991be5, type: 3}
+  earthSprite: {fileID: 21300000, guid: c2a7f34abf7e45146947addeedac0553, type: 3}
+  waterSprite: {fileID: 21300000, guid: cc3c8ec37fe3dd346951cf32915c9254, type: 3}
+  airSprite: {fileID: 21300000, guid: 8cf48d7a8c89610468ca1234d1aaf68d, type: 3}
+  lightSprite: {fileID: 21300000, guid: 124cb2d8343fce74d940530ed1671aea, type: 3}
+  darkSprite: {fileID: 21300000, guid: 53bbe624eda975749b19b2ac94a1cbad, type: 3}
 --- !u!1 &8579790225135504651
 GameObject:
   m_ObjectHideFlags: 0
