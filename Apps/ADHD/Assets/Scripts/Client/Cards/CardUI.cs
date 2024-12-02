@@ -1,4 +1,5 @@
 using Game.Data;
+using Game.Logic;
 using GameModel;
 using System.Collections;
 using System.Collections.Generic;
@@ -35,11 +36,10 @@ public class CardUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI CardName;
     [SerializeField] private TextMeshProUGUI CivilizationName;
     [SerializeField] private TextMeshProUGUI ShortText;
+    [SerializeField] private TextMeshProUGUI LongText;
 
     [SerializeField] private Image CardArt;
     [SerializeField] private Image CardFrame;
-
-    [SerializeField] private GameObject TagArea;
 
     void Start()
     {
@@ -106,6 +106,7 @@ public class CardUI : MonoBehaviour
 
         CardName.text = cardSO.Name;
         ShortText.text = cardSO.ShortText;
+        LongText.text = cardSO.Description;
         BlessingsText.text = cardSO.Blessings.ToString();
         CivilizationName.text = cardSO.Faction.ToString();
         CardArt.sprite = cardSO.Art;
@@ -115,6 +116,7 @@ public class CardUI : MonoBehaviour
     {
         CardName.text = card.Name;
         ShortText.text = card.ShortText;
+        LongText.text = card.Description;
         BlessingsText.text = card.Blessings.ToString();
         CivilizationName.text = card.Faction.ToString();
         CardArt.sprite = card.Art;

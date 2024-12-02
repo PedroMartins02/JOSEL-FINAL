@@ -5500,8 +5500,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: RootProjectContentPrefab
       objectReference: {fileID: 0}
+    - target: {fileID: 7915009269831257033, guid: 0093643eecf19594aa951048d410401d,
+        type: 3}
+      propertyPath: contentView
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 6272879060112290276, guid: 0093643eecf19594aa951048d410401d, type: 3}
+    - {fileID: 3532706633240056411, guid: 0093643eecf19594aa951048d410401d, type: 3}
+    - {fileID: 4126856817444281228, guid: 0093643eecf19594aa951048d410401d, type: 3}
+    - {fileID: 6429734608006534169, guid: 0093643eecf19594aa951048d410401d, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 3187763588366390564, guid: 0093643eecf19594aa951048d410401d,
         type: 3}

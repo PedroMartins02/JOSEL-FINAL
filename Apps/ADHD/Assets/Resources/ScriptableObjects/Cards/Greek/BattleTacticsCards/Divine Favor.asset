@@ -17,7 +17,7 @@ MonoBehaviour:
   ShortText: 'Blessing from the gods '
   Description: Favor from the gods could turn the tide of battle with a sudden advantage
     or miracle.
-  Art: {fileID: 0}
+  Art: {fileID: 21300000, guid: 793f4ef9d2fae0f4191fbb06bcfe8d2e, type: 3}
   Faction: 0
   Element: 4
   Blessings: 6

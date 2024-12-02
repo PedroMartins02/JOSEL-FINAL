@@ -475,8 +475,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: RootProjectContentPrefab
       objectReference: {fileID: 0}
+    - target: {fileID: 7915009269831257033, guid: 0093643eecf19594aa951048d410401d,
+        type: 3}
+      propertyPath: contentView
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 6272879060112290276, guid: 0093643eecf19594aa951048d410401d, type: 3}
+    - {fileID: 3532706633240056411, guid: 0093643eecf19594aa951048d410401d, type: 3}
+    - {fileID: 4126856817444281228, guid: 0093643eecf19594aa951048d410401d, type: 3}
+    - {fileID: 6429734608006534169, guid: 0093643eecf19594aa951048d410401d, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 3187763588366390564, guid: 0093643eecf19594aa951048d410401d,
         type: 3}
@@ -526,10 +535,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1117917806}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1310220861
 MonoBehaviour:

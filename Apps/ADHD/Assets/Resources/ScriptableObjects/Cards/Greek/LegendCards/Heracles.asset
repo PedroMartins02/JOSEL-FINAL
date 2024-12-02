@@ -21,6 +21,6 @@ MonoBehaviour:
   Faction: 0
   Element: 4
   Blessings: 7
-  Attack: 8
-  Health: 5
+  Attack: 7
+  Health: 7
   Effects: []

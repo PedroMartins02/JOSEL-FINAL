@@ -14,12 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Id: 8673-102990
   Name: Cleopatra
-  ShortText: 
-  Description: 
+  ShortText: Queen of the Nile
+  Description: Cleopatra ruled with intelligence and charm, weaving alliances that
+    altered the course of history.
   Art: {fileID: 21300000, guid: 34813857a4b99024bbe19f25255a3d9a, type: 3}
   Faction: 3
-  Element: 0
-  Blessings: 0
-  Attack: 0
-  Health: 0
+  Element: 4
+  Blessings: 5
+  Attack: 4
+  Health: 5
   Effects: []

@@ -696,6 +696,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: SettingsManager
       objectReference: {fileID: 0}
+    - target: {fileID: 6566253202940618450, guid: 35353ede18b4e4643aac8cced1c52818,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7999379835309255851, guid: 35353ede18b4e4643aac8cced1c52818,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -759,6 +764,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1136151437881091743, guid: 0093643eecf19594aa951048d410401d,
+        type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4350283692618750245, guid: 0093643eecf19594aa951048d410401d,
         type: 3}
       propertyPath: m_LocalPosition.x

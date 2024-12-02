@@ -183,6 +183,12 @@ public class DeckEditorManager : MonoBehaviour
             var cardUI = cardInstance.GetComponent<CardUI>();
             cardUI.SetCardData(card);
 
+            if (card.GetType() == typeof(BattleTacticCardSO))
+            {
+                cardInstance.GetComponent<CanvasGroup>().alpha = 0.3f;
+                cardInstance.GetComponent<CanvasGroup>().interactable = false;
+            }
+
             var quantityInstance = Instantiate(QuantityPrefab, cardInstance.transform);
             var quantityUI = quantityInstance.GetComponent<QuantityUI>();
             quantityUI.SetQuantity(kvp.Value);

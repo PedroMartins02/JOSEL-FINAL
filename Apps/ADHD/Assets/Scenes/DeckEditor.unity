@@ -2044,6 +2044,11 @@ PrefabInstance:
       propertyPath: _size.y
       value: 1086.6863
       objectReference: {fileID: 0}
+    - target: {fileID: 1136151437881091743, guid: 0093643eecf19594aa951048d410401d,
+        type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4350283692618750245, guid: 0093643eecf19594aa951048d410401d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2114,8 +2119,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: RootProjectContentPrefab
       objectReference: {fileID: 0}
+    - target: {fileID: 7915009269831257033, guid: 0093643eecf19594aa951048d410401d,
+        type: 3}
+      propertyPath: contentView
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 6272879060112290276, guid: 0093643eecf19594aa951048d410401d, type: 3}
+    - {fileID: 3532706633240056411, guid: 0093643eecf19594aa951048d410401d, type: 3}
+    - {fileID: 4126856817444281228, guid: 0093643eecf19594aa951048d410401d, type: 3}
+    - {fileID: 6429734608006534169, guid: 0093643eecf19594aa951048d410401d, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 3187763588366390564, guid: 0093643eecf19594aa951048d410401d,
         type: 3}
@@ -2200,10 +2214,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
+  m_fontSize: 38.05
   m_fontSizeBase: 36
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 16

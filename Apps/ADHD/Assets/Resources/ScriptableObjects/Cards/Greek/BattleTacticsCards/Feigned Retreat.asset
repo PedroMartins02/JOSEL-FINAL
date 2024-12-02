@@ -17,7 +17,7 @@ MonoBehaviour:
   ShortText: Tactical withdrawal to lure enemies
   Description: A strategic withdrawal to make the enemy overcommit, then counterattack
     decisively.
-  Art: {fileID: 0}
+  Art: {fileID: 21300000, guid: 5512d57ccc48ea24ea6baf91010fc87b, type: 3}
   Faction: 0
   Element: 3
   Blessings: 2

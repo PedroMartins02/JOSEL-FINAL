@@ -14,12 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Id: 74f2-50844
   Name: Khufu
-  ShortText: 
-  Description: 
-  Art: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  ShortText: Builder of the Great Pyramid
+  Description: "Khufu\u2019s ambition reached the heavens, immortalized in the towering
+    monument that bears his name."
+  Art: {fileID: 21300000, guid: 7c2c98857b0b334409eee43a63c35c18, type: 3}
   Faction: 3
   Element: 4
-  Blessings: 0
-  Attack: 0
-  Health: 0
+  Blessings: 3
+  Attack: 4
+  Health: 4
   Effects: []

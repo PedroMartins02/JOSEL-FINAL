@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40d5e5baf0e005248a06fdbfd3f36b64, type: 3}
+  m_Name: Spearman
+  m_EditorClassIdentifier: 
+  Id: e599-306234
+  Name: Spearman
+  ShortText: Defender of the Pharaoh
+  Description: "With shield and spear, they formed an unyielding wall, safeguarding
+    Egypt\u2019s future."
+  Art: {fileID: 0}
+  Faction: 0
+  Element: 0
+  Blessings: 2
+  Attack: 3
+  Health: 1
