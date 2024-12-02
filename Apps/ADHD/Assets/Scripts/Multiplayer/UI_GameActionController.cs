@@ -279,4 +279,9 @@ public class UI_GameActionController : NetworkBehaviour
 
         cardSlotTransform.transform.localPosition = Vector3.zero;
     }
+
+    public void Surrender()
+    {
+        GameplayManager.Instance.GameOverRpc(NetworkManager.Singleton.LocalClientId);
+    }
 }

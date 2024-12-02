@@ -171,7 +171,7 @@ public class GameplayManager : NetworkBehaviour
     }
 
     [Rpc(SendTo.ClientsAndHost)]
-    private void GameOverRpc(ulong losingPlayerID)
+    public void GameOverRpc(ulong losingPlayerID)
     {
         Debug.Log("Game over!");
         NetworkManager.Singleton.Shutdown();
