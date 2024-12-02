@@ -7,8 +7,6 @@ using Game.Logic.Actions.UI;
 using GameCore.Events;
 using GameModel;
 using Unity.Netcode;
-using UnityEditor.PackageManager;
-using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameplayManager : NetworkBehaviour

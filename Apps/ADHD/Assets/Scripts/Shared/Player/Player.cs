@@ -52,7 +52,7 @@ namespace GameModel
         private void HandlePlayCard(ICard card)
         {
             Hand.RemoveCard(card);
-            card.StateMachine.SetState(CardStateType.InPlay);
+            card.HandleAction(CardActions.Play);
 
             CardManager.Instance.UpdateCard(card);
         }
