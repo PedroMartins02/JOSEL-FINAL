@@ -64,5 +64,14 @@ namespace Game.Logic
 
             playerCards[playerId] = cardList;
         }
+
+        public bool HasCardOnBoard(ulong playerId, ICard card)
+        {
+            playerCards.TryGetValue(playerId, out var cardList);
+
+            if (cardList == null) return false;
+
+            return cardList.Contains(card);
+        }
     }
 }

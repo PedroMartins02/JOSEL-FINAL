@@ -27,7 +27,9 @@ namespace Game.Logic.Actions
         public bool IsLegal()
         {
             //Debug.Log($"Checking if Attack is Legal: {attacker.StateMachine.CurrentState.StateType} - {defender.StateMachine.CurrentState.StateType}");
-            return attacker.CanAttack && defender.IsTargatable;
+            return attacker.CanAttack 
+                && defender.IsTargatable 
+                && TurnManager.Instance.IsCurrentPlayer(player.playerData.ClientId);
         }
 
         public void Execute()

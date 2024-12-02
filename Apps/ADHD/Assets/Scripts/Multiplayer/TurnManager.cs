@@ -5,15 +5,17 @@ using GameCore.Events;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class TurnManager : NetworkBehaviour
 {
     public static TurnManager Instance { get; private set; }
 
+    private NetworkVariable<int> _currentTurn = new NetworkVariable<int>();
     private NetworkVariable<int> _timeLeft = new NetworkVariable<int>();
     private NetworkVariable<int> _currentPlayerIdx = new NetworkVariable<int>();
-    [NonSerialized] public NetworkVariable<ulong> CurrentPlayer = new NetworkVariable<ulong>();
+    public NetworkVariable<ulong> CurrentPlayer = new NetworkVariable<ulong>();
     private NetworkList<ulong> _registeredPlayers;
 
     [SerializeField] private int _turnTime = 60;
@@ -41,30 +43,32 @@ public class TurnManager : NetworkBehaviour
     {
         if (IsServer)
         {
-            _currentPlayerIdx.Value = 0;
+            NetworkManager.Singleton.SceneManager.OnLoadEventCompleted += SetupTurnManager;
         }
         else
         {
-
         }
 
         _timeLeft.OnValueChanged += UpdateTimerLabel;
+        CurrentPlayer.OnValueChanged += UpdateButtonState;
     }
 
-    [Rpc(SendTo.Server)]
-    public void RegisterPlayerRpc(ulong PlayerID, RpcParams rpcParams = default)
+    private void SetupTurnManager(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
     {
-        if (_registeredPlayers.Contains(PlayerID)) return;
-
-        _registeredPlayers.Add(PlayerID);
-
-
-        // If is host
-        if (PlayerID == OwnerClientId)
+        foreach (ulong clientID in clientsCompleted)
         {
-            _currentPlayerIdx.Value = _registeredPlayers.IndexOf(PlayerID);
-            CurrentPlayer.Value = PlayerID;
+            if (_registeredPlayers.Contains(clientID)) return;
+
+            _registeredPlayers.Add(clientID);
+
+            if (clientID == NetworkManager.Singleton.LocalClientId)
+            {
+                _currentPlayerIdx.Value = _registeredPlayers.IndexOf(clientID);
+                CurrentPlayer.Value = clientID;
+            }
         }
+
+        HandleSkipButtonRpc();
     }
 
     private void UpdateTimerLabel(int previous, int current)
@@ -80,14 +84,23 @@ public class TurnManager : NetworkBehaviour
     [Rpc(SendTo.Server)]
     public void StartTurnRpc()
     {
-        HandleSkipButtonRpc();
+        _currentTurn.Value++;
+
         StartTimerRpc();
+        HandleSkipButtonRpc();
+
+        EventManager.TriggerEvent(GameEventsEnum.TurnStarted, CurrentPlayer.Value);
     }
 
     [Rpc(SendTo.ClientsAndHost)]
     private void HandleSkipButtonRpc()
     {
-        if (CurrentPlayer.Value == OwnerClientId)
+        UpdateButtonState();
+    }
+
+    private void UpdateButtonState(ulong previous = 0, ulong current = 1)
+    {
+        if (CurrentPlayer.Value == NetworkManager.Singleton.LocalClientId)
         {
             _skipButton.gameObject.SetActive(true);
         }
@@ -106,6 +119,8 @@ public class TurnManager : NetworkBehaviour
     public void NextTurnRpc()
     {
         StopTimerRpc();
+
+        EventManager.TriggerEvent(GameEventsEnum.TurnEnded, CurrentPlayer.Value);
 
         _currentPlayerIdx.Value += 1;
 
@@ -150,4 +165,6 @@ public class TurnManager : NetworkBehaviour
     }
 
     public bool IsCurrentPlayer(ulong playerId) => playerId == CurrentPlayer.Value;
+
+    public int CurrentTurn => _currentTurn.Value;
 }
