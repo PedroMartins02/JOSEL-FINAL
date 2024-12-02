@@ -5,6 +5,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using Game.Log;
 
 public class MatchResultManager : MonoBehaviour
 {
@@ -21,19 +22,21 @@ public class MatchResultManager : MonoBehaviour
     [Header("Victory")]
     [SerializeField] private GameObject VictoryReward;
 
+    private GameLog gameLog;
+
     private bool didWin;
 
     void Start()
     {
-        // Event Listeners? idk
-        PlayerData mockOpponent = new PlayerData();
-        SetMatchResult(mockOpponent, true);
+        gameLog = GameLog.Instance; // Get all the information you need here
+
+        SetMatchResult(gameLog.OpponentMMR, gameLog.PlayerWon);
     }
 
-    private void SetMatchResult(PlayerData opponent, bool didWin)
+    private void SetMatchResult(int opponentMMR, bool didWin)
     {
         this.didWin = didWin;
-        int mmrDifference = RankManager.AwardMMR(opponent, didWin);
+        int mmrDifference = RankManager.AwardMMR(opponentMMR, didWin);
 
         UpdateUI(mmrDifference);
     }
@@ -49,6 +52,8 @@ public class MatchResultManager : MonoBehaviour
 
     public void OnContinueClick()
     {
+        Destroy(gameLog.gameObject);
+
         SceneLoader.Load("NavigationScene");
     }
 }
