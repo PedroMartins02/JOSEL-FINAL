@@ -18,8 +18,8 @@ MonoBehaviour:
   Description: "The khopesh wasn\u2019t just a weapon; it was a symbol of Egyptian
     dominance on the battlefield."
   Art: {fileID: 21300000, guid: e61646e866edb264aa35167884058eef, type: 3}
-  Faction: 0
-  Element: 0
+  Faction: 3
+  Element: 1
   Blessings: 2
   Attack: 2
   Health: 2

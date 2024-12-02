@@ -18,7 +18,7 @@ MonoBehaviour:
   Description: "With unmatched speed, the chariot archer struck like the desert wind\u2014swift
     and merciless."
   Art: {fileID: 0}
-  Faction: 0
+  Faction: 3
   Element: 0
   Blessings: 2
   Attack: 2

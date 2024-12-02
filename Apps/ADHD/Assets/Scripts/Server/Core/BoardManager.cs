@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using GameCore.Events;
+using GameModel;
 using UnityEngine;
 
 namespace Game.Logic
@@ -27,6 +29,8 @@ namespace Game.Logic
         {
             numberOfAllowedCards = 4;
             playerCards = new();
+
+            EventManager.Subscribe(GameEventsEnum.CardDied, OnCardDiedEvent);
         }
 
         public void ChangeNumberOfAllowedCards(int allowedCards)
@@ -72,6 +76,33 @@ namespace Game.Logic
             if (cardList == null) return false;
 
             return cardList.Contains(card);
+        }
+
+        public void RemoveCardFromBoard(int cardID, ICard card)
+        {
+            foreach (ulong playerId in playerCards.Keys)
+            {
+                playerCards.TryGetValue(playerId, out var cardList);
+
+                if (cardList == null) continue;
+
+                if (cardList.Contains(card))
+                {
+                    cardList.Remove(card);
+                    playerCards[playerId] = cardList;
+                    return;
+                }
+            }
+        }
+
+        private void OnCardDiedEvent(object args)
+        {
+            if (!(args is ICard))
+                return;
+
+            ICard card = args as ICard;
+
+            RemoveCardFromBoard(card.Data.GameID, card);
         }
     }
 }

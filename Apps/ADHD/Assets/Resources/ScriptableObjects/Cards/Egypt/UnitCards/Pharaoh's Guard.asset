@@ -18,8 +18,8 @@ MonoBehaviour:
   Description: Only the most loyal and skilled soldiers were chosen to guard the
     living embodiment of the gods.
   Art: {fileID: 0}
-  Faction: 0
-  Element: 0
+  Faction: 3
+  Element: 3
   Blessings: 3
   Attack: 2
   Health: 3

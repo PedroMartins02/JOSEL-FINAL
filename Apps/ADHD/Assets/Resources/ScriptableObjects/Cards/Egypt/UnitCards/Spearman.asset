@@ -18,8 +18,8 @@ MonoBehaviour:
   Description: "With shield and spear, they formed an unyielding wall, safeguarding
     Egypt\u2019s future."
   Art: {fileID: 0}
-  Faction: 0
-  Element: 0
+  Faction: 3
+  Element: 3
   Blessings: 2
   Attack: 3
   Health: 1

@@ -104,12 +104,7 @@ public class CardUI : MonoBehaviour
 
         if (cardSO == null) return;
 
-        CardName.text = cardSO.Name;
-        ShortText.text = cardSO.ShortText;
-        LongText.text = cardSO.Description;
-        BlessingsText.text = cardSO.Blessings.ToString();
-        CivilizationName.text = cardSO.Faction.ToString();
-        CardArt.sprite = cardSO.Art;
+        SetGeneralUI(cardSO);
     }
 
     private void SetGeneralUI(CardSO card)

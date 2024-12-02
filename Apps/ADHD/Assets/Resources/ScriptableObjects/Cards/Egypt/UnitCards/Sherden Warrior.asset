@@ -18,8 +18,8 @@ MonoBehaviour:
   Description: The Sherden fought for gold and glory, their horned helmets striking
     fear into their foes.
   Art: {fileID: 21300000, guid: a93eb704558e0114a9ec8f5d740aee24, type: 3}
-  Faction: 0
-  Element: 0
+  Faction: 3
+  Element: 1
   Blessings: 3
   Attack: 3
   Health: 3

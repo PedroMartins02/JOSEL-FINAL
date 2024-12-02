@@ -34,7 +34,7 @@ namespace Game.Logic.Actions
 
         public void Execute()
         {
-            int damageDealt = combatSystem.AttackCard(attacker, defender);
+            Tuple<int, int> damage = combatSystem.AttackCard(attacker, defender);
 
             attacker.HandleAction(CardActions.Attack);
 
@@ -44,7 +44,8 @@ namespace Game.Logic.Actions
                 PlayerId = player.playerData.ClientId,
                 CardGameID = attacker.Data.GameID,
                 TargetCardGameID = defender.Data.GameID,
-                Damage = damageDealt,
+                Damage = damage.Item1,
+                DamageReceived = damage.Item2,
             };
 
             GameplayManager.Instance.BroadcastActionExecutedRpc(actionData);

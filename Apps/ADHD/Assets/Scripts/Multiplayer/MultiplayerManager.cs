@@ -106,6 +106,7 @@ public class MultiplayerManager : NetworkBehaviour
         SetPlayerTimeServerRpc(AccountManager.Singleton.TimeElement);
         SetPlayerNameServerRpc(playerData.Name);
         SetPlayerIdServerRpc(AuthenticationService.Instance.PlayerId);
+        SetPlayerMMRServerRpc(AccountManager.Singleton.GetPlayerData().MMR);
     }
 
     private void NetworkManager_ConnectionApprovalCallback(NetworkManager.ConnectionApprovalRequest connectionApprovalRequest, NetworkManager.ConnectionApprovalResponse connectionApprovalResponse)
@@ -164,6 +165,7 @@ public class MultiplayerManager : NetworkBehaviour
         SetPlayerTimeServerRpc(AccountManager.Singleton.TimeElement);
         SetPlayerNameServerRpc(playerData.Name);
         SetPlayerIdServerRpc(AuthenticationService.Instance.PlayerId);
+        SetPlayerMMRServerRpc(AccountManager.Singleton.GetPlayerData().MMR);
 
         // Request the Lobby Game Rules
         RequestRulesServerRpc();
@@ -228,6 +230,18 @@ public class MultiplayerManager : NetworkBehaviour
         MP_PlayerData playerData = playerDataNetworkList[playerDataIndex];
 
         playerData.playerId = playerId;
+
+        playerDataNetworkList[playerDataIndex] = playerData;
+    }
+
+    [Rpc(SendTo.Server)]
+    private void SetPlayerMMRServerRpc(int MMR, RpcParams rpcParams = default)
+    {
+        int playerDataIndex = GetPlayerDataIndexFromClientId(rpcParams.Receive.SenderClientId);
+
+        MP_PlayerData playerData = playerDataNetworkList[playerDataIndex];
+
+        playerData.MMR = MMR;
 
         playerDataNetworkList[playerDataIndex] = playerData;
     }
