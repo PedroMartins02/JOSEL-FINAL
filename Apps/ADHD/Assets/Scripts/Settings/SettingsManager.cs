@@ -57,15 +57,20 @@ public class SettingsManager : MonoBehaviour
   {
 	audioMixerManager.UpdateVolumeLevels();
 
-	// if index invalid, get the best resolution possible
 	Resolution[] resolutions = Screen.resolutions;
 	if (resolutionIndex < 0 || resolutionIndex >= resolutions.Length)
 	{
 	  resolutionIndex = resolutions.Length - 1;
 	}
 
-	Screen.fullScreen = isFullScreen;
-	Screen.SetResolution(resolutions[resolutionIndex].width, resolutions[resolutionIndex].height, isFullScreen);
+	FullScreenMode displayMode;
+	if (isFullScreen)
+	  displayMode = FullScreenMode.ExclusiveFullScreen;
+	else
+	  displayMode = FullScreenMode.Windowed;
+
+	Screen.SetResolution(resolutions[resolutionIndex].width, resolutions[resolutionIndex].height, displayMode);
+	Debug.Log("Resolution set!");
   }
 
   public int GetCurrentResolutionIndex()
