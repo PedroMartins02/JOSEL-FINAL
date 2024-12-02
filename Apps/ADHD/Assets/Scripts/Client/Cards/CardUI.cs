@@ -8,10 +8,20 @@ using UnityEngine.UI;
 
 public class CardUI : MonoBehaviour
 {
+    [Header("Frame Sprites")]
     [SerializeField] private Sprite UnitFrame;
     [SerializeField] private Sprite BattleTacticFrame;
     [SerializeField] private Sprite LegendFrame;
 
+    [Header("Element Sprites")]
+    [SerializeField] private Sprite FireSprite;
+    [SerializeField] private Sprite AirSprite;
+    [SerializeField] private Sprite EarthSprite;
+    [SerializeField] private Sprite WaterSprite;
+    [SerializeField] private Sprite LightSprite;
+    [SerializeField] private Sprite DarkSprite;
+
+    [Header("References")]
     [SerializeField] private Image ElementIcon;
 
     [SerializeField] private GameObject BlessingsIcon;
@@ -108,6 +118,20 @@ public class CardUI : MonoBehaviour
         BlessingsText.text = card.Blessings.ToString();
         CivilizationName.text = card.Faction.ToString();
         CardArt.sprite = card.Art;
+        if (card.Element == Elements.Fire)
+            ElementIcon.sprite = FireSprite;
+        else if (card.Element == Elements.Air)
+            ElementIcon.sprite = AirSprite;
+        else if (card.Element == Elements.Earth)
+            ElementIcon.sprite = EarthSprite;
+        else if (card.Element == Elements.Water)
+            ElementIcon.sprite = WaterSprite;
+        else if (card.Element == Elements.Light)
+            ElementIcon.sprite = LightSprite;
+        else if (card.Element == Elements.Dark)
+            ElementIcon.sprite = DarkSprite;
+        else 
+            ElementIcon.enabled = false;
     }
 
 
