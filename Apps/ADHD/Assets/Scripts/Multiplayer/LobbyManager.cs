@@ -349,15 +349,6 @@ public class LobbyManager : NetworkBehaviour
         
         try
         {
-            // Set the deck for the quick match
-            PlayerData playerData = AccountManager.Singleton.GetPlayerData();
-            List<DeckData> deckLists = playerData.DeckCollection;
-
-            int deckId = playerData.SelectedDeckId > deckLists.Count ? 0 : playerData.SelectedDeckId;
-
-            DeckData deck = deckLists[deckId];
-            MultiplayerManager.Instance.SetPlayerDeck(deck);
-
             // Firstly, we try to join an available Quick Match lobby
             List<Lobby> lobbyList = await ListLobbiesOfType(LobbyType.QuickMatch);
 
@@ -420,8 +411,8 @@ public class LobbyManager : NetworkBehaviour
         JoinQuickMatchGameServerRpc();
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    private void JoinQuickMatchGameServerRpc(ServerRpcParams rpcParams = default)
+    [Rpc(SendTo.Server)]
+    private void JoinQuickMatchGameServerRpc(RpcParams rpcParams = default)
     {
         LobbyManager.Instance.DeleteLobby();
         SceneLoader.LoadNetwork(SceneLoader.Scene.Game);

@@ -20,8 +20,9 @@ namespace Game.Logic.Actions
             CardDataSnapshot snapshot = CardManager.Instance.GetCardSnapshot(cardGameID);
 
             return BoardManager.Instance.CanPlayAnotherCard(player.playerData.ClientId)
-                && player.HasCard(cardGameID)
-                && player.CurrentBlessings >= snapshot.CurrentBlessings;
+                && player.HasCardInHand(cardGameID)
+                && player.CurrentBlessings >= snapshot.CurrentBlessings
+                && TurnManager.Instance.IsCurrentPlayer(player.playerData.ClientId);
         }
 
         public void Execute()

@@ -1,3 +1,4 @@
+using GameModel;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,6 +12,8 @@ public struct MP_PlayerData : IEquatable<MP_PlayerData>, INetworkSerializable
     public FixedString64Bytes playerUsername;
     public FixedString64Bytes playerId;
     public FixedString512Bytes playerDeck;
+    public Elements playerWeather;
+    public Elements playerTime;
 
     public bool Equals(MP_PlayerData other)
     {

@@ -31,7 +31,7 @@ namespace GameModel
 
         public void PlayCard(int cardGameID)
         {
-            if (!HasCard(cardGameID)) return;
+            if (!HasCardInHand(cardGameID)) return;
 
             ICard card = Hand.GetCard(cardGameID);
 
@@ -44,7 +44,7 @@ namespace GameModel
 
         public void PlayCard(ICard card)
         {
-            if (!HasCard(card)) return;
+            if (!HasCardInHand(card)) return;
 
             HandlePlayCard(card);
         }
@@ -57,14 +57,19 @@ namespace GameModel
             CardManager.Instance.UpdateCard(card);
         }
 
-        public bool HasCard(ICard card)
+        public bool HasCardInHand(ICard card)
         {
             return Hand.Contains(card);
         }
 
-        public bool HasCard(int cardGameID)
+        public bool HasCardInHand(int cardGameID)
         {
             return Hand.Contains(cardGameID);
+        }
+
+        public bool HasCardOnField(ICard card)
+        {
+            return BoardManager.Instance.HasCardOnBoard(playerData.ClientId, card);
         }
 
         public void UseBlessings(int amount)

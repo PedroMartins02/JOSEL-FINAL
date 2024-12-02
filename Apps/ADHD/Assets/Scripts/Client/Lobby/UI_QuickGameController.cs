@@ -71,7 +71,7 @@ public class UI_QuickGameController : MonoBehaviour
 
     IEnumerator WaitCoroutine()
     {
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(10);
 
         LobbyManager.Instance.JoinQuickMatchGame();
     }
@@ -124,9 +124,6 @@ public class UI_QuickGameController : MonoBehaviour
 
     private void OnDestroy()
     {
-        if(LobbyManager.Instance != null) 
-            LobbyManager.Instance.LeaveLobby();
-
         LobbyManager.Instance.OnQuickMatchStarted -= LobbyManager_OnQuickMatchStarted;
         LobbyManager.Instance.OnQuickMatchFailed -= LobbyManager_OnQuickMatchFailed;
         LobbyManager.Instance.OnJoinedLobbyUpdate -= LobbyManager_OnJoinedLobbyUpdate;

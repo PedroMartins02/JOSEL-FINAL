@@ -66,6 +66,9 @@ public class GameplayManager : NetworkBehaviour
         if (IsServer)
         {
             NetworkManager.Singleton.SceneManager.OnLoadEventCompleted += SetupGame;
+
+            EventManager.Subscribe(GameEventsEnum.TurnStarted, HandleTurnStarted);
+            EventManager.Subscribe(GameEventsEnum.TurnEnded, HandleTurnEnded);
         }
 
         base.OnNetworkSpawn();
@@ -84,19 +87,18 @@ public class GameplayManager : NetworkBehaviour
             MP_PlayerData playerData = MultiplayerManager.Instance.GetPlayerDataFromClientId(clientId);
 
             PlayerManager.Instance.CreatePlayer(clientId, playerData);
-            TurnManager.Instance.RegisterPlayerRpc(clientId);
         }
 
         CurrentGameState.Value = GameState.Playing;
 
         StartGameClientRpc(GameRulesManager.Instance.GetIntRuleValue(RuleTarget.StartingHandSize));
+        TurnManager.Instance.StartTurnRpc();
     }
 
     [Rpc(SendTo.ClientsAndHost)]
     private void StartGameClientRpc(int cardsToDraw)
     {
         ActionRequestHandler.Instance.HandleDrawCardRequestServerRpc(cardsToDraw, NetworkManager.Singleton.LocalClientId);
-        TurnManager.Instance.NextTurn(); // Start turn doesn't work for some reason, it messes with the "End Turn" button 
     }
 
     [Rpc(SendTo.Server)]
@@ -122,6 +124,44 @@ public class GameplayManager : NetworkBehaviour
     public GameState GetCurrentGameState()
     {
         return this.CurrentGameState.Value;
+    }
+
+    private void HandleTurnStarted(object args)
+    {
+        Player player = HandleTurnEventArgs(args);
+
+        if (player == null) return;
+
+        ulong playerID = (ulong)args;
+
+        if (TurnManager.Instance.CurrentTurn > 2)
+        {
+            player.RaiseMaxBlessings(GameRulesManager.Instance.GetIntRuleValue(RuleTarget.BlessingPerTurn));
+            player.RestockBlessings();
+        }
+
+        ActionRequestHandler.Instance.HandleDrawCardRequestServerRpc(GameRulesManager.Instance.GetIntRuleValue(RuleTarget.CardsDrawnPerTurn), playerID);
+
+        EventManager.TriggerEvent(GameEventsEnum.PlayerInfoChanged);
+    }
+
+    private void HandleTurnEnded(object args)
+    {
+        Player player = HandleTurnEventArgs(args);
+
+        if (player == null) return;
+
+    }
+
+    private Player HandleTurnEventArgs(object args)
+    {
+        if ((args.GetType() != typeof(ulong)) || !IsServer) return null;
+
+        ulong playerID = (ulong)args;
+
+        Player player = PlayerManager.Instance.GetPlayerByClientId(playerID);
+
+        return player;
     }
 
     private void GameOver()
