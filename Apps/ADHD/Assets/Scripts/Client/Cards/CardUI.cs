@@ -1,4 +1,5 @@
 using Game.Data;
+using Game.Logic;
 using GameModel;
 using System.Collections;
 using System.Collections.Generic;
@@ -104,11 +105,7 @@ public class CardUI : MonoBehaviour
 
         if (cardSO == null) return;
 
-        CardName.text = cardSO.Name;
-        ShortText.text = cardSO.ShortText;
-        BlessingsText.text = cardSO.Blessings.ToString();
-        CivilizationName.text = cardSO.Faction.ToString();
-        CardArt.sprite = cardSO.Art;
+        SetGeneralUI(cardSO);
     }
 
     private void SetGeneralUI(CardSO card)

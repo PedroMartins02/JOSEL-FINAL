@@ -1318,6 +1318,12 @@ MonoBehaviour:
   UnitFrame: {fileID: 21300000, guid: a08058fda4460e249a2935db92ef9671, type: 3}
   BattleTacticFrame: {fileID: 21300000, guid: 898df6b444b7b3a418ba4b7f48e1e6df, type: 3}
   LegendFrame: {fileID: 21300000, guid: 5683229e6633ddd4c8f8dd5843413b34, type: 3}
+  FireSprite: {fileID: 21300000, guid: fb96f82cc5e8b974fb54c34a05991be5, type: 3}
+  AirSprite: {fileID: 21300000, guid: 8cf48d7a8c89610468ca1234d1aaf68d, type: 3}
+  EarthSprite: {fileID: 21300000, guid: c2a7f34abf7e45146947addeedac0553, type: 3}
+  WaterSprite: {fileID: 21300000, guid: cc3c8ec37fe3dd346951cf32915c9254, type: 3}
+  LightSprite: {fileID: 21300000, guid: f00084f4f5e06cb498b1df900d076ec2, type: 3}
+  DarkSprite: {fileID: 21300000, guid: 361e7f3b34e09e34e9f03405796ec9ef, type: 3}
   ElementIcon: {fileID: 8908367162426365006}
   BlessingsIcon: {fileID: 362164663602380648}
   AttackIcon: {fileID: 1018966818079996248}
