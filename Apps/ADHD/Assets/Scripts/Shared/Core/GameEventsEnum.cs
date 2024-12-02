@@ -51,4 +51,12 @@ namespace GameCore.Events
         public int TargetCardGameID;
         public int DamageDealt;
     }
+
+    public struct MythAttackedEventArgs
+    {
+        public ulong PlayerID;
+        public ulong TargetPlayerID;
+        public int AttackingCardGameID;
+        public int DamageDealt;
+    }
 }

@@ -7,7 +7,7 @@ namespace Game.Logic.Actions
     public enum ActionType
     {
         PlayCard,
-        AttackPlayer,
+        AttackMyth,
         AttackCard,
         Heal,
         DrawCard,

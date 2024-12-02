@@ -31,6 +31,12 @@ namespace Game.Logic.Actions
                     player = PlayerManager.Instance.GetPlayerByClientId(actionData.PlayerId);
 
                     return new AttackCardAction(player, actionData.CardGameID, actionData.TargetCardGameID);
+                case ActionType.AttackMyth:
+                    player = PlayerManager.Instance.GetPlayerByClientId(actionData.PlayerId);
+
+                    Player targetPlayer = PlayerManager.Instance.GetPlayerByClientId(actionData.TargetPlayerId);
+
+                    return new AttackMythAction(player, targetPlayer, actionData.CardGameID);
                 default:
                     return null;
             }

@@ -8,5 +8,6 @@ namespace Game.Logic
     public interface ICombatSystem
     {
         public int AttackCard(ICombatCard attacker, ICombatCard defender);
+        public int AttackMyth(ICombatCard attackerCard, Player targetPlayer);
     }
 }

@@ -64,5 +64,20 @@ namespace Game.Logic.Actions
             IAction action = ActionFactory.CreateAction(actionData);
             ActionQueueManager.Instance.AddAction(action);
         }
+
+        [Rpc(SendTo.Server)]
+        public void HandleAttackMythRequestServerRpc(ulong clientID, ulong targetPlayerID, int attackingCardGameID, RpcParams rpcParams = default)
+        {
+            ActionData actionData = new ActionData
+            {
+                ActionType = ActionType.AttackMyth,
+                PlayerId = clientID,
+                TargetPlayerId = targetPlayerID,
+                CardGameID = attackingCardGameID,
+            };
+
+            IAction action = ActionFactory.CreateAction(actionData);
+            ActionQueueManager.Instance.AddAction(action);
+        }
     }
 }

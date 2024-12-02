@@ -6,6 +6,7 @@ using Game.Logic.Actions.UI;
 using GameCore.Events;
 using GameModel;
 using Unity.Netcode;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameplayManager : NetworkBehaviour
@@ -77,7 +78,7 @@ public class GameplayManager : NetworkBehaviour
     private void SetupGame(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
     {
         if (clientsTimedOut.Count > 0)
-            GameOver();
+            GameOverRpc(clientsTimedOut[0]);
 
         List<GameRule> rules = MultiplayerManager.Instance.GetLobbyGameRules();
         GameRulesManager.Instance.IntializeGameRules(rules);
@@ -147,10 +148,15 @@ public class GameplayManager : NetworkBehaviour
 
     private void HandleTurnEnded(object args)
     {
-        Player player = HandleTurnEventArgs(args);
+        Player currentTurnPlayer = HandleTurnEventArgs(args);
 
-        if (player == null) return;
+        if (currentTurnPlayer == null) return;
 
+        foreach (Player player in PlayerManager.Instance.PlayerList)
+        {
+            if (player.CurrentHealth <= 0)
+                GameOverRpc(player.playerData.ClientId);
+        }
     }
 
     private Player HandleTurnEventArgs(object args)
@@ -164,8 +170,11 @@ public class GameplayManager : NetworkBehaviour
         return player;
     }
 
-    private void GameOver()
+    [Rpc(SendTo.ClientsAndHost)]
+    private void GameOverRpc(ulong losingPlayerID)
     {
-
+        Debug.Log("Game over!");
+        NetworkManager.Singleton.Shutdown();
+        SceneLoader.ExitNetworkLoad(SceneLoader.Scene.MatchResultScene);
     }
 }

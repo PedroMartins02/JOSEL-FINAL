@@ -94,5 +94,10 @@ namespace GameModel
         {
             CurrentMaxBlessings += amount;
         }
+
+        public void Damage(int amount)
+        {
+            CurrentHealth -= amount;
+        }
     }
 }

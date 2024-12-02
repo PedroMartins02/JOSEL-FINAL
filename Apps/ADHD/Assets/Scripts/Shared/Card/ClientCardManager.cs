@@ -15,6 +15,7 @@ namespace Game.Multiplayer
         public static ClientCardManager Instance { get; private set; }
 
         private Dictionary<int, CardDataSnapshot> cardSnapshotDict;
+        private Dictionary<ulong, List<int>> cardPlayerDict;
 
         private void Awake()
         {
@@ -24,14 +25,23 @@ namespace Game.Multiplayer
                 Destroy(this);
 
             cardSnapshotDict = new();
+            cardPlayerDict = new();
         }
 
         [Rpc(SendTo.ClientsAndHost)]
-        public void RegisterCardSnapshotRpc(CardDataSnapshot cardSnapshot)
+        public void RegisterCardSnapshotRpc(CardDataSnapshot cardSnapshot, ulong playerID)
         {
             cardSnapshotDict[cardSnapshot.GameID] = cardSnapshot;
 
             OnSnapshotRegistered?.Invoke(cardSnapshot);
+
+            if (!cardPlayerDict.ContainsKey(playerID))
+                cardPlayerDict[playerID] = new List<int>();
+
+            List<int> cardIDList = cardPlayerDict[playerID];
+
+            cardIDList.Add(cardSnapshot.GameID);
+            cardPlayerDict[playerID] = cardIDList;
         }
 
         [Rpc(SendTo.Server)]
@@ -57,6 +67,13 @@ namespace Game.Multiplayer
             cardSnapshotDict.TryGetValue(cardGameID, out CardDataSnapshot cardSnapshot);
 
             return cardSnapshot;
+        }
+
+        public bool CardBelongsToPlayer(ulong playerID, int cardGameID)
+        {
+            List<int> cardList = cardPlayerDict[playerID];
+
+            return cardList != null && cardList.Contains(cardGameID);
         }
     }
 }

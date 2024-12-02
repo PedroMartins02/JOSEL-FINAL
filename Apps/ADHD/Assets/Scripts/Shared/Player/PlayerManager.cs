@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Game.Data;
 using GameModel;
+using Unity.VisualScripting;
 
 namespace Game.Logic
 {
@@ -65,5 +66,7 @@ namespace Game.Logic
         }
 
         public int PlayerCount => players.Count;
+
+        public IList<Player> PlayerList => players.Values.AsReadOnlyList();
     }
 }

@@ -14,6 +14,8 @@ using Game.Logic;
 using Unity.Netcode;
 using Game.Multiplayer;
 using UnityEngine.InputSystem;
+using System.Linq;
+using GameCore.Events;
 
 public class GameCard : NetworkBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
 {
@@ -133,10 +135,8 @@ public class GameCard : NetworkBehaviour, IDragHandler, IBeginDragHandler, IEndD
 
     public void DiscardCard()
     {
-        //Should move card into a discard pile instead of destroying it
-
-        Destroy(transform.parent.gameObject);   // Destroy the card slot
-        Destroy(gameObject);                    // Destroy the card itself
+        stateMachine.SetState(new UIDiscardedState(this));
+        EventManager.TriggerEvent(GameEventsEnum.CardDied, this);
     }
 
     public bool ShouldISeeThisCard(GameCard gameCard, CardDataSnapshot cardData) =>
@@ -454,6 +454,20 @@ public class GameCard : NetworkBehaviour, IDragHandler, IBeginDragHandler, IEndD
 
     private void AttackOpponent(GameObject targetOpponent)
     {
-        // TRY ATTACK OPPONENT
+        Debug.Log("Attacking opponent");
+
+        try
+        {
+            // TODO: Should get playerID from "targetOpponent" but for now, there are only 2 players so to save time we are just going to get the other player's ID from the NetworkManager
+
+            ulong clientID = NetworkManager.Singleton.LocalClientId;
+            ulong targetPlayerID = NetworkManager.Singleton.ConnectedClientsIds.First((id) => id != clientID);
+
+            ActionRequestHandler.Instance.HandleAttackMythRequestServerRpc(clientID, targetPlayerID, GameID);
+        }
+        catch (Exception e)
+        {
+            Debug.LogException(e);
+        }
     }
 }

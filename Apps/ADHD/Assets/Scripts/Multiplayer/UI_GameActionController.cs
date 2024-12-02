@@ -18,6 +18,7 @@ public class UI_GameActionController : NetworkBehaviour
     [SerializeField] private TextMeshProUGUI blessingsLabel;
     [SerializeField] private Image healthImage;
     [SerializeField] private Image mythVisual;
+    [SerializeField] private Transform myDiscardPile;
 
     [Header("Opponent UI")]
     [SerializeField] private HandCardHolder opponentHand;
@@ -26,6 +27,7 @@ public class UI_GameActionController : NetworkBehaviour
     [SerializeField] private TextMeshProUGUI oppBlessingsLabel;
     [SerializeField] private Image oppHealthImage;
     [SerializeField] private Image oppMythVisual;
+    [SerializeField] private Transform oppDiscardPile;
 
     private void Start()
     {
@@ -46,6 +48,8 @@ public class UI_GameActionController : NetworkBehaviour
         EventManager.Subscribe(GameEventsEnum.CardDrawn, OnCardDrawnEvent);
         EventManager.Subscribe(GameEventsEnum.CardPlayed, OnCardPlayedEvent);
         EventManager.Subscribe(GameEventsEnum.CardAttacked, OnCardAttackedEvent);
+        EventManager.Subscribe(GameEventsEnum.MythDamaged, OnMythAttackedEvent);
+        EventManager.Subscribe(GameEventsEnum.CardDied, OnCardDiedEvent);
     }
 
     private void GameplayManager_OnStateChange(object sender, GameplayManager.GameStateEventArgs e)
@@ -97,13 +101,13 @@ public class UI_GameActionController : NetworkBehaviour
     {
         if (NetworkManager.Singleton.LocalClientId.Equals(clientId))
         {
-            healthImage.fillAmount = playerCurrentHealth / playerMaxHealth;
-            healthLabel.text = playerMaxHealth.ToString();
+            healthImage.fillAmount = (float)playerCurrentHealth / (float)playerMaxHealth;
+            healthLabel.text = $"{playerCurrentHealth}/{playerMaxHealth}";
         }
         else
         {
-            oppHealthImage.fillAmount = playerCurrentHealth / playerMaxHealth;
-            oppHealthLabel.text = playerMaxHealth.ToString();
+            oppHealthImage.fillAmount = (float)playerCurrentHealth / (float)playerMaxHealth;
+            oppHealthLabel.text = $"{playerCurrentHealth}/{playerMaxHealth}";
         }
     }
 
@@ -156,7 +160,7 @@ public class UI_GameActionController : NetworkBehaviour
             opponentHand.SpawnCard(cardDrawnArgs.CardData, cardDrawnArgs.PlayerID);
         }
 
-        ClientCardManager.Instance.RegisterCardSnapshotRpc(cardDrawnArgs.CardData);
+        ClientCardManager.Instance.RegisterCardSnapshotRpc(cardDrawnArgs.CardData, cardDrawnArgs.PlayerID);
     }
 
     public void OnCardPlayedEvent(object args)
@@ -219,5 +223,60 @@ public class UI_GameActionController : NetworkBehaviour
             ClientCardManager.Instance.UpdateCardSnapshotRpc(cardAttackedArgs.AttackingCardGameID);
             ClientCardManager.Instance.UpdateCardSnapshotRpc(cardAttackedArgs.TargetCardGameID);
         }
+    }
+
+    public void OnMythAttackedEvent(object args)
+    {
+        if (args.GetType() != typeof(MythAttackedEventArgs))
+            return;
+
+        MythAttackedEventArgs mythAttackedArgs = (MythAttackedEventArgs)args;
+
+        GameCard attackingCard;
+
+        if (NetworkManager.Singleton.LocalClientId.Equals(mythAttackedArgs.PlayerID))
+        {
+            attackingCard = myBoard.cards.Find(card => card.GameID == mythAttackedArgs.AttackingCardGameID);
+        }
+        else
+        {
+            attackingCard = opponentBoard.cards.Find(card => card.GameID == mythAttackedArgs.AttackingCardGameID);
+        }
+
+        if (attackingCard == null) return;
+
+        // TODO: Do stuff with the card, animations and such
+
+        UpdatePlayerInfoRpc();
+
+        if (IsServer)
+        {
+            ClientCardManager.Instance.UpdateCardSnapshotRpc(mythAttackedArgs.AttackingCardGameID);
+        }
+    }
+
+    public void OnCardDiedEvent(object args)
+    {
+        if (args.GetType() != typeof(GameCard))
+            return;
+
+        GameCard card = (GameCard)args;
+
+        HorizontalCardHolder horizontalCardHolder = card.GetComponentInParent<HorizontalCardHolder>();
+        horizontalCardHolder.RemoveCard(card);
+        horizontalCardHolder.UpdateIndexes();
+
+        RectTransform cardSlotTransform = card.transform.parent as RectTransform;
+
+        if (ClientCardManager.Instance.CardBelongsToPlayer(NetworkManager.Singleton.LocalClientId, card.GameID)) 
+        {
+            cardSlotTransform.SetParent(myDiscardPile, false);
+        } 
+        else 
+        {
+            cardSlotTransform.transform.SetParent(oppDiscardPile, false);
+        }
+
+        cardSlotTransform.transform.localPosition = Vector3.zero;
     }
 }

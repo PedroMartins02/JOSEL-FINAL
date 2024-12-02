@@ -32,5 +32,16 @@ namespace Game.Logic
 
             return damage;
         }
+
+        public int AttackMyth(ICombatCard attackerCard, Player targetPlayer)
+        {
+            int damage = attackerCard.CurrentAttack;
+
+            // Handle any other damage modifiers here
+
+            targetPlayer.Damage(damage);
+
+            return damage;
+        }
     }
 }
