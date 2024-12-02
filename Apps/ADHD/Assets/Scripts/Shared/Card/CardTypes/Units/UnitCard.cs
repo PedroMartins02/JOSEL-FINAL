@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using Game.Data;
 using Game.Logic;
+using Game.Logic.Modifiers;
 using Game.Utils.Logic;
 using GameCore.Events;
 using UnityEngine;
@@ -11,11 +13,13 @@ namespace GameModel
     {
         public int CurrentAttack { get; protected set; }
         public int CurrentHealth { get; protected set; }
+        public int CurrentMaxHealth { get; protected set; }
 
         public UnitCard(UnitCardData cardData) : base(cardData)
         {
             this.CurrentAttack = cardData.Attack;
             this.CurrentHealth = cardData.Health;
+            this.CurrentMaxHealth = cardData.Health;
 
             StateMachine = new StateMachine<CardStateType, CardActions>();
 
@@ -102,6 +106,42 @@ namespace GameModel
         }
 
         #region Modifiers
+
+        public override void ApplyModifier(Modifier modifier)
+        {
+            switch (modifier.Type)
+            {
+                case ModifierType.GenericBuff:
+                    ApplyBuffModifier(modifier);
+                    break;
+            }
+
+            CurrentModifiers.Add(modifier);
+        }
+
+        private void ApplyBuffModifier(Modifier modifier)
+        {
+            Dictionary<ModifierTarget, int> modifierDict = modifier.Dictionary;
+
+            foreach (ModifierTarget target in modifierDict.Keys) 
+            {
+                switch (target)
+                {
+                    case ModifierTarget.Attack:
+                        AddAttack(modifierDict[target]);
+                        break;
+                    case ModifierTarget.Health:
+                        IncreaseMaxHealth(modifierDict[target]);
+                        break;
+                }
+            }
+        }
+
+        public override void RemoveModifier(Modifier modifier)
+        {
+
+        }
+
         public void AddAttack(int amount)
         {
             CurrentAttack += amount;
@@ -114,6 +154,21 @@ namespace GameModel
             if (CurrentAttack < 0)
                 CurrentAttack = 0;
         }
+
+        private void IncreaseMaxHealth(int amount)
+        {
+            CurrentHealth += amount;
+            CurrentMaxHealth += amount;
+        }
+
+        private void DecreaseMaxHealth(int amount)
+        {
+            CurrentMaxHealth -= amount;
+
+            if (CurrentHealth > CurrentMaxHealth)
+                CurrentHealth = CurrentMaxHealth;
+        }
+
         #endregion
 
         #region Conditions

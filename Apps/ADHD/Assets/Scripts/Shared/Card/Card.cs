@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Game.Logic;
+using Game.Logic.Modifiers;
 using Game.Utils.Logic;
 using Game.Data;
 
@@ -48,15 +49,9 @@ namespace GameModel
 
         }
 
-        public void ApplyModifier(Modifier modifier)
-        {
+        public abstract void ApplyModifier(Modifier modifier);
 
-        }
-
-        public void RemoveModifier(Modifier modifier)
-        {
-
-        }
+        public abstract void RemoveModifier(Modifier modifier);
 
 
         #region Modifiers

@@ -34,7 +34,7 @@ namespace Game.Logic
         {
             DeckData deckData = DeckData.DeserializeDeckData(playerData.playerDeck.ToString());
 
-            Deck deck = new Deck(deckData.Name, deckData.CardList);
+            Deck deck = new Deck(deckData.Name, deckData.CardList, playerData.playerWeather, playerData.playerTime);
 
             PlayerGameData playerGameData 
                 = new PlayerGameData(

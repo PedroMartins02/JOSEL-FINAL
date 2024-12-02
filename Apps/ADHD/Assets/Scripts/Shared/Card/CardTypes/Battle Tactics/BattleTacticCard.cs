@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Game.Data;
 using Game.Logic;
+using Game.Logic.Modifiers;
 using Game.Utils.Logic;
 
 namespace GameModel
@@ -45,6 +46,18 @@ namespace GameModel
 
             return new BattleTacticCardData((BattleTacticCardData)cardData, gameID);
         }
+
+        #region Modifiers
+        public override void ApplyModifier(Modifier modifier)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void RemoveModifier(Modifier modifier)
+        {
+            throw new System.NotImplementedException();
+        }
+        #endregion
 
         #region Conditions
         public override bool IsTargatable

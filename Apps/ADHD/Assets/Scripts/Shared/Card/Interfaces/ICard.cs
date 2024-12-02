@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using Game.Data;
 using Game.Utils.Logic;
+using Game.Logic.Modifiers;
 using GameModel;
 using UnityEngine;
 
 namespace Game.Logic
 {
-    public interface ICard
+    public interface ICard : IModifiable
     {
         public CardData Data { get; }
         public int CurrentBlessingsCost { get; }
