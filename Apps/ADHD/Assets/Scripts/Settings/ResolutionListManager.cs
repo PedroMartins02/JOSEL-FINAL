@@ -12,41 +12,28 @@ public class ResolutionListManager : MonoBehaviour
   [Header("List Generation")]
   public GameObject resolutionItemPrefab;
   public Transform listContainer;
-  public int itemSpacing;
 
   private Resolution[] resolutions;
 
-  void Start()
+  public void PopulateResolutionList()
   {
 	resolutions = Screen.resolutions;
-	PopulateResolutionList();
-  }
-
-  private void PopulateResolutionList()
-  {
-	int currentSpacing = 0;
 	foreach (Resolution res in resolutions)
 	{
-	  GameObject resolutionItem = Instantiate(resolutionItemPrefab, listContainer);
+	  // check if resolution is valid
+	  string resolutionStr = $"{res.width}x{res.height}";
+	  if (!SettingsManager.Instance.resolutionSet.Contains(resolutionStr))
+		continue;
 
-	  RectTransform rectTransform = resolutionItem.GetComponent<RectTransform>();
-	  if (rectTransform != null)
-	  {
-		rectTransform.anchoredPosition = new Vector2(0, currentSpacing);
-		currentSpacing -= itemSpacing; // Move down by prefab height + spacing
-	  }
+	  GameObject resolutionItem = Instantiate(resolutionItemPrefab, listContainer);
 
 	  Image image = resolutionItem.GetComponentInChildren<Image>();
 	  if (image != null)
 	  {
 		TextMeshProUGUI resolutionText = resolutionItem.GetComponentInChildren<TextMeshProUGUI>();
 		if (resolutionText != null)
-		  resolutionText.text = $"{res.width}x{res.height}";
-		else
-		  Debug.Log("Text not found in resolutionItem");
+		  resolutionText.text = resolutionStr;
 	  }
-	  else
-		Debug.Log("Image not found in resolutionItem");
 
 	  Button resolutionButton = resolutionItem.GetComponentInChildren<Button>();
 	  if (resolutionButton != null)
@@ -55,8 +42,6 @@ public class ResolutionListManager : MonoBehaviour
 		  resolutionButton.Select();
 		resolutionButton.onClick.AddListener(() => OnResolutionSelected(resolutionButton, res));
 	  }
-	  else
-		Debug.Log("Button not found in resolutionItem");
 	}
   }
 
@@ -70,7 +55,7 @@ public class ResolutionListManager : MonoBehaviour
 	  return;
 
 	btn.Select();
-	//videoSettings.ChangeResolution(resolutionIndex);
+	videoSettings.ChangeResolution(resolutionIndex);
 	Debug.Log(resolutions[resolutionIndex].ToString() + " selected (index: " + resolutionIndex + ")");
   }
 }
