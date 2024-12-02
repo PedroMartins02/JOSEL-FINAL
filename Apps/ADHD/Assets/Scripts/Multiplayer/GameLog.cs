@@ -27,7 +27,7 @@ namespace Game.Log
         public int CardsDestroyed { get; private set; }
         public int EnemyCardsDestroyed { get; private set; }
 
-        
+        public int OpponentMMR { get; private set; }
 
         private void Awake()
         {
@@ -59,6 +59,11 @@ namespace Game.Log
         public void SetPlayerWon(bool won)
         {
             PlayerWon = won;
+        }
+        
+        public void SetOpponentMMR(int mmr)
+        {
+            OpponentMMR = mmr;
         }
 
         private void OnCardDrawnEvent(object args)

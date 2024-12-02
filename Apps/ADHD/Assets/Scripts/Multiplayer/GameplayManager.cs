@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using Game.Log;
 using Game.Logic;
 using Game.Logic.Actions;
 using Game.Logic.Actions.UI;
 using GameCore.Events;
 using GameModel;
 using Unity.Netcode;
+using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -173,8 +175,18 @@ public class GameplayManager : NetworkBehaviour
     [Rpc(SendTo.ClientsAndHost)]
     public void GameOverRpc(ulong losingPlayerID)
     {
-        Debug.Log("Game over!");
+        foreach (ulong clientId in NetworkManager.Singleton.ConnectedClientsIds)
+        {
+            if (clientId == NetworkManager.Singleton.LocalClientId) continue;
+
+            MP_PlayerData playerData = MultiplayerManager.Instance.GetPlayerDataFromClientId(clientId);
+            GameLog.Instance.SetOpponentMMR(playerData.MMR);
+        }
+
+        GameLog.Instance.SetPlayerWon(losingPlayerID != NetworkManager.Singleton.LocalClientId);
+
         NetworkManager.Singleton.Shutdown();
+
         SceneLoader.ExitNetworkLoad(SceneLoader.Scene.MatchResultScene);
     }
 }
