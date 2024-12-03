@@ -65,7 +65,7 @@ public class UI_QuickGameController : MonoBehaviour
             cancelQueueBtn.enabled = false;
             isJoiningMatch = true;
             cancelQueueBtn.gameObject.SetActive(false);
-            LobbyManager.Instance.ClearJoinedLobby();
+            StartCoroutine(WaitCoroutineClient());
         }
     }
 
@@ -74,6 +74,13 @@ public class UI_QuickGameController : MonoBehaviour
         yield return new WaitForSeconds(10);
 
         LobbyManager.Instance.JoinQuickMatchGame();
+    }
+
+    IEnumerator WaitCoroutineClient()
+    {
+        yield return new WaitForSeconds(6);
+
+        LobbyManager.Instance.ClearJoinedLobby();
     }
 
     private void Update()

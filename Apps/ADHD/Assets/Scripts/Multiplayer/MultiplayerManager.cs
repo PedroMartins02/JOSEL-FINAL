@@ -101,12 +101,17 @@ public class MultiplayerManager : NetworkBehaviour
 
         // Only add deck if its a quick match
         Lobby lobby = LobbyManager.Instance.GetLobby();
-        if (lobby != null && lobby.Data["Type"].Equals(LobbyType.QuickMatch.ToString()))
+
+        if (lobby != null && lobby.Data["Type"].Value == LobbyType.QuickMatch.ToString())
         {
+            Debug.Log("here host");
+
             List<DeckData> deckLists = playerData.DeckCollection;
             int deckId = playerData.SelectedDeckId;
             DeckData deck = deckLists[deckId];
             SetPlayerDeck(deck);
+
+            Debug.Log("deck: " + DeckData.SerializeDeckData(deck));
         }
         
         SetPlayerWeatherServerRpc(AccountManager.Singleton.WeatherElement);
@@ -165,13 +170,19 @@ public class MultiplayerManager : NetworkBehaviour
 
         // Only add deck if its a quick match
         Lobby lobby = LobbyManager.Instance.GetLobby();
-        if (lobby != null && lobby.Data["Type"].Equals(LobbyType.QuickMatch.ToString()))
+
+        if (lobby != null && LobbyManager.Instance.isQuick)
         {
+            Debug.Log("here client");
+
             List<DeckData> deckLists = playerData.DeckCollection;
             int deckId = playerData.SelectedDeckId;
             DeckData deck = deckLists[deckId];
             SetPlayerDeck(deck);
+
+            Debug.Log("deck: " + DeckData.SerializeDeckData(deck));
         }
+
 
         SetPlayerWeatherServerRpc(AccountManager.Singleton.WeatherElement);
         SetPlayerTimeServerRpc(AccountManager.Singleton.TimeElement);
