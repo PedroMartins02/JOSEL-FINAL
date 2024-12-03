@@ -111,7 +111,7 @@ public class UI_RegionBox : MonoBehaviour
                 elementImage.sprite = airSprite;
                 AccountManager.Singleton.WeatherElement = GameModel.Elements.Air;
             }
-            else if (weatherMain.Contains("Clear"))
+            else
             {
                 elementImage.sprite = earthSprite;
                 AccountManager.Singleton.WeatherElement = GameModel.Elements.Earth;

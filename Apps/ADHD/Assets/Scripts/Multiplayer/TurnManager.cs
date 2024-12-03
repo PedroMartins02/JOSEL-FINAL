@@ -22,6 +22,7 @@ public class TurnManager : NetworkBehaviour
     [SerializeField] private TextMeshProUGUI _timerLabel;
     [SerializeField] private TextMeshProUGUI _turnLabel;
     [SerializeField] private Button _skipButton;
+    [SerializeField] private GameObject turnPopUp;
 
     private Coroutine _timerCoroutine;
 
@@ -105,6 +106,7 @@ public class TurnManager : NetworkBehaviour
         {
             _skipButton.gameObject.SetActive(true);
             _turnLabel.text = "Your Turn";
+            StartCoroutine(TurnIndicator());
         }
         else
         {
@@ -113,7 +115,14 @@ public class TurnManager : NetworkBehaviour
         }
     }
 
-    public void NextTurn()
+    private IEnumerator TurnIndicator()
+    {
+        turnPopUp.SetActive(true);
+        yield return new WaitForSeconds(1f);
+        turnPopUp.SetActive(false);
+    }
+
+public void NextTurn()
     {
         NextTurnRpc();
     }
