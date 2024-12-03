@@ -382,6 +382,11 @@ public class DeckEditorManager : MonoBehaviour
 
     public void SaveDeck()
     {
+        if (ListOfSelectedCards.Count != 20)
+        {
+            StartCoroutine(ShowErrorPopUp("You need to have 20 cards in your deck!", 1.5f));
+            return;
+        }
         this.deckName = deckNameInput.text.IsEmpty() ? "New Deck" : deckNameInput.text;
         AccountManager.Singleton.AddDeckToPlayer(this.slotIndex, this.deckCardBackID, new DeckSO(deckName,selectedMyth,ListOfSelectedCards,this.faction));
         BackButton();
