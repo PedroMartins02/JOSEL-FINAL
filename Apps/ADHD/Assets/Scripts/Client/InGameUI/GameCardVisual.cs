@@ -102,6 +102,18 @@ public class GameCardVisual : MonoBehaviour
         }
     }
 
+    public void FlipCard()
+    {
+        //gameObject.SetActive(false);
+        transform.DOScale(1, scaleTransition).SetEase(scaleEase);
+        foreach (Transform transform in cardVisual)
+        {
+            Destroy(transform.gameObject);
+        }
+        GameObject cardFront = Instantiate(cardBackPrefab, cardVisual);
+        shadowImage.sprite = cardBackSprite;
+    }
+
     public void SetCardData(CardDataSnapshot cardData)
     {
         foreach (Transform transform in cardVisual)

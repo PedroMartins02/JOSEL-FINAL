@@ -3,6 +3,7 @@ using Game.Logic;
 using Game.Multiplayer;
 using GameCore.Events;
 using GameModel;
+using System.Collections;
 using TMPro;
 using Unity.Collections;
 using Unity.Netcode;
@@ -30,6 +31,14 @@ public class UI_GameActionController : NetworkBehaviour
     [SerializeField] private Image oppBlessingsImage;
     [SerializeField] private Image oppMythVisual;
     [SerializeField] private Transform oppDiscardPile;
+
+    [Header("Audio")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip drawCardAudio;
+    [SerializeField] private AudioClip playCardAudio;
+    [SerializeField] private AudioClip attackCardAudio;
+    [SerializeField] private AudioClip destroyCardAudio;
+    [SerializeField] private AudioClip attackMythAudio;
 
     private void Start()
     {
@@ -153,6 +162,9 @@ public class UI_GameActionController : NetworkBehaviour
     {
         if (args.GetType() != typeof(CardDrawnEventArgs))
             return;
+
+        audioSource.clip = drawCardAudio;
+        audioSource.Play();
 
         CardDrawnEventArgs cardDrawnArgs = (CardDrawnEventArgs)args;
 
@@ -283,6 +295,13 @@ public class UI_GameActionController : NetworkBehaviour
         }
 
         cardSlotTransform.transform.localPosition = Vector3.zero;
+        StartCoroutine(FlipCard(cardSlotTransform));
+    }
+
+    private IEnumerator FlipCard(Transform cardSlotTransform)
+    {
+        yield return new WaitForSeconds(0.5f);
+        cardSlotTransform.gameObject.GetComponentInChildren<GameCard>().FlipCard();
     }
 
     public void Surrender()

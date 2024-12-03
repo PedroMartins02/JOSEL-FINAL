@@ -103,6 +103,12 @@ public class GameCard : NetworkBehaviour, IDragHandler, IBeginDragHandler, IEndD
         }
     }
 
+    public void FlipCard()
+    {
+        isMine = false;
+        cardVisual.FlipCard();
+    }
+
     public void SetCardData(CardDataSnapshot cardData)
     {
         if (cardData.GameID != GameID) return;
