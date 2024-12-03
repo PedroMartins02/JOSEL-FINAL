@@ -20,6 +20,7 @@ public class TurnManager : NetworkBehaviour
 
     [SerializeField] private int _turnTime = 60;
     [SerializeField] private TextMeshProUGUI _timerLabel;
+    [SerializeField] private TextMeshProUGUI _turnLabel;
     [SerializeField] private Button _skipButton;
 
     private Coroutine _timerCoroutine;
@@ -103,10 +104,12 @@ public class TurnManager : NetworkBehaviour
         if (CurrentPlayer.Value == NetworkManager.Singleton.LocalClientId)
         {
             _skipButton.gameObject.SetActive(true);
+            _turnLabel.text = "Your Turn";
         }
         else
         {
             _skipButton.gameObject.SetActive(false);
+            _turnLabel.text = "Opponent's Turn";
         }
     }
 
