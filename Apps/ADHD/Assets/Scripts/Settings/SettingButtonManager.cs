@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SettingPanelManager : MonoBehaviour
+public class SettingButtonManager : MonoBehaviour
 {
   [Header("Side Buttons")]
   public Button generalButton;

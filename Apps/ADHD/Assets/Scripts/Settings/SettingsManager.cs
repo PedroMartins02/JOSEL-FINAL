@@ -8,7 +8,7 @@ public class SettingsManager : MonoBehaviour
 {
   public static SettingsManager Instance;
   public AudioMixerManager audioMixerManager;
-  public HashSet<string> resolutionSet;
+  public HashSet<string> resolutionSet = new HashSet<string> { "1920x1080", "1600x900", "1366x768", "1280x720" };
 
   [Header("Settings")]
   public bool isFullScreen;
@@ -24,7 +24,6 @@ public class SettingsManager : MonoBehaviour
 	  Instance = this;
 	  DontDestroyOnLoad(gameObject);
 	  LoadSettings();
-	  SetResolutions();
 	}
 	else
 	{
@@ -64,8 +63,7 @@ public class SettingsManager : MonoBehaviour
 	  resolutionIndex = resolutions.Length - 1;
 	}
 
-	Screen.fullScreen = isFullScreen;
-	Screen.SetResolution(resolutions[resolutionIndex].width, resolutions[resolutionIndex].height, isFullScreen);
+	StartCoroutine(UpdateResolution(resolutions[resolutionIndex]));
   }
 
   public int GetCurrentResolutionIndex()
@@ -79,8 +77,14 @@ public class SettingsManager : MonoBehaviour
 	return -1;
   }
 
-  private void SetResolutions()
+  private IEnumerator UpdateResolution(Resolution res)
   {
-	resolutionSet = new HashSet<string> { "1920x1080", "1600x900", "1366x768", "1280x720" };
+	Screen.fullScreen = isFullScreen;
+
+	yield return new WaitForEndOfFrame();
+	yield return new WaitForEndOfFrame();
+
+	Screen.SetResolution(res.width, res.height, Screen.fullScreen);
+	Debug.Log($"[Settings Manager] Resolution set to {res.width}x{res.height} / Fullscreen {isFullScreen}!");
   }
 }

@@ -10,10 +10,6 @@ public class VideoSettingUpdater : MonoBehaviour
   public TextMeshProUGUI resolutionText;
   public TextMeshProUGUI displayText;
 
-  [Header("Radio Buttons")]
-  public Button[] resolutionButtons;
-  public Button[] displayButtons;
-
   [HideInInspector]
   public int resolutionIndex;
   [HideInInspector]
