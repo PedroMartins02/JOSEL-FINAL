@@ -33,6 +33,7 @@ public class LobbyManager : NetworkBehaviour
     private const string KEY_RELAY_CODE = "RelayJoinCode";
 
     private Lobby joinedLobby;
+    public bool isQuick = false;
     private float heartbeatTimer;
     private float listLobbiesTimer;
     private float lobbyPollTimer = 2;
@@ -358,7 +359,7 @@ public class LobbyManager : NetworkBehaviour
                 Lobby firstLobby = lobbyList.First<Lobby>();
                 if (firstLobby != null)
                 {
-                    JoinLobbyById(firstLobby.Id);
+                    JoinLobbyById(firstLobby.Id, true);
                 }
             } 
             else
@@ -381,11 +382,12 @@ public class LobbyManager : NetworkBehaviour
     /**
      * Method for joining a lobby by clicking on it
      */
-    public async void JoinLobbyById(string lobbyID)
+    public async void JoinLobbyById(string lobbyID, bool isQuick = false)
     {
         OnJoinStarted?.Invoke(this, EventArgs.Empty);
         try
         {
+            this.isQuick = isQuick;
             joinedLobby = await LobbyService.Instance.JoinLobbyByIdAsync(lobbyID);
 
             // Join a lobby with Relay
