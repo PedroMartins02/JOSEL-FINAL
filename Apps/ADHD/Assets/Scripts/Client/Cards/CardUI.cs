@@ -9,6 +9,10 @@ using UnityEngine.UI;
 
 public class CardUI : MonoBehaviour
 {
+    [Header("Attack Sprites")]
+    [SerializeField] private Sprite CanAttack;
+    [SerializeField] private Sprite CannotAttack;
+
     [Header("Frame Sprites")]
     [SerializeField] private Sprite UnitFrame;
     [SerializeField] private Sprite BattleTacticFrame;
@@ -40,6 +44,7 @@ public class CardUI : MonoBehaviour
 
     [SerializeField] private Image CardArt;
     [SerializeField] private Image CardFrame;
+    [SerializeField] private Image AttackIndicator;
 
     void Start()
     {
@@ -189,5 +194,38 @@ public class CardUI : MonoBehaviour
         AttackText.text = card.CurrentAttack.ToString();
         HealthText.text = card.CurrentHealth.ToString();
         //Effects
+    }
+
+    public void UpdateState(CardStateType state)
+    {
+        if (state == CardStateType.Exhausted)
+        {
+            SetExhausted();
+        }
+        else if (state == CardStateType.InPlay)
+        {
+            SetCanAttack();
+        }
+        else
+        {
+            SetDefaultState();
+        }
+    }
+
+    public void SetCanAttack()
+    {
+        AttackIndicator.sprite = CanAttack;
+        AttackIndicator.gameObject.SetActive(true);
+    }
+
+    public void SetExhausted()
+    {
+        AttackIndicator.sprite = CannotAttack;
+        AttackIndicator.gameObject.SetActive(true);
+    }
+
+    public void SetDefaultState()
+    {
+        AttackIndicator.gameObject.SetActive(false);
     }
 }

@@ -117,8 +117,13 @@ public class GameCard : NetworkBehaviour, IDragHandler, IBeginDragHandler, IEndD
 
         if (newData.CurrentState == CardStateType.Discarded)
         {
+            cardVisual.UpdateState(newData.CurrentState);
             DiscardCard();
             return;
+        }
+
+        if (isMine) {
+            cardVisual.UpdateState(newData.CurrentState);
         }
 
         if (ShouldISeeThisCard(this, newData)) {
