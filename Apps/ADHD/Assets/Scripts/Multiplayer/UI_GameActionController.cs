@@ -17,6 +17,7 @@ public class UI_GameActionController : NetworkBehaviour
     [SerializeField] private TextMeshProUGUI healthLabel;
     [SerializeField] private TextMeshProUGUI blessingsLabel;
     [SerializeField] private Image healthImage;
+    [SerializeField] private Image blessingsImage;
     [SerializeField] private Image mythVisual;
     [SerializeField] private Transform myDiscardPile;
 
@@ -26,6 +27,7 @@ public class UI_GameActionController : NetworkBehaviour
     [SerializeField] private TextMeshProUGUI oppHealthLabel;
     [SerializeField] private TextMeshProUGUI oppBlessingsLabel;
     [SerializeField] private Image oppHealthImage;
+    [SerializeField] private Image oppBlessingsImage;
     [SerializeField] private Image oppMythVisual;
     [SerializeField] private Transform oppDiscardPile;
 
@@ -33,7 +35,8 @@ public class UI_GameActionController : NetworkBehaviour
     {
         GameplayManager.Instance.OnCurrentGameStateChanged += GameplayManager_OnStateChange;
 
-        
+        blessingsImage.fillAmount = 1;
+        oppBlessingsImage.fillAmount = 1;
         healthImage.fillAmount = 1;
         oppHealthImage.fillAmount = 1;
     }
@@ -118,10 +121,12 @@ public class UI_GameActionController : NetworkBehaviour
 
         if (NetworkManager.Singleton.LocalClientId.Equals(clientId))
         {
+            blessingsImage.fillAmount = (float)CurrentBlessings / (float)CurrentMaxBlessings;
             blessingsLabel.text = blessingsText;
         }
         else
         {
+            oppBlessingsImage.fillAmount = (float)CurrentBlessings / (float)CurrentMaxBlessings;
             oppBlessingsLabel.text = blessingsText;
         }
     }
