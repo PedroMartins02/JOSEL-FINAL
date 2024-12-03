@@ -15,9 +15,14 @@ public class ResolutionListManager : MonoBehaviour
 
   private Resolution[] resolutions;
 
-  public void PopulateResolutionList()
+  void Start()
   {
 	resolutions = Screen.resolutions;
+	PopulateResolutionList();
+  }
+
+  private void PopulateResolutionList()
+  {
 	foreach (Resolution res in resolutions)
 	{
 	  // check if resolution is valid
@@ -33,7 +38,11 @@ public class ResolutionListManager : MonoBehaviour
 		TextMeshProUGUI resolutionText = resolutionItem.GetComponentInChildren<TextMeshProUGUI>();
 		if (resolutionText != null)
 		  resolutionText.text = resolutionStr;
+		else
+		  Debug.Log("Text not found in resolutionItem");
 	  }
+	  else
+		Debug.Log("Image not found in resolutionItem");
 
 	  Button resolutionButton = resolutionItem.GetComponentInChildren<Button>();
 	  if (resolutionButton != null)
@@ -42,6 +51,8 @@ public class ResolutionListManager : MonoBehaviour
 		  resolutionButton.Select();
 		resolutionButton.onClick.AddListener(() => OnResolutionSelected(resolutionButton, res));
 	  }
+	  else
+		Debug.Log("Button not found in resolutionItem");
 	}
   }
 
