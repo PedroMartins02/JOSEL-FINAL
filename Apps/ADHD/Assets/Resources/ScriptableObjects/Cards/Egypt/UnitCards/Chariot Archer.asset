@@ -17,7 +17,7 @@ MonoBehaviour:
   ShortText: Swift Hunter of the Sands
   Description: "With unmatched speed, the chariot archer struck like the desert wind\u2014swift
     and merciless."
-  Art: {fileID: 0}
+  Art: {fileID: 21300000, guid: 2f1e585a2f5ebae43adaae7e6301ac81, type: 3}
   Faction: 3
   Element: 0
   Blessings: 2
