@@ -17,7 +17,7 @@ MonoBehaviour:
   ShortText: Protector of the Divine
   Description: Only the most loyal and skilled soldiers were chosen to guard the
     living embodiment of the gods.
-  Art: {fileID: 0}
+  Art: {fileID: 21300000, guid: d95abce079d9725408e7531db75d2360, type: 3}
   Faction: 3
   Element: 3
   Blessings: 3

@@ -17,7 +17,7 @@ MonoBehaviour:
   ShortText: Defender of the Pharaoh
   Description: "With shield and spear, they formed an unyielding wall, safeguarding
     Egypt\u2019s future."
-  Art: {fileID: 0}
+  Art: {fileID: 21300000, guid: 119ad2f59ad3a7c4b817eedea722bfbf, type: 3}
   Faction: 3
   Element: 3
   Blessings: 2
