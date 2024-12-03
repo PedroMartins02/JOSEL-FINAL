@@ -5,9 +5,11 @@ using System.Threading.Tasks;
 using Unity.Collections;
 using Unity.Netcode;
 using Unity.Services.Authentication;
+using Unity.Services.Lobbies.Models;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static LobbyManager;
 
 /**
  * This Class serves for handling the network connection (not to confuse with lobby joing/disconnect) and the player's data
@@ -97,10 +99,15 @@ public class MultiplayerManager : NetworkBehaviour
             return;
         }
 
-        List<DeckData> deckLists = playerData.DeckCollection;
-        int deckId = playerData.SelectedDeckId;
-        DeckData deck = deckLists[deckId];
-        SetPlayerDeck(deck);
+        // Only add deck if its a quick match
+        Lobby lobby = LobbyManager.Instance.GetLobby();
+        if (lobby != null && lobby.Data["Type"].Equals(LobbyType.QuickMatch.ToString()))
+        {
+            List<DeckData> deckLists = playerData.DeckCollection;
+            int deckId = playerData.SelectedDeckId;
+            DeckData deck = deckLists[deckId];
+            SetPlayerDeck(deck);
+        }
         
         SetPlayerWeatherServerRpc(AccountManager.Singleton.WeatherElement);
         SetPlayerTimeServerRpc(AccountManager.Singleton.TimeElement);
@@ -156,10 +163,15 @@ public class MultiplayerManager : NetworkBehaviour
             return;
         }
 
-        List<DeckData> deckLists = playerData.DeckCollection;
-        int deckId = playerData.SelectedDeckId;
-        DeckData deck = deckLists[deckId];
-        SetPlayerDeck(deck);
+        // Only add deck if its a quick match
+        Lobby lobby = LobbyManager.Instance.GetLobby();
+        if (lobby != null && lobby.Data["Type"].Equals(LobbyType.QuickMatch.ToString()))
+        {
+            List<DeckData> deckLists = playerData.DeckCollection;
+            int deckId = playerData.SelectedDeckId;
+            DeckData deck = deckLists[deckId];
+            SetPlayerDeck(deck);
+        }
 
         SetPlayerWeatherServerRpc(AccountManager.Singleton.WeatherElement);
         SetPlayerTimeServerRpc(AccountManager.Singleton.TimeElement);

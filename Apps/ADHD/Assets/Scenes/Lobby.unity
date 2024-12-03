@@ -3608,7 +3608,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lobbyNameText: {fileID: 651393444}
   readyButton: {fileID: 1555575322}
-  tutorialUi: {fileID: 0}
+  tutorialUi: {fileID: 1829419477}
   playerOneNameText: {fileID: 924362693}
   readyIconP1: {fileID: 237605826}
   notReadyIconSpriteP1: {fileID: 21300000, guid: 99da6891e0f8f064598602dd5e54953e,

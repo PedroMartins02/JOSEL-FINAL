@@ -238,7 +238,7 @@ public class UI_LobbyController : MonoBehaviour
                     this.previousSelectedBtn = deckButton;
                     this.previousHighlight = highlight;
                 }
-                if (previousDeck != null && !previousDeck.Equals(deckData))
+                else if (previousDeck != null && !previousDeck.Equals(deckData))
                 {
                     MultiplayerManager.Instance.SetPlayerDeck(deckData);
                     this.previousHighlight.SetActive(false);
@@ -251,7 +251,7 @@ public class UI_LobbyController : MonoBehaviour
                 }
             });
 
-            // Assign the first dick as the selected one
+            // Assign the first deck XD as the selected one
             if (isFirst)
             {
                 deckButton.onClick.Invoke();
