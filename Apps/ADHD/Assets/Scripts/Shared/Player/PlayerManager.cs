@@ -53,6 +53,11 @@ namespace Game.Logic
             return player;
         }
 
+        public void Clear()
+        {
+            players = new Dictionary<ulong, Player>();
+        }
+
         public void RegisterPlayer(ulong clientId, Player player)
         {
             players.Add(clientId, player);

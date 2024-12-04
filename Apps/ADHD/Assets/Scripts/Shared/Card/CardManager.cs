@@ -31,6 +31,12 @@ namespace Game.Logic
             cards = new();
         }
 
+        public void Clear()
+        {
+            cards = new();
+            nextAvailableId = 0;
+        }
+
         public int RegisterCard(ICard card)
         {
             int cardId = nextAvailableId;

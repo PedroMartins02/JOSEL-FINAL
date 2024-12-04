@@ -181,10 +181,27 @@ public class GameplayManager : NetworkBehaviour
             GameLog.Instance.SetOpponentMMR(playerData.MMR);
         }
 
+        if (IsServer)
+        {
+            SceneInstancesCleanupRpc();
+        }
+
         GameLog.Instance.SetPlayerWon(losingPlayerID != NetworkManager.Singleton.LocalClientId);
 
         NetworkManager.Singleton.Shutdown();
 
         SceneLoader.ExitNetworkLoad(SceneLoader.Scene.MatchResultScene);
+    }
+
+    [Rpc(SendTo.Server)]
+    private void SceneInstancesCleanupRpc()
+    {
+        PlayerManager.Instance.Clear();
+        CardManager.Instance.Clear();
+
+        ActionQueueManager.Instance.ClearQueue();
+
+        EventManager.Unsubscribe(GameEventsEnum.TurnStarted, HandleTurnStarted);
+        EventManager.Unsubscribe(GameEventsEnum.TurnEnded, HandleTurnEnded);
     }
 }

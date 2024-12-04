@@ -64,6 +64,16 @@ public class UI_GameActionController : NetworkBehaviour
         EventManager.Subscribe(GameEventsEnum.CardDied, OnCardDiedEvent);
     }
 
+    private void OnDestroy()
+    {
+        EventManager.Unsubscribe(GameEventsEnum.PlayerInfoChanged, UpdatePlayerInfo);
+        EventManager.Unsubscribe(GameEventsEnum.CardDrawn, OnCardDrawnEvent);
+        EventManager.Unsubscribe(GameEventsEnum.CardPlayed, OnCardPlayedEvent);
+        EventManager.Unsubscribe(GameEventsEnum.CardAttacked, OnCardAttackedEvent);
+        EventManager.Unsubscribe(GameEventsEnum.MythDamaged, OnMythAttackedEvent);
+        EventManager.Unsubscribe(GameEventsEnum.CardDied, OnCardDiedEvent);
+    }
+
     private void GameplayManager_OnStateChange(object sender, GameplayManager.GameStateEventArgs e)
     {
         if (IsServer && e.gameState.Equals(GameplayManager.GameState.Playing))
