@@ -48,6 +48,7 @@ public class UI_RegionBox : MonoBehaviour
             if (webRequest.result != UnityWebRequest.Result.Success)
             {
                 Debug.LogError($"Error fetching region data: {webRequest.error}");
+                StopLoading();
                 yield break;
             }
 
@@ -77,6 +78,7 @@ public class UI_RegionBox : MonoBehaviour
             if (webRequest.result != UnityWebRequest.Result.Success)
             {
                 Debug.LogError($"Error fetching weather data: {webRequest.error}");
+                StopLoading();
                 yield break;
             }
 

@@ -158,8 +158,6 @@ public class DeckEditorManager : MonoBehaviour
                 mythCardInstance.gameObject.SetActive(true);
                 MythUI mythCardUI = mythCardInstance.GetComponent<MythUI>();
 
-                selectedMyth = card;
-
                 mythCardUI.SetMythData((MythCardSO)card);
                 Transform selected = mythCardUI.transform.Find("Selected");
                 selected.gameObject.SetActive(false);
@@ -167,9 +165,11 @@ public class DeckEditorManager : MonoBehaviour
                 if (mythCardButton != null)
                 {
                     mythCardButton.onClick.RemoveAllListeners();
+                    mythCardButton.onClick.AddListener(() => DeselectAllMyths());
                     mythCardButton.onClick.AddListener(() => SelectMyth(mythCardInstance.gameObject, card));
                 }
                 mythCardsCount++;
+
                 continue;
             }
 
@@ -284,6 +284,8 @@ public class DeckEditorManager : MonoBehaviour
     private void OnDeckLoad(DeckData deck)
     {
         deckNameInput.text = deck.Name;
+
+        selectedMyth = CardDatabase.Singleton.GetCardSoOfId(deck.MythId);
         
         foreach (var id in deck.CardList)
         {
@@ -370,6 +372,32 @@ public class DeckEditorManager : MonoBehaviour
         ListOfSelectedCards.Remove(cardToRemove);
         List<string> stringIdList = ListOfSelectedCards.Select(e => e.Id.ToString()).ToList();
         UpdateCardsList(stringIdList);
+    }
+
+    List<Transform> FindAllChildrenByName(Transform parent, string name)
+    {
+        List<Transform> matchingChildren = new List<Transform>();
+
+        foreach (Transform child in parent)
+        {
+            if (child.name == name)
+            {
+                matchingChildren.Add(child);
+            }
+
+            matchingChildren.AddRange(FindAllChildrenByName(child, name));
+        }
+
+        return matchingChildren;
+    }
+
+    private void DeselectAllMyths()
+    {
+        var allSelected = FindAllChildrenByName(mythContainer, "Selected");
+        foreach (Transform t in allSelected)
+        {
+            t.gameObject.SetActive(false);
+        }
     }
 
     private void SelectMyth(GameObject mythCardUI, CardSO myth)
