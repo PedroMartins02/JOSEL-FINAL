@@ -21,8 +21,6 @@ namespace GameModel
             this.CurrentHealth = cardData.Health;
             this.CurrentMaxHealth = cardData.Health;
 
-            StateMachine = new StateMachine<CardStateType, CardActions>();
-
             StateMachine.AddState(new InDeckState(this));
             StateMachine.AddState(new InHandState(this));
             StateMachine.AddState(new InPlayState(this));

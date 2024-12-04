@@ -70,6 +70,7 @@ public class GameplayManager : NetworkBehaviour
 
             EventManager.Subscribe(GameEventsEnum.TurnStarted, HandleTurnStarted);
             EventManager.Subscribe(GameEventsEnum.TurnEnded, HandleTurnEnded);
+            EventManager.Subscribe(GameEventsEnum.CardStateChanged, HandleTurnEnded);
         }
 
         base.OnNetworkSpawn();

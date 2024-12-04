@@ -325,8 +325,10 @@ public class GameCard : NetworkBehaviour, IDragHandler, IBeginDragHandler, IEndD
         return transform.parent.CompareTag("Slot") ? ExtensionMethods.Remap((float)ParentIndex(), 0, (float)(transform.parent.parent.childCount - 1), 0, 1) : 0;
     }
 
-    private void OnDestroy()
+    public override void OnDestroy()
     {
+        base.OnDestroy();
+
         if (cardVisual != null)
             Destroy(cardVisual.gameObject);
     }

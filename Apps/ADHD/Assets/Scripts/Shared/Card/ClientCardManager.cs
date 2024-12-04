@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Game.Data;
 using Game.Logic;
+using GameCore.Events;
 using Unity.Netcode;
 
 namespace Game.Multiplayer
@@ -26,6 +27,33 @@ namespace Game.Multiplayer
 
             cardSnapshotDict = new();
             cardPlayerDict = new();
+        }
+
+        private void Start()
+        {
+            if (IsServer)
+            {
+                EventManager.Subscribe(GameEventsEnum.CardStateChanged, OnCardStateChanged);
+            }
+        }
+
+        public override void OnDestroy()
+        {
+            base.OnDestroy();
+
+            if (IsServer)
+            {
+                EventManager.Unsubscribe(GameEventsEnum.CardStateChanged, OnCardStateChanged);
+            }
+        }
+
+        private void OnCardStateChanged(object args) 
+        {
+            if (args.GetType() != typeof(CardStateChangedEventArgs)) return;
+
+            CardStateChangedEventArgs stateChangedArgs = (CardStateChangedEventArgs)args;
+
+            UpdateCardSnapshotRpc(stateChangedArgs.CardGameID);
         }
 
         [Rpc(SendTo.ClientsAndHost)]

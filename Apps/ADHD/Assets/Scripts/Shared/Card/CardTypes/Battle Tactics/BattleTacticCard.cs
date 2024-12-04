@@ -13,8 +13,6 @@ namespace GameModel
             this.CurrentEffects = cardData.Effects;
             this.CurrentModifiers = new List<Modifier>();
 
-            StateMachine = new StateMachine<CardStateType, CardActions>();
-
             StateMachine.AddState(new InDeckState(this));
             StateMachine.AddState(new InHandState(this));
             StateMachine.AddState(new InPlayState(this));

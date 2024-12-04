@@ -64,8 +64,10 @@ public class UI_GameActionController : NetworkBehaviour
         EventManager.Subscribe(GameEventsEnum.CardDied, OnCardDiedEvent);
     }
 
-    private void OnDestroy()
+    public override void OnDestroy()
     {
+        base.OnDestroy();
+
         EventManager.Unsubscribe(GameEventsEnum.PlayerInfoChanged, UpdatePlayerInfo);
         EventManager.Unsubscribe(GameEventsEnum.CardDrawn, OnCardDrawnEvent);
         EventManager.Unsubscribe(GameEventsEnum.CardPlayed, OnCardPlayedEvent);

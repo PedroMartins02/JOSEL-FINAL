@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Game.Data;
+using Game.Logic;
 using UnityEngine;
 
 
@@ -27,6 +28,7 @@ namespace GameCore.Events
         CardDamaged,
         CardHealed,
         CardDied,
+        CardStateChanged,
         // Myth Events
         MythDamaged,
         MythHealed,
@@ -58,5 +60,12 @@ namespace GameCore.Events
         public ulong TargetPlayerID;
         public int AttackingCardGameID;
         public int DamageDealt;
+    }
+
+    public struct CardStateChangedEventArgs
+    {
+        public int CardGameID;
+        public CardStateType OldCardState;
+        public CardStateType NewCardState;
     }
 }
