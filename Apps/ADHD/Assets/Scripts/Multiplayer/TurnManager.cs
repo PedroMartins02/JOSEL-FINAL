@@ -23,6 +23,9 @@ public class TurnManager : NetworkBehaviour
     [SerializeField] private TextMeshProUGUI _turnLabel;
     [SerializeField] private Button _skipButton;
     [SerializeField] private GameObject turnPopUp;
+    [Header("Audio")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip changeTurnAudio;
 
     private Coroutine _timerCoroutine;
 
@@ -99,30 +102,42 @@ public class TurnManager : NetworkBehaviour
     {
         UpdateButtonState();
     }
+    private int _updateButtonStateCallCount = 0;
 
     private void UpdateButtonState(ulong previous = 0, ulong current = 1)
     {
+        _updateButtonStateCallCount++;
+        if (_updateButtonStateCallCount != 2 && NetworkManager.Singleton.IsClient)
+        {
+            return;
+        }
         if (CurrentPlayer.Value == NetworkManager.Singleton.LocalClientId)
         {
             _skipButton.gameObject.SetActive(true);
             _turnLabel.text = "Your Turn";
+
             StartCoroutine(TurnIndicator());
         }
         else
         {
             _skipButton.gameObject.SetActive(false);
             _turnLabel.text = "Opponent's Turn";
+            Debug.Log("Opponent Turn");
         }
+        _updateButtonStateCallCount = 0;
     }
 
     private IEnumerator TurnIndicator()
     {
+        Debug.Log("Your Turn");
+        audioSource.clip = changeTurnAudio;
+        audioSource.Play();
         turnPopUp.SetActive(true);
         yield return new WaitForSeconds(1f);
         turnPopUp.SetActive(false);
     }
 
-public void NextTurn()
+    public void NextTurn()
     {
         NextTurnRpc();
     }

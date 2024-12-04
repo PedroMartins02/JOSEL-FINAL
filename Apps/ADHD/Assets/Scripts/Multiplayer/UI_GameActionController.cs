@@ -33,7 +33,7 @@ public class UI_GameActionController : NetworkBehaviour
     [SerializeField] private Transform oppDiscardPile;
 
     [Header("Audio")]
-    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private SoundQueueManager soundQueueManager;
     [SerializeField] private AudioClip drawCardAudio;
     [SerializeField] private AudioClip playCardAudio;
     [SerializeField] private AudioClip attackCardAudio;
@@ -163,9 +163,6 @@ public class UI_GameActionController : NetworkBehaviour
         if (args.GetType() != typeof(CardDrawnEventArgs))
             return;
 
-        audioSource.clip = drawCardAudio;
-        audioSource.Play();
-
         CardDrawnEventArgs cardDrawnArgs = (CardDrawnEventArgs)args;
 
         if (NetworkManager.Singleton.LocalClientId.Equals(cardDrawnArgs.PlayerID))
@@ -178,6 +175,8 @@ public class UI_GameActionController : NetworkBehaviour
         }
 
         ClientCardManager.Instance.RegisterCardSnapshotRpc(cardDrawnArgs.CardData, cardDrawnArgs.PlayerID);
+
+        soundQueueManager.QueueSound(drawCardAudio);
     }
 
     public void OnCardPlayedEvent(object args)
@@ -208,6 +207,8 @@ public class UI_GameActionController : NetworkBehaviour
         {
             ClientCardManager.Instance.UpdateCardSnapshotRpc(cardPlayedArgs.CardGameID);
         }
+
+        soundQueueManager.QueueSound(playCardAudio);
     }
 
     public void OnCardAttackedEvent(object args)
@@ -234,12 +235,14 @@ public class UI_GameActionController : NetworkBehaviour
         if (attackingCard == null || targetCard == null) return;
 
         // TODO: Do stuff with the cards, animations and such
+        soundQueueManager.QueueSound(attackCardAudio);
 
         if (IsServer)
         {
             ClientCardManager.Instance.UpdateCardSnapshotRpc(cardAttackedArgs.AttackingCardGameID);
             ClientCardManager.Instance.UpdateCardSnapshotRpc(cardAttackedArgs.TargetCardGameID);
         }
+
     }
 
     public void OnMythAttackedEvent(object args)
@@ -263,6 +266,8 @@ public class UI_GameActionController : NetworkBehaviour
         if (attackingCard == null) return;
 
         // TODO: Do stuff with the card, animations and such
+        soundQueueManager.QueueSound(attackCardAudio);
+        soundQueueManager.QueueSound(attackMythAudio);
 
         UpdatePlayerInfoRpc();
 
@@ -295,6 +300,8 @@ public class UI_GameActionController : NetworkBehaviour
         }
 
         cardSlotTransform.transform.localPosition = Vector3.zero;
+
+        soundQueueManager.QueueSound(destroyCardAudio);
         StartCoroutine(FlipCard(cardSlotTransform));
     }
 
