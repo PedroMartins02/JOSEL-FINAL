@@ -2389,7 +2389,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Description
+  m_text: DESCRIPTION
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9cd3e967304424b44982cc176c09cedd, type: 2}
   m_sharedMaterial: {fileID: 6560630065458972052, guid: 9cd3e967304424b44982cc176c09cedd,
@@ -2563,7 +2563,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Coins
+  m_text: COINS
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9cd3e967304424b44982cc176c09cedd, type: 2}
   m_sharedMaterial: {fileID: 6560630065458972052, guid: 9cd3e967304424b44982cc176c09cedd,
