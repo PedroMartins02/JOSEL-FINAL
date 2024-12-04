@@ -758,6 +758,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: RootProjectContentPrefab
       objectReference: {fileID: 0}
+    - target: {fileID: 7849159784174142015, guid: 0093643eecf19594aa951048d410401d,
+        type: 3}
+      propertyPath: contentView
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 7915009269831257033, guid: 0093643eecf19594aa951048d410401d,
         type: 3}
       propertyPath: contentView
@@ -769,6 +774,10 @@ PrefabInstance:
     - {fileID: 3532706633240056411, guid: 0093643eecf19594aa951048d410401d, type: 3}
     - {fileID: 4126856817444281228, guid: 0093643eecf19594aa951048d410401d, type: 3}
     - {fileID: 6429734608006534169, guid: 0093643eecf19594aa951048d410401d, type: 3}
+    - {fileID: 6486509265718032160, guid: 0093643eecf19594aa951048d410401d, type: 3}
+    - {fileID: 8085641689191201815, guid: 0093643eecf19594aa951048d410401d, type: 3}
+    - {fileID: 65347615808167957, guid: 0093643eecf19594aa951048d410401d, type: 3}
+    - {fileID: 5850585841129312038, guid: 0093643eecf19594aa951048d410401d, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 3187763588366390564, guid: 0093643eecf19594aa951048d410401d,
         type: 3}
