@@ -284,8 +284,6 @@ public class DeckEditorManager : MonoBehaviour
     private void OnDeckLoad(DeckData deck)
     {
         deckNameInput.text = deck.Name;
-
-        selectedMyth = CardDatabase.Singleton.GetCardSoOfId(deck.MythId);
         
         foreach (var id in deck.CardList)
         {
