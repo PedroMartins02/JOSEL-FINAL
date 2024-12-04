@@ -768,6 +768,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fcee5032fd845149a6e40ac799b9a00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CanAttack: {fileID: 0}
+  CannotAttack: {fileID: 0}
   UnitFrame: {fileID: 21300000, guid: a08058fda4460e249a2935db92ef9671, type: 3}
   BattleTacticFrame: {fileID: 21300000, guid: 898df6b444b7b3a418ba4b7f48e1e6df, type: 3}
   LegendFrame: {fileID: 21300000, guid: 5683229e6633ddd4c8f8dd5843413b34, type: 3}
@@ -790,6 +792,7 @@ MonoBehaviour:
   LongText: {fileID: 6360889244680384931}
   CardArt: {fileID: 3075800247677813526}
   CardFrame: {fileID: 7305247888287452048}
+  AttackIndicator: {fileID: 0}
 --- !u!114 &1881704630587356569
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -926,8 +929,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: 0
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 23905951f8edf9e4686f1948f1156e6b, type: 2}
+  m_sharedMaterial: {fileID: 6004044646763016263, guid: 23905951f8edf9e4686f1948f1156e6b,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1060,8 +1064,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: 0
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 23905951f8edf9e4686f1948f1156e6b, type: 2}
+  m_sharedMaterial: {fileID: 6004044646763016263, guid: 23905951f8edf9e4686f1948f1156e6b,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1489,8 +1494,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: 0
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 23905951f8edf9e4686f1948f1156e6b, type: 2}
+  m_sharedMaterial: {fileID: 6004044646763016263, guid: 23905951f8edf9e4686f1948f1156e6b,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1498,7 +1504,7 @@ MonoBehaviour:
     serializedVersion: 2
     rgba: 4294967295
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
-  m_enableVertexGradient: 0
+  m_enableVertexGradient: 1
   m_colorMode: 0
   m_fontColorGradient:
     topLeft: {r: 1, g: 1, b: 1, a: 1}
