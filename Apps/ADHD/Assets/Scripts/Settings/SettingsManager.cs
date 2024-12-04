@@ -63,7 +63,8 @@ public class SettingsManager : MonoBehaviour
 	  resolutionIndex = resolutions.Length - 1;
 	}
 
-	StartCoroutine(UpdateResolution(resolutions[resolutionIndex]));
+	if (Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.WindowsEditor)
+	  StartCoroutine(UpdateResolution(resolutions[resolutionIndex]));
   }
 
   public int GetCurrentResolutionIndex()
