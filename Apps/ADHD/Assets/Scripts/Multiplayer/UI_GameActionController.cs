@@ -279,7 +279,7 @@ public class UI_GameActionController : NetworkBehaviour
 
         // TODO: Do stuff with the card, animations and such
         soundQueueManager.QueueSound(attackCardAudio);
-        soundQueueManager.QueueSound(attackMythAudio);
+        //soundQueueManager.QueueSound(attackMythAudio);
 
         UpdatePlayerInfoRpc();
 

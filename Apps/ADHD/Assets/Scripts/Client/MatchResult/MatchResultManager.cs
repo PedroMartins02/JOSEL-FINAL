@@ -13,6 +13,7 @@ public class MatchResultManager : MonoBehaviour
     [SerializeField] private Sprite VictorySprite;
     [SerializeField] private Sprite DefeatSprite;
     [SerializeField] private Image WinLossImage;
+    [SerializeField] private Image ResultImage;
 
     [Header("Rank")]
     [SerializeField] private RankUI RankUI;
@@ -37,8 +38,16 @@ public class MatchResultManager : MonoBehaviour
     {
         this.didWin = didWin;
         int mmrDifference = RankManager.AwardMMR(opponentMMR, didWin);
+        UpdateUI(mmrDifference); 
+        StartCoroutine(ShowResult());
+    }
 
-        UpdateUI(mmrDifference);
+    private IEnumerator ShowResult()
+    {
+        ResultImage.sprite = didWin ? VictorySprite : DefeatSprite;
+        ResultImage.gameObject.SetActive(true);
+        yield return new WaitForSeconds(1f);
+        ResultImage.gameObject.SetActive(false);
     }
 
     private void UpdateUI(int mmrDifference)

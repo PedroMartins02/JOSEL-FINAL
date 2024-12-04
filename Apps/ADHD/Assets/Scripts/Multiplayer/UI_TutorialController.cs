@@ -27,8 +27,6 @@ public class UI_TutorialController : MonoBehaviour
 
     private void Start()
     {
-        Hide();
-
         tutorialOne.SetActive(true);
         tutorialTwo.SetActive(false);
         tutorialThree.SetActive(false);
@@ -42,8 +40,6 @@ public class UI_TutorialController : MonoBehaviour
 
     public void ChangeTutorialShown(int tutorialInt)
     {
-        Show(); 
-
         switch (tutorialInt)
         {
             case 1:
@@ -97,11 +93,6 @@ public class UI_TutorialController : MonoBehaviour
 
     public void Hide()
     {
-        this.gameObject.SetActive(false);
-    }
-
-    public void Show()
-    {
-        this.gameObject.SetActive(true);
+        gameObject.SetActive(false);
     }
 }
