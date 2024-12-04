@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ResolutionListManager : MonoBehaviour
+public class ResolutionListGenerator : MonoBehaviour
 {
   [Header("Managers")]
   public VideoSettingUpdater videoSettings;
@@ -17,30 +18,32 @@ public class ResolutionListManager : MonoBehaviour
 
   public void PopulateResolutionList()
   {
+	ClearResolutionList();
 	resolutions = Screen.resolutions;
+
 	foreach (Resolution res in resolutions)
 	{
 	  // check if resolution is valid
 	  string resolutionStr = $"{res.width}x{res.height}";
-	  if (!SettingsManager.Instance.resolutionSet.Contains(resolutionStr))
-		continue;
-
-	  GameObject resolutionItem = Instantiate(resolutionItemPrefab, listContainer);
-
-	  Image image = resolutionItem.GetComponentInChildren<Image>();
-	  if (image != null)
+	  if (SettingsManager.Instance.resolutionSet.Contains(resolutionStr))
 	  {
-		TextMeshProUGUI resolutionText = resolutionItem.GetComponentInChildren<TextMeshProUGUI>();
-		if (resolutionText != null)
-		  resolutionText.text = resolutionStr;
-	  }
+		GameObject resolutionItem = Instantiate(resolutionItemPrefab, listContainer);
 
-	  Button resolutionButton = resolutionItem.GetComponentInChildren<Button>();
-	  if (resolutionButton != null)
-	  {
-		if (res.Equals(Screen.currentResolution))
-		  resolutionButton.Select();
-		resolutionButton.onClick.AddListener(() => OnResolutionSelected(resolutionButton, res));
+		Image image = resolutionItem.GetComponentInChildren<Image>();
+		if (image != null)
+		{
+		  TextMeshProUGUI resolutionText = resolutionItem.GetComponentInChildren<TextMeshProUGUI>();
+		  if (resolutionText != null)
+			resolutionText.text = resolutionStr;
+		}
+
+		Button resolutionButton = resolutionItem.GetComponentInChildren<Button>();
+		if (resolutionButton != null)
+		{
+		  if (res.Equals(Screen.currentResolution))
+			resolutionButton.Select();
+		  resolutionButton.onClick.AddListener(() => OnResolutionSelected(resolutionButton, res));
+		}
 	  }
 	}
   }
@@ -57,5 +60,11 @@ public class ResolutionListManager : MonoBehaviour
 	btn.Select();
 	videoSettings.ChangeResolution(resolutionIndex);
 	Debug.Log(resolutions[resolutionIndex].ToString() + " selected (index: " + resolutionIndex + ")");
+  }
+
+  private void ClearResolutionList()
+  {
+	foreach (Transform child in listContainer)
+	  Destroy(child.gameObject);
   }
 }
