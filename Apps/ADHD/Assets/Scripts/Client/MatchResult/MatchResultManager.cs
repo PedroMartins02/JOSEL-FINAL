@@ -20,8 +20,14 @@ public class MatchResultManager : MonoBehaviour
 
     [Header("Match Rewards")]
     [SerializeField] private TextMeshProUGUI RankDifferenceText;
+
     [Header("Victory")]
     [SerializeField] private GameObject VictoryReward;
+
+    [Header("Sound")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip victorySound;
+    [SerializeField] private AudioClip defeatSound;
 
     private GameLog gameLog;
 
@@ -44,6 +50,8 @@ public class MatchResultManager : MonoBehaviour
 
     private IEnumerator ShowResult()
     {
+        audioSource.clip = didWin ? victorySound : defeatSound;
+        audioSource.Play();
         ResultImage.sprite = didWin ? VictorySprite : DefeatSprite;
         ResultImage.gameObject.SetActive(true);
         yield return new WaitForSeconds(1f);
