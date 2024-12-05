@@ -1,25 +1,25 @@
-using System.Collections;
 using GameModel;
 using System;
-using UnityEngine;
 
 namespace Game.Logic.Actions
 {
     public class AttackCardAction : IAction
     {
+        private Player player;
         private ICombatCard attacker;
         private ICombatCard defender;
         private ICombatSystem combatSystem;
 
-        public AttackCardAction(ICard attacker, ICard defender, ICombatSystem combatSystem = null)
+        public AttackCardAction(Player attackingPlayer, int attackerGameID, int defenderGameID, ICombatSystem combatSystem = null)
         {
-            if (!attacker.IsCombatCard || !defender.IsCombatCard) 
+            player = attackingPlayer;
+            attacker = CardManager.Instance.GetCardByGameId(attackerGameID) as ICombatCard;
+            defender = CardManager.Instance.GetCardByGameId(defenderGameID) as ICombatCard;
+
+            if (attacker == null || defender == null || !attacker.IsCombatCard || !defender.IsCombatCard) 
             {
                 throw new ArgumentException("Tried to create an Attack Action with non Combat Card(s)!");
             }
-
-            this.attacker = attacker as ICombatCard;
-            this.defender = defender as ICombatCard;
 
             this.combatSystem = combatSystem ?? CombatSystem.Instance;
         }
@@ -27,14 +27,28 @@ namespace Game.Logic.Actions
         public bool IsLegal()
         {
             //Debug.Log($"Checking if Attack is Legal: {attacker.StateMachine.CurrentState.StateType} - {defender.StateMachine.CurrentState.StateType}");
-            return true; // attacker.CanAttack && defender.IsTargatable;
+            return attacker.CanAttack 
+                && defender.IsTargatable 
+                && TurnManager.Instance.IsCurrentPlayer(player.playerData.ClientId);
         }
 
         public void Execute()
         {
-            combatSystem.AttackCard(attacker, defender);
+            Tuple<int, int> damage = combatSystem.AttackCard(attacker, defender);
 
             attacker.HandleAction(CardActions.Attack);
+
+            ActionData actionData = new ActionData
+            {
+                ActionType = ActionType.AttackCard,
+                PlayerId = player.playerData.ClientId,
+                CardGameID = attacker.Data.GameID,
+                TargetCardGameID = defender.Data.GameID,
+                Damage = damage.Item1,
+                DamageReceived = damage.Item2,
+            };
+
+            GameplayManager.Instance.BroadcastActionExecutedRpc(actionData);
         }
     }
 }

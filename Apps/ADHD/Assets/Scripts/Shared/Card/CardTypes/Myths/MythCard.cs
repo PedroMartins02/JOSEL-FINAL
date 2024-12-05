@@ -2,6 +2,7 @@ using Game.Data;
 using GameModel;
 using System.Collections;
 using System.Collections.Generic;
+using Game.Logic.Modifiers;
 
 public class MythCard : Card
 {
@@ -29,6 +30,18 @@ public class MythCard : Card
     {
         return new CardData(cardData, gameID);
     }
+
+    #region Modifiers
+    public override void ApplyModifier(Modifier modifier)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override void RemoveModifier(Modifier modifier)
+    {
+        throw new System.NotImplementedException();
+    }
+    #endregion
 
     #region Conditions
     public override bool CanAttack

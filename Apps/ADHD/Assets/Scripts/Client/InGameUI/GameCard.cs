@@ -12,6 +12,10 @@ using Unity.VisualScripting;
 using Game.Logic.Actions;
 using Game.Logic;
 using Unity.Netcode;
+using Game.Multiplayer;
+using UnityEngine.InputSystem;
+using System.Linq;
+using GameCore.Events;
 
 public class GameCard : NetworkBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
 {
@@ -55,8 +59,7 @@ public class GameCard : NetworkBehaviour, IDragHandler, IBeginDragHandler, IEndD
     private GameObject detectedOpponent;
 
     public GameCardStateMachine stateMachine;
-
-    NetworkVariable<CardDataSnapshot> cardDataSnapshot = new NetworkVariable<CardDataSnapshot>();
+    public int GameID;
 
     [HideInInspector] public Card cardData;
 
@@ -76,6 +79,9 @@ public class GameCard : NetworkBehaviour, IDragHandler, IBeginDragHandler, IEndD
 
         stateMachine = new GameCardStateMachine();
         stateMachine.SetState(new IdleState(this));
+
+        ClientCardManager.Instance.OnSnapshotRegistered += SetCardData;
+        ClientCardManager.Instance.OnSnapshotUpdated += UpdateCardData;
     }
 
     void Update() => stateMachine.Update();
@@ -93,27 +99,63 @@ public class GameCard : NetworkBehaviour, IDragHandler, IBeginDragHandler, IEndD
         }
         else
         {
-            cardDataSnapshot.OnValueChanged += UpdateCardData;
+
         }
+    }
+
+    public void FlipCard()
+    {
+        isMine = false;
+        cardVisual.FlipCard();
     }
 
     public void SetCardData(CardDataSnapshot cardData)
     {
-        cardVisual.SetCardData(cardData);
-    }
+        if (cardData.GameID != GameID) return;
 
-    [ServerRpc]
-    public void UpdateCardDataServerRpc()
-    {
-        CardDataSnapshot updatedData = CardManager.Instance.GetCardSnapshot(cardDataSnapshot.Value.GameID);
-
-        cardDataSnapshot.Value = updatedData;
+        if (ShouldISeeThisCard(this, cardData))
+            cardVisual.SetCardData(cardData);
     }
 
     public void UpdateCardData(CardDataSnapshot previousData, CardDataSnapshot newData)
     {
-        cardVisual.UpdateCardData(newData);
+        if ((previousData.GameID != GameID) || (newData.GameID != GameID)) return;
+
+        if (newData.CurrentState == CardStateType.Discarded)
+        {
+            cardVisual.UpdateState(newData.CurrentState);
+            DiscardCard();
+            return;
+        }
+
+        if (isMine) {
+            cardVisual.UpdateState(newData.CurrentState);
+        }
+
+        if (ShouldISeeThisCard(this, newData)) {
+            if (ShouldISeeThisCard(this, previousData))
+            {
+                cardVisual.UpdateCardData(newData);
+            }
+            else
+            {
+                cardVisual.SetCardData(newData);
+            }
+        }
     }
+
+    public void DiscardCard()
+    {
+        stateMachine.SetState(new UIDiscardedState(this));
+        EventManager.TriggerEvent(GameEventsEnum.CardDied, this);
+    }
+
+    public bool ShouldISeeThisCard(GameCard gameCard, CardDataSnapshot cardData) =>
+        (gameCard.isMine &&
+            (cardData.GameID == gameCard.GameID)) ||
+        ((cardData.GameID == gameCard.GameID) &&
+            (cardData.CurrentState != CardStateType.InHand) &&
+            (cardData.CurrentState != CardStateType.InDeck));
 
     public void ClampPosition()
     {
@@ -283,8 +325,10 @@ public class GameCard : NetworkBehaviour, IDragHandler, IBeginDragHandler, IEndD
         return transform.parent.CompareTag("Slot") ? ExtensionMethods.Remap((float)ParentIndex(), 0, (float)(transform.parent.parent.childCount - 1), 0, 1) : 0;
     }
 
-    private void OnDestroy()
+    public override void OnDestroy()
     {
+        base.OnDestroy();
+
         if (cardVisual != null)
             Destroy(cardVisual.gameObject);
     }
@@ -370,13 +414,8 @@ public class GameCard : NetworkBehaviour, IDragHandler, IBeginDragHandler, IEndD
         }
     }
 
-    private void PlayCardOnBoard(GameObject playerBoardArea)
+    public void PlayCardOnBoard(GameObject playerBoardArea)
     {
-        /*
-        PlayCardAction action = new(cardData);
-        ActionQueueManager.Instance.AddAction(action);
-        */
-
         HorizontalCardHolder horizontalCardHolder = GetComponentInParent<HorizontalCardHolder>();
         horizontalCardHolder.RemoveCard(this);
         horizontalCardHolder.UpdateIndexes();
@@ -392,37 +431,33 @@ public class GameCard : NetworkBehaviour, IDragHandler, IBeginDragHandler, IEndD
 
     private void PlayCard(GameObject playerBoardArea)
     {
-        if (cardData.GetType() == typeof(BattleTacticCard))
+        CardDataSnapshot cardSnapshot = ClientCardManager.Instance.GetCardSnapshotByGameId(GameID);
+
+        switch (cardSnapshot.CardType)
         {
-            //TRY PLAY BATTLE TACTIC
-            // if can't play card, don't run the code below
-            PlayCardEffect(true);
-        } 
-        else if (cardData.GetType() == typeof(UnitCard))
-        {
-            // TRY PLAY CARD 
-            // if can't play card, don't run the code below
-            PlayCardOnBoard(playerBoardArea);
-        } else if (cardData.GetType() == typeof(LegendCard))
-        {
-            // TRY PLAY CARD 
-            // if can't play card, don't run the code below
-            PlayCardOnBoard(playerBoardArea);
-            PlayCardEffect(false);
+            case CardType.BattleTactic:
+                //TRY PLAY BATTLE TACTIC
+                // if can't play card, don't run the code below
+               
+                //PlayCardEffect(true);
+                break;
+            case CardType.Unit:
+                ActionRequestHandler.Instance.HandlePlayCardRequestServerRpc(GameID);
+                break;
+            case CardType.Legend:
+                ActionRequestHandler.Instance.HandlePlayCardRequestServerRpc(GameID);
+                //PlayCardEffect(false);
+                return;
         }
     }
 
     private void AttackCard(GameObject targetCard)
     {
-        // TRY ATTACK CARD
-
         targetCard.TryGetComponent(out GameCard target);
 
         try
         {
-            AttackCardAction action = new(cardData, target.cardData);
-
-            ActionQueueManager.Instance.AddAction(action);
+            ActionRequestHandler.Instance.HandleAttackCardRequestServerRpc(GameID, target.GameID, NetworkManager.Singleton.LocalClientId);
         }
         catch (Exception e)
         {
@@ -432,6 +467,20 @@ public class GameCard : NetworkBehaviour, IDragHandler, IBeginDragHandler, IEndD
 
     private void AttackOpponent(GameObject targetOpponent)
     {
-        // TRY ATTACK OPPONENT
+        Debug.Log("Attacking opponent");
+
+        try
+        {
+            // TODO: Should get playerID from "targetOpponent" but for now, there are only 2 players so to save time we are just going to get the other player's ID from the NetworkManager
+
+            ulong clientID = NetworkManager.Singleton.LocalClientId;
+            ulong targetPlayerID = NetworkManager.Singleton.ConnectedClientsIds.First((id) => id != clientID);
+
+            ActionRequestHandler.Instance.HandleAttackMythRequestServerRpc(clientID, targetPlayerID, GameID);
+        }
+        catch (Exception e)
+        {
+            Debug.LogException(e);
+        }
     }
 }

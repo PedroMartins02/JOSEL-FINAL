@@ -31,19 +31,16 @@ EditorBuildSettings:
     guid: 3d27904bb6eef5d49b9cb164fca647a8
   - enabled: 1
     path: Assets/Scenes/Game.unity
-    guid: 41acb13558d170e4b8da2ae873ce8920
+    guid: cedfa9234ffff1a4fbe66aedbda174b4
   - enabled: 1
     path: Assets/Scenes/MatchResultScene.unity
     guid: 9898b3883b8f8224eaa2f0502a43d130
-  - enabled: 0
-    path: Assets/Scenes/GameCleanupScene.unity
-    guid: 9a89a77346c425e4e948751442d9a026
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 7d1eb4e1e2eb752488c0e170f48c335b,
       type: 2}
-    com.unity.xr.arfoundation.simulation_settings: {fileID: 11400000, guid: 2b55480cc5535c84eb2d17c7b31b1c5f,
+    com.unity.xr.arfoundation.simulation_settings: {fileID: 11400000, guid: a5384e0db20b88241ba89a9be89b96b4,
       type: 2}
-    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: ebcc273ce1ae6e54d9067e0f09f9ceba,
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 2df39cebfc603cd48ab79b065255a82a,
       type: 2}
-    com.unity.xr.openxr.settings4: {fileID: 11400000, guid: e01d8e3a39ab1d84485beefe135e78e3,
+    com.unity.xr.openxr.settings4: {fileID: 11400000, guid: 2471c6be01dbf634188bd6e4728a17cc,
       type: 2}

@@ -27,6 +27,11 @@ namespace Game.Logic.Actions.UI
             }
         }
 
+        private void OnDestroy()
+        {
+            ClearQueue();
+        }
+
         public void EnqueueAction(IUIAction action)
         {
             uiActionQueue.Enqueue(action);

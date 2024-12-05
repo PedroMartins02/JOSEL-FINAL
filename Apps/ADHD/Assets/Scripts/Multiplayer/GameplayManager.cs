@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
+using Game.Log;
 using Game.Logic;
 using Game.Logic.Actions;
 using Game.Logic.Actions.UI;
+using GameCore.Events;
 using GameModel;
 using Unity.Netcode;
-using Unity.Services.Lobbies.Models;
-using UnityEngine;
 using UnityEngine.SceneManagement;
-using static LobbyManager;
 
 public class GameplayManager : NetworkBehaviour
 {
@@ -68,6 +67,10 @@ public class GameplayManager : NetworkBehaviour
         if (IsServer)
         {
             NetworkManager.Singleton.SceneManager.OnLoadEventCompleted += SetupGame;
+
+            EventManager.Subscribe(GameEventsEnum.TurnStarted, HandleTurnStarted);
+            EventManager.Subscribe(GameEventsEnum.TurnEnded, HandleTurnEnded);
+            EventManager.Subscribe(GameEventsEnum.CardStateChanged, HandleTurnEnded);
         }
 
         base.OnNetworkSpawn();
@@ -76,15 +79,13 @@ public class GameplayManager : NetworkBehaviour
     private void SetupGame(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
     {
         if (clientsTimedOut.Count > 0)
-            GameOver();
+            GameOverRpc(clientsTimedOut[0]);
 
         List<GameRule> rules = MultiplayerManager.Instance.GetLobbyGameRules();
         GameRulesManager.Instance.IntializeGameRules(rules);
 
         foreach (ulong clientId in NetworkManager.Singleton.ConnectedClientsIds)
         {
-            Debug.Log("Registering Player: " + clientId);
-
             MP_PlayerData playerData = MultiplayerManager.Instance.GetPlayerDataFromClientId(clientId);
 
             PlayerManager.Instance.CreatePlayer(clientId, playerData);
@@ -93,27 +94,19 @@ public class GameplayManager : NetworkBehaviour
         CurrentGameState.Value = GameState.Playing;
 
         StartGameClientRpc(GameRulesManager.Instance.GetIntRuleValue(RuleTarget.StartingHandSize));
+        TurnManager.Instance.StartTurnRpc();
     }
 
     [Rpc(SendTo.ClientsAndHost)]
     private void StartGameClientRpc(int cardsToDraw)
     {
-        StartGame();
-
         ActionRequestHandler.Instance.HandleDrawCardRequestServerRpc(cardsToDraw, NetworkManager.Singleton.LocalClientId);
     }
 
-    private void StartGame()
+    [Rpc(SendTo.Server)]
+    public void BroadcastActionExecutedRpc(ActionData actionData)
     {
-        
-    }
-
-    public void BroadcastActionExecuted(ActionData actionData)
-    {
-        if (IsServer)
-        {
-            NotifyActionExecutedClientRpc(actionData);
-        }
+        NotifyActionExecutedClientRpc(actionData);
     }
 
     [Rpc(SendTo.ClientsAndHost)]
@@ -124,13 +117,92 @@ public class GameplayManager : NetworkBehaviour
         UIActionQueueManager.Instance.EnqueueAction(uiAction);
     }
 
+    [Rpc(SendTo.Server)]
+    public void BroadcasUpdatePlayerInfoRpc()
+    {
+        EventManager.TriggerEvent(GameEventsEnum.PlayerInfoChanged);
+    }
+
     public GameState GetCurrentGameState()
     {
         return this.CurrentGameState.Value;
     }
 
-    private void GameOver()
+    private void HandleTurnStarted(object args)
     {
+        Player player = HandleTurnEventArgs(args);
 
+        if (player == null) return;
+
+        ulong playerID = (ulong)args;
+
+        if (TurnManager.Instance.CurrentTurn > 2)
+        {
+            player.RaiseMaxBlessings(GameRulesManager.Instance.GetIntRuleValue(RuleTarget.BlessingPerTurn));
+            player.RestockBlessings();
+        }
+
+        ActionRequestHandler.Instance.HandleDrawCardRequestServerRpc(GameRulesManager.Instance.GetIntRuleValue(RuleTarget.CardsDrawnPerTurn), playerID);
+
+        EventManager.TriggerEvent(GameEventsEnum.PlayerInfoChanged);
+    }
+
+    private void HandleTurnEnded(object args)
+    {
+        Player currentTurnPlayer = HandleTurnEventArgs(args);
+
+        if (currentTurnPlayer == null) return;
+
+        foreach (Player player in PlayerManager.Instance.PlayerList)
+        {
+            if (player.CurrentHealth <= 0)
+                GameOverRpc(player.playerData.ClientId);
+        }
+    }
+
+    private Player HandleTurnEventArgs(object args)
+    {
+        if ((args.GetType() != typeof(ulong)) || !IsServer) return null;
+
+        ulong playerID = (ulong)args;
+
+        Player player = PlayerManager.Instance.GetPlayerByClientId(playerID);
+
+        return player;
+    }
+
+    [Rpc(SendTo.ClientsAndHost)]
+    public void GameOverRpc(ulong losingPlayerID)
+    {
+        foreach (ulong clientId in NetworkManager.Singleton.ConnectedClientsIds)
+        {
+            if (clientId == NetworkManager.Singleton.LocalClientId) continue;
+
+            MP_PlayerData playerData = MultiplayerManager.Instance.GetPlayerDataFromClientId(clientId);
+            GameLog.Instance.SetOpponentMMR(playerData.MMR);
+        }
+
+        if (IsServer)
+        {
+            SceneInstancesCleanupRpc();
+        }
+
+        GameLog.Instance.SetPlayerWon(losingPlayerID != NetworkManager.Singleton.LocalClientId);
+
+        NetworkManager.Singleton.Shutdown();
+
+        SceneLoader.ExitNetworkLoad(SceneLoader.Scene.MatchResultScene);
+    }
+
+    [Rpc(SendTo.Server)]
+    private void SceneInstancesCleanupRpc()
+    {
+        PlayerManager.Instance.Clear();
+        CardManager.Instance.Clear();
+
+        ActionQueueManager.Instance.ClearQueue();
+
+        EventManager.Unsubscribe(GameEventsEnum.TurnStarted, HandleTurnStarted);
+        EventManager.Unsubscribe(GameEventsEnum.TurnEnded, HandleTurnEnded);
     }
 }

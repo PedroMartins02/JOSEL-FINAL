@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40d5e5baf0e005248a06fdbfd3f36b64, type: 3}
+  m_Name: Sherden Warrior
+  m_EditorClassIdentifier: 
+  Id: f6e3-305944
+  Name: Sherden Warrior
+  ShortText: Mercenary of the Nile
+  Description: The Sherden fought for gold and glory, their horned helmets striking
+    fear into their foes.
+  Art: {fileID: 21300000, guid: a93eb704558e0114a9ec8f5d740aee24, type: 3}
+  Faction: 3
+  Element: 1
+  Blessings: 3
+  Attack: 3
+  Health: 3

@@ -65,15 +65,22 @@ public class UI_QuickGameController : MonoBehaviour
             cancelQueueBtn.enabled = false;
             isJoiningMatch = true;
             cancelQueueBtn.gameObject.SetActive(false);
-            LobbyManager.Instance.ClearJoinedLobby();
+            StartCoroutine(WaitCoroutineClient());
         }
     }
 
     IEnumerator WaitCoroutine()
     {
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(10);
 
         LobbyManager.Instance.JoinQuickMatchGame();
+    }
+
+    IEnumerator WaitCoroutineClient()
+    {
+        yield return new WaitForSeconds(6);
+
+        LobbyManager.Instance.ClearJoinedLobby();
     }
 
     private void Update()
@@ -124,9 +131,6 @@ public class UI_QuickGameController : MonoBehaviour
 
     private void OnDestroy()
     {
-        if(LobbyManager.Instance != null) 
-            LobbyManager.Instance.LeaveLobby();
-
         LobbyManager.Instance.OnQuickMatchStarted -= LobbyManager_OnQuickMatchStarted;
         LobbyManager.Instance.OnQuickMatchFailed -= LobbyManager_OnQuickMatchFailed;
         LobbyManager.Instance.OnJoinedLobbyUpdate -= LobbyManager_OnJoinedLobbyUpdate;

@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 using GameModel;
 using TMPro;
 using Game.Data;
+using Game.Logic;
 
 public class GameCardVisual : MonoBehaviour
 {
@@ -90,6 +91,27 @@ public class GameCardVisual : MonoBehaviour
 
         //Initialization
         initalize = true;
+    }
+
+    public void UpdateState(CardStateType state)
+    {
+        CardUI cardUI = GetComponentInChildren<CardUI>();
+        if (cardUI != null)
+        {
+            cardUI.UpdateState(state);
+        }
+    }
+
+    public void FlipCard()
+    {
+        //gameObject.SetActive(false);
+        transform.DOScale(1, scaleTransition).SetEase(scaleEase);
+        foreach (Transform transform in cardVisual)
+        {
+            Destroy(transform.gameObject);
+        }
+        GameObject cardFront = Instantiate(cardBackPrefab, cardVisual);
+        shadowImage.sprite = cardBackSprite;
     }
 
     public void SetCardData(CardDataSnapshot cardData)

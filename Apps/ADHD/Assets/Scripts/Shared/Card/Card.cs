@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using Game.Logic;
+using Game.Logic.Modifiers;
 using Game.Utils.Logic;
 using Game.Data;
+using GameCore.Events;
 
 namespace GameModel
 {
@@ -27,6 +29,9 @@ namespace GameModel
             this.Data = CardDataWithID(cardData, gameID);
 
             CardManager.Instance.UpdateCard(this);
+
+            StateMachine = new StateMachine<CardStateType, CardActions>();
+            StateMachine.OnStateChanged += OnStateChangedEvent;
         }
 
         protected abstract CardData CardDataWithID(CardData cardData, int gameID);
@@ -48,16 +53,21 @@ namespace GameModel
 
         }
 
-        public void ApplyModifier(Modifier modifier)
+        public abstract void ApplyModifier(Modifier modifier);
+
+        public abstract void RemoveModifier(Modifier modifier);
+
+        private void OnStateChangedEvent(CardStateType oldCardState, CardStateType newCardState)
         {
+            CardStateChangedEventArgs args = new CardStateChangedEventArgs
+            {
+                CardGameID = Data.GameID,
+                OldCardState = oldCardState,
+                NewCardState = newCardState,
+            };
 
+            EventManager.TriggerEvent(GameEventsEnum.CardStateChanged, args);
         }
-
-        public void RemoveModifier(Modifier modifier)
-        {
-
-        }
-
 
         #region Modifiers
         public void IncreaseBlessingCost(int amount)

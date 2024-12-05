@@ -31,6 +31,12 @@ namespace Game.Logic
             cards = new();
         }
 
+        public void Clear()
+        {
+            cards = new();
+            nextAvailableId = 0;
+        }
+
         public int RegisterCard(ICard card)
         {
             int cardId = nextAvailableId;
@@ -61,7 +67,7 @@ namespace Game.Logic
             cards.Remove(cardId);
         }
 
-        public ICard GetCardByNetworkId(int cardId)
+        public ICard GetCardByGameId(int cardId)
         {
             cards.TryGetValue(cardId, out ICard card);
             return card;

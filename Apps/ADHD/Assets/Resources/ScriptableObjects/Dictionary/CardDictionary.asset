@@ -16,6 +16,8 @@ MonoBehaviour:
     DictItems:
     - Id: 8673-102990
       ItemCardSO: {fileID: 11400000, guid: 973e2b4d59ccc2b46b1f78852a226259, type: 2}
+    - Id: 74f2-50844
+      ItemCardSO: {fileID: 11400000, guid: db7d9a0f984b9e846a7f868930e6afba, type: 2}
     - Id: 225d-103122
       ItemCardSO: {fileID: 11400000, guid: 93b6420f86a3c424cbe9fc29c744c37f, type: 2}
     - Id: 7c93-100510
@@ -24,6 +26,20 @@ MonoBehaviour:
       ItemCardSO: {fileID: 11400000, guid: b6d5345e932edb54cbd056ffdc21dc77, type: 2}
     - Id: d0ff-10476
       ItemCardSO: {fileID: 11400000, guid: 98e14ec1d65bf0947b12607ef25be00f, type: 2}
+    - Id: b6e3-306386
+      ItemCardSO: {fileID: 11400000, guid: 87170b190129311448529131d62ed0f2, type: 2}
+    - Id: a1a2-305598
+      ItemCardSO: {fileID: 11400000, guid: e91e82fddf2ebd14a8a3a2a1deaa0eea, type: 2}
+    - Id: 7f4c-305428
+      ItemCardSO: {fileID: 11400000, guid: 0f1e3e1f8db6b3047a8720b9fbe374e9, type: 2}
+    - Id: cf31-253238
+      ItemCardSO: {fileID: 11400000, guid: 38faa93042c29f943bfff88e1002e2bb, type: 2}
+    - Id: a510-306538
+      ItemCardSO: {fileID: 11400000, guid: 9f74894a98bed8a46809e2a79cf322b7, type: 2}
+    - Id: f6e3-305944
+      ItemCardSO: {fileID: 11400000, guid: 32788d77f12be434190526d77da06790, type: 2}
+    - Id: e599-306234
+      ItemCardSO: {fileID: 11400000, guid: d0c59692b99c0ad4f8fc04acb1f303ae, type: 2}
     - Id: 9516-33854
       ItemCardSO: {fileID: 11400000, guid: 4d1813316f5093e4c81fe60c9c25cd7a, type: 2}
     - Id: f9e3-33308
@@ -46,8 +62,14 @@ MonoBehaviour:
       ItemCardSO: {fileID: 11400000, guid: 760aaf89801f46b44bbffc6fdb44c4af, type: 2}
     - Id: e5d941168
       ItemCardSO: {fileID: 11400000, guid: a38b178dd189ac74ea507def185f3629, type: 2}
+    - Id: 406f-180156
+      ItemCardSO: {fileID: 11400000, guid: 3544f5a078b47c449a621e081acd39e9, type: 2}
+    - Id: 4b85-181322
+      ItemCardSO: {fileID: 11400000, guid: ff88224814aebea4dbeb3e4a339b0f23, type: 2}
     - Id: a1eb42070
       ItemCardSO: {fileID: 11400000, guid: b9388999da9b98b4cb516f16632f1386, type: 2}
+    - Id: 26f9-180806
+      ItemCardSO: {fileID: 11400000, guid: 3db88901b1bf9094fa25129ef97d74d2, type: 2}
     - Id: 8a6441240
       ItemCardSO: {fileID: 11400000, guid: 23c71cf37cad32841a1a16ec1f400a74, type: 2}
     - Id: b08741014

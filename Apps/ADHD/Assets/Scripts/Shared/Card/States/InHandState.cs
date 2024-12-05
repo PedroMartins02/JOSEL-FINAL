@@ -36,7 +36,7 @@ namespace Game.Logic
             switch (action)
             {
                 case CardActions.Play:
-                    card.StateMachine.SetState(CardStateType.InPlay);
+                    card.StateMachine.SetState(CardStateType.Exhausted);
                     break;
             }
         }

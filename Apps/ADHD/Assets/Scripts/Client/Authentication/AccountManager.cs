@@ -39,6 +39,8 @@ public class AccountManager : MonoBehaviour
     }
 
     private PlayerData playerData;
+    public Elements WeatherElement { get; set; }
+    public Elements TimeElement { get; set; }
 
     public PlayerData GetPlayerData()
     {

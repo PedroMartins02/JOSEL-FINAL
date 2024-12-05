@@ -5,9 +5,11 @@ using System.Threading.Tasks;
 using Unity.Collections;
 using Unity.Netcode;
 using Unity.Services.Authentication;
+using Unity.Services.Lobbies.Models;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static LobbyManager;
 
 /**
  * This Class serves for handling the network connection (not to confuse with lobby joing/disconnect) and the player's data
@@ -60,7 +62,7 @@ public class MultiplayerManager : NetworkBehaviour
     public void StartHost()
     {
         // The event for the host when he needs to approve a connection
-        NetworkManager.Singleton.ConnectionApprovalCallback += NetworkManager_ConnectionApprovalCallback;
+        //NetworkManager.Singleton.ConnectionApprovalCallback += NetworkManager_ConnectionApprovalCallback;
         // Populates the NetworkList with it self's data
         NetworkManager.Singleton.OnClientConnectedCallback += NetworkManager_OnClientConnectedCallback;
         // If player disconnects, clear his data from the NetworkList
@@ -91,14 +93,32 @@ public class MultiplayerManager : NetworkBehaviour
             clientId = clientId,
         });
 
-        var playerData = AccountManager.Singleton.GetPlayerData();
+        PlayerData playerData = AccountManager.Singleton.GetPlayerData();
         if (playerData == null)
         {
             return;
         }
 
-        SetPlayerNameServerRpc(playerData.Name); ;
+        // Only add deck if its a quick match
+        Lobby lobby = LobbyManager.Instance.GetLobby();
+
+        if (lobby != null && lobby.Data["Type"].Value == LobbyType.QuickMatch.ToString())
+        {
+            Debug.Log("here host");
+
+            List<DeckData> deckLists = playerData.DeckCollection;
+            int deckId = playerData.SelectedDeckId;
+            DeckData deck = deckLists[deckId];
+            SetPlayerDeck(deck);
+
+            Debug.Log("deck: " + DeckData.SerializeDeckData(deck));
+        }
+        
+        SetPlayerWeatherServerRpc(AccountManager.Singleton.WeatherElement);
+        SetPlayerTimeServerRpc(AccountManager.Singleton.TimeElement);
+        SetPlayerNameServerRpc(playerData.Name);
         SetPlayerIdServerRpc(AuthenticationService.Instance.PlayerId);
+        SetPlayerMMRServerRpc(AccountManager.Singleton.GetPlayerData().MMR);
     }
 
     private void NetworkManager_ConnectionApprovalCallback(NetworkManager.ConnectionApprovalRequest connectionApprovalRequest, NetworkManager.ConnectionApprovalResponse connectionApprovalResponse)
@@ -148,21 +168,40 @@ public class MultiplayerManager : NetworkBehaviour
             return;
         }
 
+        // Only add deck if its a quick match
+        Lobby lobby = LobbyManager.Instance.GetLobby();
+
+        if (lobby != null && LobbyManager.Instance.isQuick)
+        {
+            Debug.Log("here client");
+
+            List<DeckData> deckLists = playerData.DeckCollection;
+            int deckId = playerData.SelectedDeckId;
+            DeckData deck = deckLists[deckId];
+            SetPlayerDeck(deck);
+
+            Debug.Log("deck: " + DeckData.SerializeDeckData(deck));
+        }
+
+
+        SetPlayerWeatherServerRpc(AccountManager.Singleton.WeatherElement);
+        SetPlayerTimeServerRpc(AccountManager.Singleton.TimeElement);
         SetPlayerNameServerRpc(playerData.Name);
         SetPlayerIdServerRpc(AuthenticationService.Instance.PlayerId);
+        SetPlayerMMRServerRpc(AccountManager.Singleton.GetPlayerData().MMR);
 
         // Request the Lobby Game Rules
         RequestRulesServerRpc();
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    public void RequestRulesServerRpc(ServerRpcParams rpcParams = default)
+    [Rpc(SendTo.Server)]
+    public void RequestRulesServerRpc(RpcParams rpcParams = default)
     {
         string serializedRules = GameModel.GameRule.SerializeGameRules(this.lobbyGameRules);
         SendRulesClientRpc(serializedRules, rpcParams.Receive.SenderClientId);
     }
 
-    [ClientRpc]
+    [Rpc(SendTo.ClientsAndHost)]
     private void SendRulesClientRpc(string serializedRules, ulong clientId)
     {
         if (NetworkManager.Singleton.LocalClientId == clientId)
@@ -171,10 +210,34 @@ public class MultiplayerManager : NetworkBehaviour
         }
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    private void SetPlayerNameServerRpc(string playerUsername, ServerRpcParams serverRpcParams = default)
+    [Rpc(SendTo.Server)]
+    private void SetPlayerWeatherServerRpc(GameModel.Elements playerWeather, RpcParams rpcParams = default)
     {
-        int playerDataIndex = GetPlayerDataIndexFromClientId(serverRpcParams.Receive.SenderClientId);
+        int playerDataIndex = GetPlayerDataIndexFromClientId(rpcParams.Receive.SenderClientId);
+        MP_PlayerData playerData = playerDataNetworkList[playerDataIndex];
+
+        playerData.playerWeather = playerWeather;
+
+        playerDataNetworkList[playerDataIndex] = playerData;
+    }
+
+
+    [Rpc(SendTo.Server)]
+    private void SetPlayerTimeServerRpc(GameModel.Elements playerTime, RpcParams rpcParams = default)
+    {
+        int playerDataIndex = GetPlayerDataIndexFromClientId(rpcParams.Receive.SenderClientId);
+        MP_PlayerData playerData = playerDataNetworkList[playerDataIndex];
+
+        playerData.playerTime = playerTime;
+
+        playerDataNetworkList[playerDataIndex] = playerData;
+    }
+
+
+    [Rpc(SendTo.Server)]
+    private void SetPlayerNameServerRpc(string playerUsername, RpcParams rpcParams = default)
+    {
+        int playerDataIndex = GetPlayerDataIndexFromClientId(rpcParams.Receive.SenderClientId);
         MP_PlayerData playerData = playerDataNetworkList[playerDataIndex];
 
         playerData.playerUsername = playerUsername;
@@ -182,14 +245,26 @@ public class MultiplayerManager : NetworkBehaviour
         playerDataNetworkList[playerDataIndex] = playerData;
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    private void SetPlayerIdServerRpc(string playerId, ServerRpcParams serverRpcParams = default)
+    [Rpc(SendTo.Server)]
+    private void SetPlayerIdServerRpc(string playerId, RpcParams rpcParams = default)
     {
-        int playerDataIndex = GetPlayerDataIndexFromClientId(serverRpcParams.Receive.SenderClientId);
+        int playerDataIndex = GetPlayerDataIndexFromClientId(rpcParams.Receive.SenderClientId);
 
         MP_PlayerData playerData = playerDataNetworkList[playerDataIndex];
 
         playerData.playerId = playerId;
+
+        playerDataNetworkList[playerDataIndex] = playerData;
+    }
+
+    [Rpc(SendTo.Server)]
+    private void SetPlayerMMRServerRpc(int MMR, RpcParams rpcParams = default)
+    {
+        int playerDataIndex = GetPlayerDataIndexFromClientId(rpcParams.Receive.SenderClientId);
+
+        MP_PlayerData playerData = playerDataNetworkList[playerDataIndex];
+
+        playerData.MMR = MMR;
 
         playerDataNetworkList[playerDataIndex] = playerData;
     }
@@ -325,10 +400,10 @@ public class MultiplayerManager : NetworkBehaviour
         return this.selectedDeckData;
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    private void SetPlayerDeckServerRpc(string serializedDeck, ServerRpcParams serverRpcParams = default)
+    [Rpc(SendTo.Server)]
+    private void SetPlayerDeckServerRpc(string serializedDeck, RpcParams rpcParams = default)
     {
-        int playerDataIndex = GetPlayerDataIndexFromClientId(serverRpcParams.Receive.SenderClientId);
+        int playerDataIndex = GetPlayerDataIndexFromClientId(rpcParams.Receive.SenderClientId);
         MP_PlayerData playerData = playerDataNetworkList[playerDataIndex];
 
         playerData.playerDeck = serializedDeck;
@@ -343,7 +418,7 @@ public class MultiplayerManager : NetworkBehaviour
         {
             if (IsServer)
             {
-                NetworkManager.Singleton.ConnectionApprovalCallback -= NetworkManager_ConnectionApprovalCallback;
+                //NetworkManager.Singleton.ConnectionApprovalCallback -= NetworkManager_ConnectionApprovalCallback;
                 NetworkManager.Singleton.OnClientConnectedCallback -= NetworkManager_OnClientConnectedCallback;
                 NetworkManager.Singleton.OnClientDisconnectCallback -= NetworkManager_Server_OnClientDisconnectCallback;
             }

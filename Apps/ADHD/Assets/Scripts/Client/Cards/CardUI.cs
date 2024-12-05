@@ -1,4 +1,5 @@
 using Game.Data;
+using Game.Logic;
 using GameModel;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,10 +9,24 @@ using UnityEngine.UI;
 
 public class CardUI : MonoBehaviour
 {
+    [Header("Attack Sprites")]
+    [SerializeField] private Sprite CanAttack;
+    [SerializeField] private Sprite CannotAttack;
+
+    [Header("Frame Sprites")]
     [SerializeField] private Sprite UnitFrame;
     [SerializeField] private Sprite BattleTacticFrame;
     [SerializeField] private Sprite LegendFrame;
 
+    [Header("Element Sprites")]
+    [SerializeField] private Sprite FireSprite;
+    [SerializeField] private Sprite AirSprite;
+    [SerializeField] private Sprite EarthSprite;
+    [SerializeField] private Sprite WaterSprite;
+    [SerializeField] private Sprite LightSprite;
+    [SerializeField] private Sprite DarkSprite;
+
+    [Header("References")]
     [SerializeField] private Image ElementIcon;
 
     [SerializeField] private GameObject BlessingsIcon;
@@ -25,11 +40,11 @@ public class CardUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI CardName;
     [SerializeField] private TextMeshProUGUI CivilizationName;
     [SerializeField] private TextMeshProUGUI ShortText;
+    [SerializeField] private TextMeshProUGUI LongText;
 
     [SerializeField] private Image CardArt;
     [SerializeField] private Image CardFrame;
-
-    [SerializeField] private GameObject TagArea;
+    [SerializeField] private Image AttackIndicator;
 
     void Start()
     {
@@ -94,20 +109,31 @@ public class CardUI : MonoBehaviour
 
         if (cardSO == null) return;
 
-        CardName.text = cardSO.Name;
-        ShortText.text = cardSO.ShortText;
-        BlessingsText.text = cardSO.Blessings.ToString();
-        CivilizationName.text = cardSO.Faction.ToString();
-        CardArt.sprite = cardSO.Art;
+        SetGeneralUI(cardSO);
     }
 
     private void SetGeneralUI(CardSO card)
     {
         CardName.text = card.Name;
         ShortText.text = card.ShortText;
+        LongText.text = card.Description;
         BlessingsText.text = card.Blessings.ToString();
         CivilizationName.text = card.Faction.ToString();
         CardArt.sprite = card.Art;
+        if (card.Element == Elements.Fire)
+            ElementIcon.sprite = FireSprite;
+        else if (card.Element == Elements.Air)
+            ElementIcon.sprite = AirSprite;
+        else if (card.Element == Elements.Earth)
+            ElementIcon.sprite = EarthSprite;
+        else if (card.Element == Elements.Water)
+            ElementIcon.sprite = WaterSprite;
+        else if (card.Element == Elements.Light)
+            ElementIcon.sprite = LightSprite;
+        else if (card.Element == Elements.Dark)
+            ElementIcon.sprite = DarkSprite;
+        else 
+            ElementIcon.enabled = false;
     }
 
 
@@ -168,5 +194,38 @@ public class CardUI : MonoBehaviour
         AttackText.text = card.CurrentAttack.ToString();
         HealthText.text = card.CurrentHealth.ToString();
         //Effects
+    }
+
+    public void UpdateState(CardStateType state)
+    {
+        if (state == CardStateType.Exhausted)
+        {
+            SetExhausted();
+        }
+        else if (state == CardStateType.InPlay)
+        {
+            SetCanAttack();
+        }
+        else
+        {
+            SetDefaultState();
+        }
+    }
+
+    public void SetCanAttack()
+    {
+        AttackIndicator.sprite = CanAttack;
+        AttackIndicator.gameObject.SetActive(true);
+    }
+
+    public void SetExhausted()
+    {
+        AttackIndicator.sprite = CannotAttack;
+        AttackIndicator.gameObject.SetActive(true);
+    }
+
+    public void SetDefaultState()
+    {
+        AttackIndicator.gameObject.SetActive(false);
     }
 }

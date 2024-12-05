@@ -6,8 +6,15 @@ using UnityEngine;
 
 public class HomeManager : MonoBehaviour
 {
-
+    [SerializeField] private GameObject tutorialUI;
+   
     void Start()
     {
+        tutorialUI.SetActive(false);
+    }
+
+    public void OpenTutorial()
+    {
+        tutorialUI.SetActive(true);
     }
 }

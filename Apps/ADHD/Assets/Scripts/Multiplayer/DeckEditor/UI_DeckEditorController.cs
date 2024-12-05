@@ -22,6 +22,9 @@ public class UI_DeckEditorController : MonoBehaviour
 
     private int chosenFaction = 0;
 
+    private string greekInfo = "The Greek civilization stands as a beacon of philosophy, warfare, and artistry. Rooted in city-states like Athens and Sparta, ancient Greece was a land of contrasts—where democracy thrived in one polis and martial discipline defined another. The Greeks were masters of strategy, evidenced by their phalanx formations and naval prowess, as well as pioneers of cultural achievements in theater, architecture, and the sciences. Guided by their pantheon of gods, they sought arete, or excellence, in every endeavor. In battle, Greek forces blend the precision of the disciplined hoplite with the agility of light infantry and the cunning of naval commanders.";
+    private string egyptInfo = "The Egyptian civilization is one of the world's oldest and most enduring, thriving along the fertile banks of the Nile River. Known for their monumental architecture, such as the Great Pyramids and temples dedicated to their gods, the Egyptians were deeply spiritual, guided by beliefs in the afterlife and divine kingship. Their armies, led by pharaohs, combined swift chariotry with disciplined infantry, reflecting their resourceful adaptation to the harsh desert and fertile floodplains. Masters of engineering and agriculture, the Egyptians balanced innovation and mysticism to maintain their vast empire.";
+
     private void Start()
     {
         ClearContainer(civCardsContainer);
@@ -75,7 +78,7 @@ public class UI_DeckEditorController : MonoBehaviour
 
     private void SetInfo(Factions civilization)
     {
-        civFactsText.text = civilization == Factions.Greek ? "GREEK INFO" : "EGYPT INFO";
+        civFactsText.text = civilization == Factions.Greek ? greekInfo : egyptInfo;
     }
 
     private void ClearContainer(Transform container)

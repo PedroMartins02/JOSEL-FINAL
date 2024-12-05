@@ -1,3 +1,4 @@
+using System;
 using GameCore.Events;
 using GameModel;
 using UnityEngine;
@@ -20,13 +21,36 @@ namespace Game.Logic
             }
         }
 
-        public void AttackCard(ICombatCard attacker, ICombatCard defender)
+        public Tuple<int, int> AttackCard(ICombatCard attacker, ICombatCard defender)
         {
-            Debug.Log($"Processing Attack: - Attacker: {attacker.CurrentAttack} Ad - Deffender: {defender.CurrentHealth} Hp");
-            defender.TakeDamage(attacker.CurrentAttack);
-            Debug.Log($"Attack Finished: - Attacker: {attacker.CurrentAttack} Ad - Deffender: {defender.CurrentHealth} Hp");
+            int damageDealt = attacker.CurrentAttack;
+
+            // Handle any other damage modifiers here
+
+            defender.TakeDamage(damageDealt);
 
             EventManager.TriggerEvent(GameEventsEnum.CardAttacked, attacker.Data.Id);
+
+            int damageReceived = defender.CurrentAttack;
+
+            // Handle any other damage modifiers here
+
+            attacker.TakeDamage(damageReceived);
+
+            EventManager.TriggerEvent(GameEventsEnum.CardDamaged, attacker.Data.Id);
+
+            return new Tuple<int, int>(damageDealt, damageReceived);
+        }
+
+        public int AttackMyth(ICombatCard attackerCard, Player targetPlayer)
+        {
+            int damage = attackerCard.CurrentAttack;
+
+            // Handle any other damage modifiers here
+
+            targetPlayer.Damage(damage);
+
+            return damage;
         }
     }
 }

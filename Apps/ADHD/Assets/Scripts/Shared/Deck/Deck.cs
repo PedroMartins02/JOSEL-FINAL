@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Game.Data;
 using Game.Logic;
+using Game.Logic.Modifiers;
 using GameCore.Events;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEditor;
@@ -17,31 +18,49 @@ namespace GameModel
 
         private Stack<ICard> cards;
 
-        public Deck(string name, List<string> cardIdList)
+        public Deck(string name, List<string> cardIdList, Elements playerWeather, Elements playerTime)
         {
             this.Name = name;
 
             this.cards = new();
 
-            InitializeCards(cardIdList);
+            InitializeCards(cardIdList, playerWeather, playerTime);
             Shuffle();
 
             this.Faction = cards.Peek().Data.Faction;
         }
 
-        private void InitializeCards(List<string> cardIdList)
+        private void InitializeCards(List<string> cardIdList, Elements playerWeather, Elements playerTime)
         {
+            // TODO: There should be a Card Factory
+
             foreach (string cardID in cardIdList)
             {
                 ICard card = CardDatabase.Singleton.GetCardOfId(cardID);
 
                 if (card.GetType() == typeof(UnitCard))
                 {
-                    cards.Push(new UnitCard((UnitCardData)card.Data));
+                    UnitCard unitCard = new UnitCard((UnitCardData)card.Data);
+
+                    if (unitCard.Data.Element == playerWeather)
+                    {
+                        WeatherModifier weatherModifier = new WeatherModifier();
+                        unitCard.ApplyModifier(weatherModifier);
+                    }
+
+                    cards.Push(unitCard);
                 }
                 else if (card.GetType() == typeof(LegendCard))
                 {
-                    cards.Push(new LegendCard((LegendCardData)card.Data));
+                    LegendCard legendCard = new LegendCard((LegendCardData)card.Data);
+
+                    if (legendCard.Data.Element == playerTime)
+                    {
+                        WeatherModifier weatherModifier = new WeatherModifier();
+                        legendCard.ApplyModifier(weatherModifier);
+                    }
+
+                    cards.Push(legendCard);
                 }
                 else if (card.GetType() == typeof(BattleTacticCard))
                 {

@@ -5,6 +5,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using Game.Log;
 
 public class MatchResultManager : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class MatchResultManager : MonoBehaviour
     [SerializeField] private Sprite VictorySprite;
     [SerializeField] private Sprite DefeatSprite;
     [SerializeField] private Image WinLossImage;
+    [SerializeField] private Image ResultImage;
 
     [Header("Rank")]
     [SerializeField] private RankUI RankUI;
@@ -21,21 +23,31 @@ public class MatchResultManager : MonoBehaviour
     [Header("Victory")]
     [SerializeField] private GameObject VictoryReward;
 
+    private GameLog gameLog;
+
     private bool didWin;
 
     void Start()
     {
-        // Event Listeners? idk
-        PlayerData mockOpponent = new PlayerData();
-        SetMatchResult(mockOpponent, true);
+        gameLog = GameLog.Instance; // Get all the information you need here
+
+        SetMatchResult(gameLog.OpponentMMR, gameLog.PlayerWon);
     }
 
-    private void SetMatchResult(PlayerData opponent, bool didWin)
+    private void SetMatchResult(int opponentMMR, bool didWin)
     {
         this.didWin = didWin;
-        int mmrDifference = RankManager.AwardMMR(opponent, didWin);
+        int mmrDifference = RankManager.AwardMMR(opponentMMR, didWin);
+        UpdateUI(mmrDifference); 
+        StartCoroutine(ShowResult());
+    }
 
-        UpdateUI(mmrDifference);
+    private IEnumerator ShowResult()
+    {
+        ResultImage.sprite = didWin ? VictorySprite : DefeatSprite;
+        ResultImage.gameObject.SetActive(true);
+        yield return new WaitForSeconds(1f);
+        ResultImage.gameObject.SetActive(false);
     }
 
     private void UpdateUI(int mmrDifference)
@@ -49,6 +61,8 @@ public class MatchResultManager : MonoBehaviour
 
     public void OnContinueClick()
     {
+        Destroy(gameLog.gameObject);
+
         SceneLoader.Load("NavigationScene");
     }
 }

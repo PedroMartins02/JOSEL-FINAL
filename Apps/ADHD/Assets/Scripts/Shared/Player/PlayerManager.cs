@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Game.Data;
 using GameModel;
+using Unity.VisualScripting;
 
 namespace Game.Logic
 {
@@ -33,7 +34,7 @@ namespace Game.Logic
         {
             DeckData deckData = DeckData.DeserializeDeckData(playerData.playerDeck.ToString());
 
-            Deck deck = new Deck(deckData.Name, deckData.CardList);
+            Deck deck = new Deck(deckData.Name, deckData.CardList, playerData.playerWeather, playerData.playerTime);
 
             PlayerGameData playerGameData 
                 = new PlayerGameData(
@@ -52,6 +53,11 @@ namespace Game.Logic
             return player;
         }
 
+        public void Clear()
+        {
+            players = new Dictionary<ulong, Player>();
+        }
+
         public void RegisterPlayer(ulong clientId, Player player)
         {
             players.Add(clientId, player);
@@ -65,5 +71,7 @@ namespace Game.Logic
         }
 
         public int PlayerCount => players.Count;
+
+        public IList<Player> PlayerList => players.Values.AsReadOnlyList();
     }
 }

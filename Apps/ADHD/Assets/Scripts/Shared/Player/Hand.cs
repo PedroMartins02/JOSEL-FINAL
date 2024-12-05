@@ -39,6 +39,16 @@ namespace GameModel
             return cards.Contains(card);
         }
 
+        public bool Contains(int cardGameID)
+        {
+            return cards.Find(card => card.Data.GameID == cardGameID) != null;
+        }
+
+        public ICard GetCard(int cardGameID)
+        {
+            return cards.Find(card => card.Data.GameID == cardGameID);
+        }
+
         public IReadOnlyList<ICard> GetCards() => cards.AsReadOnly();
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Game.Data;
 using Game.Logic;
+using Game.Logic.Modifiers;
 using Game.Utils.Logic;
 
 namespace GameModel
@@ -11,8 +12,6 @@ namespace GameModel
         {
             this.CurrentEffects = cardData.Effects;
             this.CurrentModifiers = new List<Modifier>();
-
-            StateMachine = new StateMachine<CardStateType, CardActions>();
 
             StateMachine.AddState(new InDeckState(this));
             StateMachine.AddState(new InHandState(this));
@@ -45,6 +44,18 @@ namespace GameModel
 
             return new BattleTacticCardData((BattleTacticCardData)cardData, gameID);
         }
+
+        #region Modifiers
+        public override void ApplyModifier(Modifier modifier)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void RemoveModifier(Modifier modifier)
+        {
+            throw new System.NotImplementedException();
+        }
+        #endregion
 
         #region Conditions
         public override bool IsTargatable

@@ -60,8 +60,6 @@ public class DeckData
         result.Append('|');
         result.Append(string.Join("|", deckData.CardList.Select(cardId => cardId)));
 
-        Debug.Log("Serialized Deck Data: " + result.ToString());
-
         return result.ToString();
     }
 

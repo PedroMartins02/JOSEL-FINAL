@@ -16,8 +16,10 @@ public struct ActionData : INetworkSerializable
     public int CardGameID;
     public int TargetCardGameID;
     public int Damage;
+    public int DamageReceived;
     public int Heal;
     public int Blessings;
+    public ulong TargetPlayerId;
 
     // Other information
     public int NumberOfCardsDrawn;
@@ -36,10 +38,16 @@ public struct ActionData : INetworkSerializable
             case ActionType.PlayCard:
                 serializer.SerializeValue(ref CardGameID);
                 break;
-            case ActionType.Attack:
+            case ActionType.AttackCard:
                 serializer.SerializeValue(ref CardGameID); // Attacker
                 serializer.SerializeValue(ref TargetCardGameID); // Defender
                 serializer.SerializeValue(ref Damage);
+                serializer.SerializeValue(ref DamageReceived);
+                break;
+            case ActionType.AttackMyth:
+                serializer.SerializeValue(ref CardGameID);
+                serializer.SerializeValue(ref Damage);
+                serializer.SerializeValue(ref TargetPlayerId);
                 break;
                 // Add cases for other action types
         }

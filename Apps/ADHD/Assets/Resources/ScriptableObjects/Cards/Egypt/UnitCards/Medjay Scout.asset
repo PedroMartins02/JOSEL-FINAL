@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40d5e5baf0e005248a06fdbfd3f36b64, type: 3}
+  m_Name: Medjay Scout
+  m_EditorClassIdentifier: 
+  Id: 7f4c-305428
+  Name: Medjay Scout
+  ShortText: Guardian of the Frontier
+  Description: The Medjay patrolled the wilds, their keen eyes and sharp blades defending
+    the kingdom's edges.
+  Art: {fileID: 21300000, guid: 1b1224fd99002c748b077517e2d39cab, type: 3}
+  Faction: 3
+  Element: 3
+  Blessings: 1
+  Attack: 1
+  Health: 1

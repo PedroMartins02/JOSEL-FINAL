@@ -14,12 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Id: 225d-103122
   Name: Tutankhamon
-  ShortText: 
-  Description: 
+  ShortText: The Boy Pharaoh
+  Description: "Tutankhamon\u2019s reign may have been short, but his tomb ensured
+    his eternal legacy."
   Art: {fileID: 21300000, guid: 98ddf5a46be3ec94c913f9dccebd73de, type: 3}
   Faction: 3
-  Element: 0
-  Blessings: 0
-  Attack: 0
-  Health: 0
+  Element: 5
+  Blessings: 4
+  Attack: 5
+  Health: 4
   Effects: []
