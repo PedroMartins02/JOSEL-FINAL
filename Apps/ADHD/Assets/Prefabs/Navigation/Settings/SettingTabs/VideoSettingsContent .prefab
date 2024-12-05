@@ -234,7 +234,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 16
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -499,7 +499,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 1359656440237164390, guid: a027178450a2e6147b7399ddd8fff4bc,
     type: 2}
-  m_audioClip: {fileID: 8300000, guid: 048995548d35e474284dd536e14e0977, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 95c43e8f3ef59674b8ad2f0286d7c530, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -1467,7 +1467,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 1359656440237164390, guid: a027178450a2e6147b7399ddd8fff4bc,
     type: 2}
-  m_audioClip: {fileID: 8300000, guid: 048995548d35e474284dd536e14e0977, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 95c43e8f3ef59674b8ad2f0286d7c530, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -1652,7 +1652,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 16
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -1902,7 +1902,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 1359656440237164390, guid: a027178450a2e6147b7399ddd8fff4bc,
     type: 2}
-  m_audioClip: {fileID: 8300000, guid: 9a40b60f0121efb41862ac8b97046fd3, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 05cdfe909bc116643aca9ae451818fb8, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -2404,7 +2404,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 1359656440237164390, guid: a027178450a2e6147b7399ddd8fff4bc,
     type: 2}
-  m_audioClip: {fileID: 8300000, guid: 9a40b60f0121efb41862ac8b97046fd3, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 8898669265fc8774c93af805102da302, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
